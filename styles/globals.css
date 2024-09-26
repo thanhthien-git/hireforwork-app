@@ -12,16 +12,21 @@
 
 html,
 body {
+  margin: 0;
+  padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
+  font-family: 'mainFont', sans-serif;
+
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
 }
 
 * {
@@ -40,3 +45,19 @@ a {
     color-scheme: dark;
   }
 }
+
+.ant-menu-item-selected {
+  background-color:rgb(84, 34, 201) !important;
+}
+
+.ant-menu-sub-item-selected {
+  background-color:rgb(84, 34, 201) !important;
+}
+
+@font-face {
+  font-family: 'mainFont';
+  src: url('/assets/fonts/mainFont2.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
