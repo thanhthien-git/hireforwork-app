@@ -2,7 +2,7 @@ const endpoint = {
     base: process.env.NEXT_PUBLIC_API_URL,
     users: {
         base: '/careers',
-        userDetail: '/careers/{id}'
+        createUser: '/careers/create',
     }
 }   
 export default endpoint

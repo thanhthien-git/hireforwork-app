@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./styles.module.scss";
 import { menuItems } from "@/constants/routeMenu";
 import Link from "next/link";
+import Image from "next/image";
+import logo from '../../assets/logo.svg'
 
 interface IProp {
   collapsed: boolean;
@@ -25,19 +27,18 @@ export default function SiderMenu({ collapsed }: Readonly<IProp>) {
     if (parentMenu) {
       setOpenKeys([parentMenu.path]);
     } else {
-      setOpenKeys([]); 
+      setOpenKeys([]);
     }
   }, [router.pathname]);
 
-
   useEffect(() => {
-    setSelectedKey([router.pathname]); 
+    setSelectedKey([router.pathname]);
     updateOpenKeys();
   }, [router.pathname, updateOpenKeys]);
-  
+
   const handleOpen = useCallback((key: string[]) => {
-    setOpenKeys(key)
-  }, [])
+    setOpenKeys(key);
+  }, []);
 
   return (
     <Menu
@@ -49,14 +50,14 @@ export default function SiderMenu({ collapsed }: Readonly<IProp>) {
       openKeys={openKeys}
       onOpenChange={handleOpen}
     >
+      <Link href={"/admin"} passHref>
+        <div className={styles["logo"]}>
+          <Image alt="logo" src={logo} width={150} height={80} />
+        </div>
+      </Link>
       {menuItems.map((item) =>
         item.subMenu ? (
-          <Menu.SubMenu
-            key={item.path}
-            icon={item.icon}
-            title={item.name}
-            
-          >
+          <Menu.SubMenu key={item.path} icon={item.icon} title={item.name}>
             {item.subMenu.map((subItem) => (
               <Menu.Item
                 key={subItem.path}

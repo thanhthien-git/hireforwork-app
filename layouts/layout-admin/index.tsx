@@ -19,7 +19,7 @@ export default function LayoutAdmin({ children, title }: Readonly<IProps>) {
   }, []);
 
   return (
-    <Layout style={{marginInlineStart: '200px'}}>
+    <Layout style={{ marginInlineStart: "200px" }}>
       <Head>
         <title>{`${title} | Admin Portal `}</title>
         <meta
@@ -27,6 +27,7 @@ export default function LayoutAdmin({ children, title }: Readonly<IProps>) {
           content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=no"
         />
       </Head>
+      
       <Sider
         className={styles["sider"]}
         collapsible
