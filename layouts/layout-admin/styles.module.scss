@@ -4,7 +4,7 @@
   left: 0;
   top: 0;
   z-index: 1000;
-  background-color: black;
+  background-color: rgb(0, 12, 23);
   overflow: auto;
   transition: width 0.3s ease;
   max-width: 250px;
@@ -12,17 +12,19 @@
 }
 
 .layout-collapse {
+  background-color: #1B2431;
   margin-left: 80px;
   transition: margin-left 0.3s ease;
 }
 
 .layout-collapse-active {
+  background-color: #1B2431;
   margin-left: 48px;
   transition: margin-left 0.3s ease;
 }
 
 .header {
-  background-color: #fff;
+  background-color: rgb(0, 12, 23);
   position: fixed;
   top: 0;
   right: 0;
@@ -42,4 +44,9 @@
   overflow-y: auto;
 }
 
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 

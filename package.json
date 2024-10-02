@@ -17,6 +17,8 @@
     "next": "14.2.13",
     "react": "^18",
     "react-dom": "^18",
+    "react-hook": "^0.0.1",
+    "react-hook-form": "^7.53.0",
     "sass": "^1.79.3"
   },
   "devDependencies": {
