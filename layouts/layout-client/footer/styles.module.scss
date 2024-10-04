@@ -1,31 +1,46 @@
 .footer {
   display: flex;
   justify-content: space-between;
-  background-color: #3c1990; /* Màu nền của footer */
+  padding: 20px 0;
+  background-color: #3C1990;
+  /* Màu nền của footer */
   color: white;
+  /* Màu chữ */
+
   .column {
-    flex: 1; /* Chia đều không gian giữa các cột */
-    padding: 0 50px; /* Khoảng cách giữa các cột */
+    flex: 1;
+    /* Chia đều không gian giữa các cột */
+    padding: 0 50px;
+    /* Khoảng cách giữa các cột */
 
     h4 {
-      margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
-      font-size: 12px; /* Kích thước chữ tiêu đề lớn hơn */
+      margin-bottom: 10px;
+      /* Khoảng cách giữa tiêu đề và danh sách */
+      font-size: 12px;
+      /* Kích thước chữ tiêu đề lớn hơn */
       font-weight: bold;
     }
 
     ul {
-      list-style: none; /* Xóa dấu đầu dòng */
-      padding: 0; /* Xóa padding */
+      list-style: none;
+      /* Xóa dấu đầu dòng */
+      padding: 0;
+      /* Xóa padding */
       font-size: 16px;
-      margin: 0; /* Xóa margin */
+      margin: 0;
+      /* Xóa margin */
 
       li {
-        margin: 10px 0; /* Khoảng cách giữa các mục */
-        font-size: 10px; /* Kích thước chữ cho các mục trong danh sách */
-        cursor: pointer; /* Thay đổi con trỏ khi hover */
+        margin: 10px 0;
+        /* Khoảng cách giữa các mục */
+        font-size: 10px;
+        /* Kích thước chữ cho các mục trong danh sách */
+        cursor: pointer;
+        /* Thay đổi con trỏ khi hover */
 
         &:hover {
-          text-decoration: underline; /* Gạch chân khi hover */
+          text-decoration: underline;
+          /* Gạch chân khi hover */
         }
       }
     }
