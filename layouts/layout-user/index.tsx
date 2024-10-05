@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import Head from "next/head";
-import Header from "../../components/commons/user/header/header";
-import Footer from "@/components/commons/user/footer/footer";
+import Header from "../layout-client/header/index";
+import Footer from "../layout-client/footer/index";
 const UserLayout = ({ children }: { children: ReactNode }) => {
     return (
       <>
