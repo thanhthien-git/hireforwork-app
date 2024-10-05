@@ -1,7 +1,7 @@
 // components/Footer.tsx
 
 import Link from 'next/link';
-import styles from './Footer.module.scss'; // Sử dụng SCSS cho styling
+import styles from './style.module.scss'; // Sử dụng SCSS cho styling
 
 const Footer = () => {
   return (

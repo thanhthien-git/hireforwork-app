@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import styles from './Header.module.scss'; // Sử dụng SCSS cho styling
+import styles from './style.module.scss'; // Sử dụng SCSS cho styling
 
 const Header = () => {
   const [isEmployerDropdownOpen, setEmployerDropdownOpen] = useState(false);
@@ -15,7 +15,7 @@ const Header = () => {
     <header className={styles.header}>
       <div className={styles.logoContainer}>
         <Link href="/"> {/* Thêm Link để chuyển về trang chủ */}
-          <img src="/logo.png" alt="Logo" className={styles.logo} /> {/* Thay thế bằng đường dẫn đến biểu tượng logo */}
+          <h2  className={styles.logo} >JobSonar</h2> {/* Thay thế bằng đường dẫn đến biểu tượng logo */}
         </Link>
       </div>
       <nav className={styles.nav}>
