@@ -1,0 +1,152 @@
+.purple-text{
+  color:#3C1990;
+}
+.container {
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
+    flex-direction: column;
+    min-height: 100vh; 
+    background-color: #ccc; 
+    margin: -30px;
+    padding: 20px;
+  }
+  .breadcrumb {
+    align-self: flex-start; 
+    margin-left: 170px; 
+    margin-bottom: 30px;
+  }
+  .content {
+  
+    background-color: #fff; 
+    width: 70%; 
+    padding: 20px; 
+    min-height: 80vh;
+    border-radius: 8px; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  }
+  .headrow{
+    padding: 30px 60px; 
+    min-height: 200px;
+    border-radius: 15px 15px 0 0;
+    border: 1px solid black;
+  }
+  .sub-head-row{
+    display: flex;
+    width: 100%;
+  }
+  .sub-head-row1{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+  }
+  .sub-head-row2{
+   display: flex;
+   justify-content: space-between;
+   width: 100%;
+   height: 70%;
+  }
+  .row1-content{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+    margin-left: 30px;
+  }
+  .row12-content{
+display: flex;
+flex-direction: column;
+height: 70%;
+gap: 58px;
+  }
+  .flex{
+    display: flex;
+    margin: 10px;
+    gap :10px;
+  }
+.text-row1{
+  display: flex;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.col-left-user-detail{
+  padding: 20px;
+}
+
+.col-left-user-detail p{
+  font-size: 12px;
+}
+.promote-content{
+  display: flex;
+  flex-direction: column;
+}
+.item-promote-content{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  align-items: baseline;
+}
+.connect-content{
+display: flex;
+flex-direction: column;
+gap: 5px;
+padding: 30px 0px;
+}
+.item-under-content{
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  align-items: baseline;
+}
+.sub-item-under-content{
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.sub-item-under-content p{
+  margin: -24px;
+}
+.body-user-detail-content-1{
+  padding:10px 20px ;
+}
+.header-web-dev{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+ 
+}
+.sub-header-web-dev{
+  display: flex;
+  gap: 8px;
+}
+.para-web-dev{
+width: 100%;
+display: flex;
+justify-content: space-between;
+}
+.body-user-detail-content-2{
+  padding: 20px;
+  min-height: 500px;
+}
+.sub-header-web-dev2{
+  display: flex;
+  gap: 10px;
+}
+.body-user-detail-content-3{
+  padding: 20px;
+}
+.body-user-detail-content-4{
+  padding: 20px;
+}
+.body-user-detail-content-5{
+  padding: 20px;
+}
+
+.footerrow{
+  padding: 30px 60px; 
+  min-height: 200px;
+  border-radius:0 0 15px 15px ;
+  border: 1px solid black;
+  border-top: none;
+}
