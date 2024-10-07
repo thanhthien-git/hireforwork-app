@@ -5,4 +5,4 @@ export const REQUIRED_RULE = [
   },
 ];
 
-export const REQUIRED_MESSAGE = (field: string) => `Please input ${field}`;
+export const REQUIRED_MESSAGE = (field: string) => `${field} , check this ☝️`;

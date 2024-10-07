@@ -9,9 +9,7 @@ const theme: ThemeConfig = {
   //Table
   components: {
     Table: {
-      headerBg: '#323D4E',
-      headerColor: '#fff',
-      rowHoverBg: '#5422c9'
+      headerColor: '#000000',
     }
   }
 };

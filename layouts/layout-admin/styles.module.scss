@@ -12,13 +12,11 @@
 }
 
 .layout-collapse {
-  background-color: #1B2431;
   margin-left: 80px;
   transition: margin-left 0.3s ease;
 }
 
 .layout-collapse-active {
-  background-color: #1B2431;
   margin-left: 48px;
   transition: margin-left 0.3s ease;
 }
@@ -38,8 +36,7 @@
 }
 
 .content {
-  margin: 32px 28px;
-  padding-top: 70px;
+  padding: 80px 16px 16px 16px;
   min-height: calc(100vh - 70px);
   overflow-y: auto;
 }
