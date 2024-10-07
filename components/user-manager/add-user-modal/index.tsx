@@ -1,33 +1,26 @@
 import InputComponent from "@/components/input";
 import { REQUIRED_MESSAGE, REQUIRED_RULE } from "@/constants/message";
-import { ICareer } from "@/interfaces/user";
 import UserService from "@/services/userService";
 import { Form, Input, Modal, notification } from "antd";
 import FormItem from "antd/lib/form/FormItem";
 import { useCallback } from "react";
 import { useForm, Controller } from "react-hook-form";
 
-export default function AddUserModal({ openModal, closeModal, onSubmit }: any) {
+export default function AddUserModal({ openModal, closeModal, onSubmit, fetchUser }: any) {
   const { control, handleSubmit, reset } = useForm();
 
   const handleFormSubmit = async (data: any) => {
     try {
       Object.assign(data)
-      console.log({...data})
       await UserService.create({
         ...data,
       });
       reset();
+      fetchUser
       closeModal();
       notification.success({message: "Create successfully"})
     } catch (err) {
-      console.log(err);
-      notification.error({
-        message: "Error",
-        description:
-          "There was an error creating the career. Please try again.",
-        placement: "topRight",
-      });
+      notification.error({message: err.message});
     }
   };
 

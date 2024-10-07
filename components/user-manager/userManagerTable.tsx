@@ -4,18 +4,47 @@ import {
   InfoCircleOutlined,
   PlusOutlined,
 } from "@ant-design/icons";
-import { Button, notification, Popconfirm, Table } from "antd";
+import { Button, notification, Popconfirm } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import styles from "./style.module.scss";
 import AddUserModal from "./add-user-modal";
+import TableCustom from "../tableCustom";
+import { IUserFilter } from "@/interfaces/iUserFilter";
+import { debounce } from "@mui/material";
+
 
 export default function ManagerUserTable() {
   const [userDocument, setUserDocument] = useState([]);
   const [totalDocs, setTotalDocs] = useState<number>(0);
-  const [pagination, setPagination] = useState({ pageNumber: 1, pageSize: 10 });
   const [openModal, setOpenModal] = useState(false);
   const [loadingTable, setLoadingTable] = useState(true);
+
+  const [filter, setFilter] = useState<IUserFilter>({
+    careerEmail: "",
+    careerFirstName: "",
+    lastName: "",
+    careerPhone: "",
+    page: 1,
+    pageSize: 8,
+  });
+
+  const debounceFunction = useCallback(
+    (field: keyof IUserFilter, value: string) => {
+      setFilter((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    },
+    []
+  );
+
+  const handleInputSearch = useCallback(
+    debounce((field, value) => {
+      debounceFunction(field, value);
+    }, 400),
+    []
+  );
 
   const columns = useMemo(
     () => [
@@ -25,7 +54,7 @@ export default function ManagerUserTable() {
             <div>Email</div>
             <HeaderSearchComponent
               placeholder="Enter email"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch('careerEmail', e.target.value)}
             />
           </>
         ),
@@ -39,7 +68,7 @@ export default function ManagerUserTable() {
             <div>First Name</div>
             <HeaderSearchComponent
               placeholder="Enter name"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch('careerFirstName', e.target.value)}
             />
           </>
         ),
@@ -53,7 +82,7 @@ export default function ManagerUserTable() {
             <div>Last Name</div>
             <HeaderSearchComponent
               placeholder="Enter name"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch('lastName', e.target.value)}
             />
           </>
         ),
@@ -67,7 +96,7 @@ export default function ManagerUserTable() {
             <div>Phone</div>
             <HeaderSearchComponent
               placeholder="Phone"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch('careerPhone', e.target.value)}
             />
           </>
         ),
@@ -119,10 +148,7 @@ export default function ManagerUserTable() {
 
   const fetchUser = useCallback(async () => {
     try {
-      const res = await UserService.get(
-        pagination.pageNumber,
-        pagination.pageSize
-      );
+      const res = await UserService.get(filter);
       setUserDocument(res.docs);
       setTotalDocs(res.totalDocs);
     } catch (err) {
@@ -130,12 +156,7 @@ export default function ManagerUserTable() {
     } finally {
       setLoadingTable(false);
     }
-  }, [
-    pagination.pageNumber,
-    pagination.pageSize,
-    setLoadingTable,
-    loadingTable,
-  ]);
+  }, [filter, setLoadingTable, loadingTable]);
   const handleFormSubmit = async (data: any) => {
     try {
       Object.assign(data, {
@@ -146,7 +167,7 @@ export default function ManagerUserTable() {
       });
     } catch (err) {
       notification.error({
-        message: "Error"
+        message: "Error",
       });
     }
   };
@@ -161,9 +182,10 @@ export default function ManagerUserTable() {
       console.log(err);
     }
   }, []);
+
   useEffect(() => {
     fetchUser();
-  }, [fetchUser]);
+  }, [fetchUser, filter]);  
 
   const handleOpenModal = useCallback(() => {
     setOpenModal(true);
@@ -175,17 +197,18 @@ export default function ManagerUserTable() {
 
   const handlePagination = useCallback(
     (page: number, pageSize: number) => {
-      setPagination({
-        pageNumber: page,
+      setFilter((prev) => ({
+        ...prev,
+        page: page,
         pageSize: pageSize,
-      });
+      }));
       fetchUser();
     },
-    [setPagination, fetchUser]
+    [setFilter, fetchUser]
   );
 
   return (
-    <>
+    <div className={styles["table-user"]}>
       <Button
         className={styles["button-add-new"]}
         icon={<PlusOutlined />}
@@ -197,22 +220,21 @@ export default function ManagerUserTable() {
         openModal={openModal}
         closeModal={handleCloseModal}
         handleFormSubmit={handleFormSubmit}
+        fetchUser
       ></AddUserModal>
-      <Table
+      <TableCustom
         columns={columns}
         dataSource={userDocument}
         loading={loadingTable}
         pagination={{
-          current: pagination.pageNumber,
-          pageSize: pagination.pageSize,
+          current: filter.page,
+          pageSize: filter.pageSize,
           total: totalDocs,
           onChange: (page, pageSize) => {
             handlePagination(page, pageSize);
           },
-          showSizeChanger: true,
-          pageSizeOptions: ["2", "10", "20", "50"],
         }}
       />
-    </>
+    </div>
   );
 }
