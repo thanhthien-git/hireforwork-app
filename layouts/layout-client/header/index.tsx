@@ -10,17 +10,21 @@ const items: MenuProps["items"] = [
   {
     key: "1",
     label: (
-      <Button href="#" type="link" className={styles["styled-button"]}>
-        Đăng ký
-      </Button>
+      <Link href="/employer/register" passHref>
+        <Button type="link" className={styles["styled-button"]}>
+          Đăng ký
+        </Button>
+      </Link>
     ),
   },
   {
     key: "2",
     label: (
-      <Button href="#" type="link" className={styles["styled-button"]}>
-        Đăng nhập
-      </Button>
+      <Link href="/employer/login" passHref>
+        <Button type="link" className={styles["styled-button"]}>
+          Đăng nhập
+        </Button>
+      </Link>
     ),
   },
 ];
@@ -45,15 +49,13 @@ export default function LayoutClientHeader() {
         </ul>
       </nav>
       <div className={styles.authButtons}>
-        <Button
-          href="/login"
-          title="Đăng nhập"
-          className={styles["styled-button"]}
-        >
-          Đăng nhập
-        </Button>
+        <Link href="/login" passHref>
+          <Button type="link" className={styles["styled-button"]}>
+            Đăng nhập
+          </Button>
+        </Link>
         <Dropdown menu={{ items }} className={styles["styled-button"]}>
-          <Button className={styles["styled-button"]}>Nhà tuyển dụng </Button>
+          <Button className={styles["styled-button"]}>Nhà tuyển dụng</Button>
         </Dropdown>
       </div>
     </Header>

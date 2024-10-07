@@ -1,0 +1,60 @@
+.bannerContainer {
+    background-color: #2F1471; // Background color of the banner
+    background-image: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%), 
+    linear-gradient(225deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%);
+    padding: 0px;
+    margin: 50px;
+    border-radius: 8px;
+  }
+  
+  .searchBox {
+    background-color: #1A0B47;
+    border-radius: 0px;
+    padding: 10px;
+  }
+  
+  .reportCard {
+    background-image: url('https://sanhanghoa.vn/wp-content/uploads/2020/01/ch%E1%BB%A9ng-kho%C3%A1n.jpg');
+    background-size: 100%;  // Reduce the size of the background image (adjust this value as needed)
+    background-repeat: no-repeat; // Ensure the image doesn't repeat
+    color:#ffffff ;
+    padding: 50px;
+    background-color: #3a1990;
+    text-align: center;
+  }
+  .banner {
+    background: linear-gradient(to right, #6a11cb, #2575fc); /* Nền gradient */
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  
+  .bannerText {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+  }
+  
+  .imageContainer {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .bannerImage {
+    width: 80%;             /* Đảm bảo ảnh sử dụng toàn bộ chiều rộng của container */
+         /* Tự động điều chỉnh chiều cao dựa trên tỷ lệ của ảnh */
+  object-fit: contain;     /* Giữ nguyên tỷ lệ của ảnh mà không làm méo ảnh */
+  }
+  
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .bannerButton {
+    background-color: #7700ff;
+    border: none;
+    color: white;
+  }
+  
