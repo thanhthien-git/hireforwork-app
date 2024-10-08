@@ -1,11 +1,11 @@
 :root {
-  --background: #ffffff;
+  --background: #f0f2f5;
   --foreground: #171717;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: white;
+    --background: #f0f2f5;
     --foreground: #ededed;
   }
 }
@@ -16,8 +16,7 @@ body {
   padding: 0;
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: 'mainFont', sans-serif;
-
+  font-family: "mainFont", sans-serif;
 }
 
 body {
@@ -47,17 +46,16 @@ a {
 }
 
 .ant-menu-item-selected {
-  background-color:rgb(84, 34, 201) !important;
+  background-color: rgb(84, 34, 201) !important;
 }
 
 .ant-menu-sub-item-selected {
-  background-color:rgb(84, 34, 201) !important;
+  background-color: rgb(84, 34, 201) !important;
 }
 
 @font-face {
-  font-family: 'mainFont';
-  src: url('/assets/fonts/mainFont2.ttf') format('truetype');
+  font-family: "mainFont";
+  src: url("/assets/fonts/mainFont2.ttf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
-

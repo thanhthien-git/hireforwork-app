@@ -6,10 +6,11 @@ import JobsIT from "../components/commons/user/item-homepage/it-job"
 import CompaniesList from "../components/commons/user/item-homepage/company"
 import Rating from "../components/commons/user/item-homepage/rating"
 import Banner from "../components/commons/user/item-homepage/jobbanner"
+import LayoutClient from "@/layouts/layout-client";
 const HomePage = () => {
     return (
       <div >
-      <UserLayout>
+      <LayoutClient title="Home page">
         <div style={{margin: '50px 0'}}>
         <App/>
         <CompaniesList/>
@@ -18,7 +19,7 @@ const HomePage = () => {
         <JobsIT/>
         <Rating/>
         </div>
-      </UserLayout>
+      </LayoutClient>
       </div>
     );
   };
