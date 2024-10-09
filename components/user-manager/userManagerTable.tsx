@@ -13,7 +13,6 @@ import TableCustom from "../tableCustom";
 import { IUserFilter } from "@/interfaces/iUserFilter";
 import { debounce } from "@mui/material";
 
-
 export default function ManagerUserTable() {
   const [userDocument, setUserDocument] = useState([]);
   const [totalDocs, setTotalDocs] = useState<number>(0);
@@ -54,7 +53,7 @@ export default function ManagerUserTable() {
             <div>Email</div>
             <HeaderSearchComponent
               placeholder="Enter email"
-              onChange={(e) => handleInputSearch('careerEmail', e.target.value)}
+              onChange={(e) => handleInputSearch("careerEmail", e.target.value)}
             />
           </>
         ),
@@ -68,7 +67,9 @@ export default function ManagerUserTable() {
             <div>First Name</div>
             <HeaderSearchComponent
               placeholder="Enter name"
-              onChange={(e) => handleInputSearch('careerFirstName', e.target.value)}
+              onChange={(e) =>
+                handleInputSearch("careerFirstName", e.target.value)
+              }
             />
           </>
         ),
@@ -82,7 +83,7 @@ export default function ManagerUserTable() {
             <div>Last Name</div>
             <HeaderSearchComponent
               placeholder="Enter name"
-              onChange={(e) => handleInputSearch('lastName', e.target.value)}
+              onChange={(e) => handleInputSearch("lastName", e.target.value)}
             />
           </>
         ),
@@ -96,7 +97,7 @@ export default function ManagerUserTable() {
             <div>Phone</div>
             <HeaderSearchComponent
               placeholder="Phone"
-              onChange={(e) => handleInputSearch('careerPhone', e.target.value)}
+              onChange={(e) => handleInputSearch("careerPhone", e.target.value)}
             />
           </>
         ),
@@ -185,7 +186,7 @@ export default function ManagerUserTable() {
 
   useEffect(() => {
     fetchUser();
-  }, [fetchUser, filter]);  
+  }, [fetchUser, filter]);
 
   const handleOpenModal = useCallback(() => {
     setOpenModal(true);

@@ -4,8 +4,12 @@ const nextConfig = {
   async rewrites() {
     return [
       {
-        source: '/:path*',  // Matches any route
-        destination: '/client/:path*',  // Redirects to the corresponding page in the client folder
+        source: "/admin/:path*", 
+        destination: "/admin/:path*",
+      },
+      {
+        source: "/:path*", 
+        destination: "/client/:path*", 
       },
     ];
   },

@@ -16,6 +16,7 @@ interface InputComponentProps extends InputProps {
   className?: string;
   error?: FieldError;
   control: Control;
+  style?: React.CSSProperties
 }
 
 export default function InputComponent({
@@ -37,7 +38,6 @@ export default function InputComponent({
       render={({ field, fieldState }) => (
         <FormItem
           label={label}
-          className={className}
           help={fieldState.error?.message}
           validateStatus={fieldState.invalid ? "error" : "success"}
         >
@@ -46,6 +46,7 @@ export default function InputComponent({
             allowClear
             placeholder={placeholder}
             addonAfter={addonAfter}
+            className={className}
             {...inputProps}
           ></Input>
         </FormItem>
