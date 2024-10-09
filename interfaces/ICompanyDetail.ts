@@ -1,7 +1,8 @@
 export interface ICompanyDetail {
-  companyName: {
-    imageUrl: string;
-    coverUrl: string;
+  companyName: string;
+  companyImage: {
+    imageURL: string;
+    coverURL: string;
   };
   contact: {
     companyPhone: string;

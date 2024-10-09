@@ -16,24 +16,34 @@ export default class CompanyService {
     }
   }
 
-  static async delete ( id: string ) {
+  static async delete(id: string) {
     try {
-      const response = await api.delete(`${endpoint.company.base}/${id}`)
+      const response = await api.delete(`${endpoint.company.base}/${id}`);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
+  static async create() {
+    try {
+      const response = await api.post(endpoint.company.createUser);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
+  static async getById(id: string) {
+    try {
+      const response = await api.get(`${endpoint.company.base}/${id}`)
       return response.data
     }
     catch (err) {
       const error = err as Error
       throw new Error(error.message)
-    }
-  }
-
-  static async create () {
-    try {
-      const response = await api.post( endpoint.company.createUser)
-      return response.data
-    }
-    catch (err) {
-      const error = err
     }
   }
 }

@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/charts": "^2.2.1",
     "@ant-design/cssinjs": "^1.21.1",
     "@ant-design/icons": "^5.5.1",
     "@emotion/react": "^11.13.3",
@@ -30,6 +31,7 @@
     "sass": "^1.79.4"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.10",
     "@types/node": "^20.16.10",
     "@types/react": "^18.3.11",
     "@types/react-dom": "^18.3.0",
