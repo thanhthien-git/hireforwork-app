@@ -11,13 +11,14 @@ import {
 import styles from "./styles.module.scss";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import { debounce } from "@mui/material";
-import axios from "axios";
+import { useRouter } from "next/router";
 
 export default function CompanyManagerTable() {
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
   const [companyData, setCompanyData] = useState([]);
   const [totalDocs, setTotalDocs] = useState(0);
+  const router = useRouter();
 
   const handleOpenModal = useCallback(() => {
     setOpenModal(true);
@@ -68,7 +69,9 @@ export default function CompanyManagerTable() {
             <div>Company's email</div>
             <HeaderSearchComponent
               placeholder="Company's email"
-              onChange={(e) => handleInputSearch("companyEmail", e.target.value)}
+              onChange={(e) =>
+                handleInputSearch("companyEmail", e.target.value)
+              }
             />
           </>
         ),
@@ -81,7 +84,9 @@ export default function CompanyManagerTable() {
             <div>Company's Phone</div>
             <HeaderSearchComponent
               placeholder="Company's Phone"
-              onChange={(e) => handleInputSearch("companyPhone", e.target.value)}
+              onChange={(e) =>
+                handleInputSearch("companyPhone", e.target.value)
+              }
             />
           </>
         ),
@@ -123,7 +128,11 @@ export default function CompanyManagerTable() {
             >
               <Button icon={<DeleteOutlined />}></Button>
             </Popconfirm>{" "}
-            <Button type="link" icon={<InfoCircleOutlined />} href={`/admin/companies-manager/${record._id}`} />
+            <Button
+              type="link"
+              icon={<InfoCircleOutlined />}
+              href={`/admin/companies-manager/${record._id}`}
+            />
           </>
         ),
       },
@@ -159,20 +168,21 @@ export default function CompanyManagerTable() {
     [setFilter]
   );
 
-  const handleDelete = useCallback(async (value: string) => {
-    try {
-      setLoading(true)
-      await CompanyService.delete(value) 
-      fetchCompany()
-      notification.success({ message: "Delete company success!"})
-    }
-    catch{
-      notification.error({ message: "Delete company failed"})
-    }
-    finally {
-      setLoading(false)
-    }
-  },[setLoading, notification, fetchCompany])
+  const handleDelete = useCallback(
+    async (value: string) => {
+      try {
+        setLoading(true);
+        await CompanyService.delete(value);
+        fetchCompany();
+        notification.success({ message: "Delete company success!" });
+      } catch {
+        notification.error({ message: "Delete company failed" });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading, notification, fetchCompany]
+  );
 
   useEffect(() => {
     fetchCompany();
@@ -183,7 +193,7 @@ export default function CompanyManagerTable() {
       <Button
         className={styles["button-add-new"]}
         icon={<PlusOutlined />}
-        onClick={handleOpenModal}
+        onClick={()=> router.push('/admin/companies-manager/create')}
       >
         Add new
       </Button>

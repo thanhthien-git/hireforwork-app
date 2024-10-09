@@ -25,6 +25,7 @@ export default function RichTextEditor({
 }) {
   return (
     <FormItem
+      className={className}
       label={!selfLabel && label ? label : ""}
       validateStatus={errors?.[name] ? "error" : "success"}
       help={get(errors, `${name}.message`)}
@@ -39,8 +40,8 @@ export default function RichTextEditor({
           <ReactQuill
             theme="snow"
             placeholder={placeholder}
-            value={value || ""}
-            onChange={onChange}  // Ensure this updates correctly
+            value={value}
+            onChange={(content) => onChange(content)}
             className={className}
           />
         )}
