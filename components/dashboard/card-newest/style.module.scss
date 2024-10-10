@@ -1,0 +1,19 @@
+.avatar{
+    width: 4rem;
+    height: 4rem;
+    padding: 0.5rem;
+    border-radius: 50%;
+    border: 1px #5422c9 solid;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.title-username{
+    font-size: 16px;
+}
+
+.col-info {
+    display: flex;
+    flex-direction: column;
+}

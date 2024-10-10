@@ -12,11 +12,14 @@
 }
 
 .layout-collapse {
+  height: 100vh;
   margin-left: 80px;
   transition: margin-left 0.3s ease;
 }
 
 .layout-collapse-active {
+  height: 100vh;
+
   margin-left: 48px;
   transition: margin-left 0.3s ease;
 }
@@ -37,7 +40,7 @@
 
 .content {
   padding: 80px 16px 16px 16px;
-  min-height: calc(100vh - 70px);
+  min-height: calc(100vh - 80px);
   overflow-y: auto;
 }
 
@@ -45,5 +48,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-grow: 1;
 }
 
