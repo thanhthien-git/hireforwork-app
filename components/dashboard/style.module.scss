@@ -1,0 +1,21 @@
+.dashboard-container {
+  height: 100%;
+  display: flex;
+}
+.card-bar-chart {
+  height: 100%;
+  justify-content: center;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.card-static-row {
+  height: 50%;
+}
+.card-statics {
+  max-height: 295px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none; 
+  }
+}

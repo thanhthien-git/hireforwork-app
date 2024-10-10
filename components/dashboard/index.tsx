@@ -1,28 +1,45 @@
-import { Bar } from "@ant-design/charts";
+import { Card, Col, Row, Space } from "antd";
+import styles from "./style.module.scss";
+import BarChart from "./bar-chart";
+import CardNewestUser from "./card-newest";
+import Title from "antd/lib/typography/Title";
 
 export default function DashboardPage() {
-  const data = [
-    { type: "Category A", value: 30 },
-    { type: "Category B", value: 70 },
-    { type: "Category C", value: 45 },
-    { type: "Category D", value: 60 },
-  ];
+  return (
+    <Row className={styles["dashboard-container"]} gutter={[16, 16]}>
+      <Col span={12}>
+        <Card className={styles["card-bar-chart"]}>
+          <BarChart />
+        </Card>
+      </Col>
+      <Col span={12}>
+        <Row gutter={[16, 16]} className={styles["card-static-row"]}>
+          <Col span={24}>
+            <Card
+              className={styles["card-statics"]}
+            >
+              <Title level={5}>New career</Title>
 
-  const config = {
-    data,
-    xField: "type", 
-    yField: "value",
-    label: {
-      position: "top", 
-      style: {
-        fill: "#FFFFFF", 
-        opacity: 0.6, 
-      },
-    },
-    meta: {
-      type: { alias: "Category" },
-      value: { alias: "Value" },
-    },
-  };
-  return <Bar {...config} />;
+              <CardNewestUser />
+              <CardNewestUser />
+              <CardNewestUser />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={[16, 16]} className={styles["card-static-row"]}>
+          <Col span={24} style={{ display: "flex", alignItems: "flex-end" }}>
+            <Card
+              className={styles["card-statics"]}
+            >
+              <Title level={5}>New job post</Title>
+
+              <CardNewestUser />
+              <CardNewestUser />
+              <CardNewestUser />
+            </Card>
+          </Col>
+        </Row>
+      </Col>
+    </Row>
+  );
 }
