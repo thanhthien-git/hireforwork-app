@@ -261,7 +261,7 @@ export default function UserDetail() {
                   <h3>Employment history</h3>
                   <PlusCircleOutlined/>
                 </div>
-                <div style={{ height: "400px" }}>
+                <div className={styles["footer-user-detail"]}>
                  
                   <Empty
                     image="https://gw.alipayobjects.com/zos/antfincdn/ZHrcdLPrvN/empty.svg"
