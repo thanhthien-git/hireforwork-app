@@ -268,7 +268,7 @@ export default function UserDetail() {
                     imageStyle={{ height: 240 }}
                     description={
                       <Typography.Text>
-                        Add a project. Talent are hired 9x more often if they’ve published a portfolio.
+                        Add a project.Talent are hired 9x more often if they’ve published a portfolio.
                       </Typography.Text>
                     }
                   >

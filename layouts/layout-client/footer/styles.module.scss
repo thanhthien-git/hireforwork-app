@@ -3,6 +3,10 @@
   justify-content: space-between;
   background-color: #3c1990; /* Màu nền của footer */
   color: white;
+  padding: 20px 0;
+  background-color: #3C1990; /* Màu nền của footer */
+  color: white; /* Màu chữ */
+
   .column {
     flex: 1; /* Chia đều không gian giữa các cột */
     padding: 0 50px; /* Khoảng cách giữa các cột */
