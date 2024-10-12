@@ -1,4 +1,5 @@
 import DashboardPage from "@/components/dashboard";
+import withRole from "@/hocs/withRole";
 import LayoutAdmin from "@/layouts/layout-admin";
 
 function Dashboard() {
@@ -9,4 +10,4 @@ function Dashboard() {
   );
 }
 
-export default Dashboard;
+export default withRole(Dashboard);

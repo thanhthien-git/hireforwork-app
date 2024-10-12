@@ -4,7 +4,6 @@ import styles from "./style.module.scss";
 import Head from "next/head";
 import LayoutClientHeader from "./header";
 import LayoutClientFooter from "./footer";
-
 interface IProps {
   children: ReactNode;
   title: string;

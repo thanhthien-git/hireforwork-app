@@ -12,6 +12,9 @@ const endpoint = {
     company: {
         base: '/companies',
         createUser: '/companies/create',
+    },
+    job: {
+        base: '/jobs',
     }
 }   
 export default endpoint

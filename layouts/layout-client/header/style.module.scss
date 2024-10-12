@@ -24,15 +24,11 @@
       margin: 0;
 
       li {
-        margin: 0 9px; /* Giảm khoảng cách giữa các mục menu */
+        margin: 0 9px;
         a {
           text-decoration: none;
           color: white;
-          font-size: 14px; /* Kích thước chữ của menu */
-
-          &:hover {
-            text-decoration: underline;
-          }
+          font-size: 14px;
         }
       }
     }
@@ -41,41 +37,57 @@
   .styled-button {
     font-size: 14px;
     margin-left: 5px;
+    font-weight: bold;
     background-color: transparent;
-    color: white; 
+    color: white;
+  }
+}
+.hamburgerMenu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav,
+  .styled-button {
+    display: none;
   }
 
-  .authButtons {
-    display: flex;
-    align-items: center;
+  .drawer{
+    width: 50%;
+  }
+  .ant-drawer-content{
+    width: 100%;
+  }
 
-    .employer {
-      position: relative; /* Để cho dropdown có thể được định vị tương đối */
-      margin-left: 5px; /* Giảm khoảng cách giữa nút Nhà Tuyển Dụng */
+  .hamburgerMenu {
+    display: block;
+  }
 
-      .tagline {
-        display: block; /* Đặt tagline xuống dòng mới */
-        font-size: 10px; /* Kích thước chữ nhỏ hơn */
-        margin-top: 3px; /* Giảm khoảng cách giữa nút và tagline */
-        text-align: center; /* Căn giữa tagline */
+  .mobileNav {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 20px;
+      a {
+        text-decoration: none;
+        color: #3c1990;
       }
+    }
+  }
 
-      .dropdown {
-        position: absolute; /* Đặt dropdown ở vị trí tuyệt đối */
-        top: 100%; /* Đặt dropdown ngay dưới button */
-        left: 0;
-        background-color: #6f42c1; /* Màu nền của dropdown */
-        border: 1px solid white; /* Border của dropdown */
-        z-index: 1000; /* Đảm bảo dropdown nằm trên các phần tử khác */
-      }
+  .mobileAuthButtons {
+    margin-top: 20px;
+
+    .styled-button {
+      margin-bottom: 10px;
+      font-weight: bold;
     }
   }
 }
 
-.loginButtonDropdown {
-  background-color: #007bff; /* Màu xanh dương cho Đăng Nhập */
-}
-
-.registerButtonDropdown {
-  background-color: #ff7f50; /* Màu cam cho Đăng Ký */
+.custom-button {
+  color: #3c1990;
+  font-size: 13px;
+  font-weight: bold;
 }

@@ -37,7 +37,6 @@ export default function InputPasswordComponent({
       render={({ field, fieldState }) => (
         <FormItem
           label={label}
-          className={className}
           help={fieldState.error?.message}
           validateStatus={fieldState.invalid ? "error" : "success"}
         >
@@ -46,6 +45,7 @@ export default function InputPasswordComponent({
             allowClear
             placeholder={placeholder}
             addonAfter={addonAfter}
+            className={className}
             {...inputProps}
           ></Input.Password>
         </FormItem>
