@@ -28,7 +28,7 @@ export const menuItems = [
   },
   {
     name: "Job Post",
-    path: "",
+    path: "/admin/jobs-manager",
     icon: <PaperClipOutlined />,
   },
   {

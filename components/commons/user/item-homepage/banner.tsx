@@ -1,6 +1,7 @@
 import { Card, Input, Button, Select, Row, Col } from 'antd';
 import styles from './style.module.scss';
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 
 const { Option } = Select;
 
@@ -77,12 +78,14 @@ const Banner = () => {
                   <Option value="hcm">TP. HCM</Option>
                 </Select>
               </Col>
+              <Col span={4}>
+                <Button type="primary"><Link href="/home-search">Tìm Kiếm</Link></Button>
+              </Col>
             </Row>
 
           </Card>
         </Col>
 
-        {/* Right Banner Section - Hidden on small screens */}
         <Col xs={0} sm={0} md={12}>
           <Card className={styles.reportCard} bordered={false}>
             <h2>BÁO CÁO THỊ TRƯỜNG TUYỂN DỤNG {new Date().getFullYear()}</h2>
