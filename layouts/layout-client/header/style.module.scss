@@ -10,6 +10,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+
     .logo {
       height: 25px;
       margin-right: 5px;
@@ -52,30 +53,18 @@
     .employer {
       position: relative; /* Để cho dropdown có thể được định vị tương đối */
       margin-left: 5px; /* Giảm khoảng cách giữa nút Nhà Tuyển Dụng */
+    }
+  }
 
-      .tagline {
-        display: block; /* Đặt tagline xuống dòng mới */
-        font-size: 10px; /* Kích thước chữ nhỏ hơn */
-        margin-top: 3px; /* Giảm khoảng cách giữa nút và tagline */
-        text-align: center; /* Căn giữa tagline */
-      }
-
-      .dropdown {
-        position: absolute; /* Đặt dropdown ở vị trí tuyệt đối */
-        top: 100%; /* Đặt dropdown ngay dưới button */
-        left: 0;
-        background-color: #6f42c1; /* Màu nền của dropdown */
-        border: 1px solid white; /* Border của dropdown */
-        z-index: 1000; /* Đảm bảo dropdown nằm trên các phần tử khác */
+  @media (max-width: 768px) {
+    .nav {
+      display: none; /* Ẩn phần menu điều hướng trên màn hình nhỏ */
+    }
+    
+    .authButtons {
+      .employer {
+        margin-left: 5px; /* Giảm khoảng cách giữa nút Nhà Tuyển Dụng */
       }
     }
   }
-}
-
-.loginButtonDropdown {
-  background-color: #007bff; /* Màu xanh dương cho Đăng Nhập */
-}
-
-.registerButtonDropdown {
-  background-color: #ff7f50; /* Màu cam cho Đăng Ký */
 }

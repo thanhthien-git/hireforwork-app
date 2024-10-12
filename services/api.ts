@@ -40,4 +40,25 @@ api.interceptors.response.use(
   }
 );
 
+
+// Định nghĩa URL host
+const BASE_URL = 'http://localhost:8080'; // Thay đổi URL này khi cần
+
+// Hàm gọi API
+export const apiClient = axios.create({
+  baseURL: BASE_URL,
+  timeout: 10000, // Thời gian chờ (milliseconds)
+});
+
+// Hàm để lấy dữ liệu từ endpoint cụ thể
+export const fetchData = async (endpoint: string) => {
+  try {
+    const response = await apiClient.get(endpoint);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching data from ${endpoint}:`, error);
+    throw error;
+  }
+};
+
 export default api;

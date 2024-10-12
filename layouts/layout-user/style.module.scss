@@ -1,0 +1,12 @@
+.layoutContainer {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Full viewport height */
+  }
+  
+  .mainContent {
+    flex: 1; /* This allows the main content to expand and push the footer down */
+  }
+  
+  /* Footer will always be at the bottom, even if content is less */
+  
