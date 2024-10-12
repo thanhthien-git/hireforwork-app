@@ -6,7 +6,10 @@ import CompaniesList from "../components/commons/user/item-homepage/company";
 import Rating from "../components/commons/user/item-homepage/rating";
 import Banner from "../components/commons/user/item-homepage/jobbanner";
 import LayoutClient from "@/layouts/layout-client";
+import { useSelector } from "react-redux";
 const HomePage = () => {
+  const { isAuth } = useSelector((state) => state.auth);
+  
   return (
     <div>
       <LayoutClient title="Home page">
@@ -14,9 +17,8 @@ const HomePage = () => {
           <App />
           <CompaniesList />
           <JobsList />
-          <Banner />
+          {!isAuth ?(<Banner />) : null}
           <JobsIT />
-          <Rating />
         </div>
       </LayoutClient>
     </div>

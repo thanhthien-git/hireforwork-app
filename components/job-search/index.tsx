@@ -56,10 +56,9 @@ const SearchForm = () => {
             <Button
               type="default"
               icon={<FilterOutlined />}
-              className={`${styles["actionButtons"]} ${styles["searchButton"]}`}
+              className={styles["actionButtons"]}
               onClick={toggleAdvancedFilter}
             >
-              LỌC NÂNG CAO
             </Button>
           </Col>
         </Row>
