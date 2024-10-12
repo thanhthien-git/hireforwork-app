@@ -1,7 +1,7 @@
 import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-
+import { fetchData } from './api'; 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
     try {
@@ -47,3 +47,18 @@ export default class CompanyService {
     }
   }
 }
+
+// services/companyService.ts
+// Hàm gọi API để lấy danh sách công ty
+export interface Company {
+  _id: string;
+  companyImage: {
+    imageURL: string;
+  };
+  companyName: string;
+  description: string;
+}
+
+export const fetchCompanies = async () => {
+  return await fetchData('/companies'); // Sử dụng hàm fetchData với endpoint /companies
+};
