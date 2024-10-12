@@ -1,5 +1,6 @@
 import { Card, Input, Button, Select, Row, Col } from 'antd';
 import styles from './style.module.scss'; // Custom CSS/SCSS module if necessary
+import Link from 'next/link';
 
 const { Option } = Select;
 
@@ -29,7 +30,7 @@ const Banner = () => {
                 </Select>
               </Col>
               <Col span={4}>
-                <Button type="primary">Tìm Kiếm</Button>
+                <Button type="primary"><Link href="/home-search">Tìm Kiếm</Link></Button>
               </Col>
             </Row>
           </Card>
