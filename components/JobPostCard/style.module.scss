@@ -1,0 +1,29 @@
+.card {
+    border-radius: 8px;
+    background-color: #fafafa;
+    margin-bottom: 16px;
+  }
+  
+  .image {
+    border-radius: 8px;
+  }
+  
+  .title {
+    margin: 0;
+  }
+  
+  .company {
+    font-size: 14px;
+    color: #595959;
+  }
+  
+  .icon-text {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+  
+    .icon {
+      margin-right: 4px;
+    }
+  }
+  
