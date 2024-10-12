@@ -1,19 +1,21 @@
 .footer {
   display: flex;
-  justify-content: space-between;
-  background-color: #3c1990; /* Màu nền của footer */
+  flex-wrap: wrap; /* Cho phép các cột gập lại trên các màn hình nhỏ */
+  justify-content: space-between; /* Căn giữa trên màn hình lớn */
+  align-items: flex-start; /* Căn đầu cột theo chiều dọc */
+  background-color: #3C1990; /* Màu nền của footer */
   color: white;
   padding: 20px 0;
-  background-color: #3C1990; /* Màu nền của footer */
-  color: white; /* Màu chữ */
 
   .column {
     flex: 1; /* Chia đều không gian giữa các cột */
-    padding: 0 50px; /* Khoảng cách giữa các cột */
-
+    padding: 0 20px; /* Khoảng cách giữa các cột */
+    min-width: 200px; /* Đảm bảo các cột không quá hẹp */
+    text-align: left; /* Căn trái cho các mục trong cột */
+    
     h4 {
       margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
-      font-size: 12px; /* Kích thước chữ tiêu đề lớn hơn */
+      font-size: 14px; /* Kích thước chữ tiêu đề lớn hơn */
       font-weight: bold;
     }
 
@@ -25,13 +27,23 @@
 
       li {
         margin: 10px 0; /* Khoảng cách giữa các mục */
-        font-size: 10px; /* Kích thước chữ cho các mục trong danh sách */
+        font-size: 14px; /* Kích thước chữ cho các mục trong danh sách */
         cursor: pointer; /* Thay đổi con trỏ khi hover */
 
         &:hover {
           text-decoration: underline; /* Gạch chân khi hover */
         }
       }
+    }
+  }
+
+  @media (max-width: 768px) {
+    justify-content: center; /* Căn giữa các cột khi màn hình nhỏ */
+    
+    .column {
+      flex: 1 1 100%; /* Các cột sẽ chiếm 100% chiều rộng */
+      margin-bottom: 20px; /* Thêm khoảng cách giữa các cột khi xếp chồng */
+      text-align: center; /* Căn giữa cho các mục trong cột */
     }
   }
 }

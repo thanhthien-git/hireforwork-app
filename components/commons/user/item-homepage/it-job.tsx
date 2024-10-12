@@ -1,100 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Pagination, Tag } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons"; 
-const jobList = [
-    {
-        title: "Kỹ Sư Phần Mềm",
-        company: "CÔNG TY CỔ PHẦN PHÁT TRIỂN CÔNG NGHỆ",
-        salary: "20 triệu - 30 triệu",
-        location: "Hà Nội",
-        date: "01/05/2024",
-        hot: true,
-      },
-      {
-        title: "Nhân Viên Hỗ Trợ Kỹ Thuật",
-        company: "CÔNG TY TNHH DỊCH VỤ CÔNG NGHỆ",
-        salary: "8 triệu - 12 triệu",
-        location: "TP. HCM",
-        date: "05/05/2024",
-        hot: true,
-      },
-      {
-        title: "Quản Lý Dự Án CNTT",
-        company: "CÔNG TY TNHH GIẢI PHÁP CÔNG NGHỆ",
-        salary: "25 triệu - 35 triệu",
-        location: "Đà Nẵng",
-        date: "15/05/2024",
-        hot: false,
-      },
-      {
-        title: "Chuyên Viên Phân Tích Dữ Liệu",
-        company: "CÔNG TY CỔ PHẦN PHÂN TÍCH DỮ LIỆU",
-        salary: "15 triệu - 20 triệu",
-        location: "Hà Nội",
-        date: "20/05/2024",
-        hot: true,
-      },
-      {
-        title: "Kỹ Sư Kiểm Thử Phần Mềm",
-        company: "CÔNG TY TNHH KIỂM THỬ VÀ ĐÁNH GIÁ",
-        salary: "10 triệu - 15 triệu",
-        location: "Hải Phòng",
-        date: "25/05/2024",
-        hot: false,
-      },
-      {
-        title: "Nhà Phát Triển Frontend",
-        company: "CÔNG TY CỔ PHẦN PHÁT TRIỂN PHẦN MỀM",
-        salary: "15 triệu - 25 triệu",
-        location: "TP. HCM",
-        date: "30/05/2024",
-        hot: false,
-      },
-      {
-        title: "Nhà Phát Triển Backend",
-        company: "CÔNG TY TNHH GIẢI PHÁP CÔNG NGHỆ",
-        salary: "20 triệu - 30 triệu",
-        location: "Hà Nội",
-        date: "05/06/2024",
-        hot: true,
-      },
-      {
-        title: "Kỹ Sư Hệ Thống",
-        company: "CÔNG TY CỔ PHẦN ĐIỆN TỬ",
-        salary: "12 triệu - 18 triệu",
-        location: "Nha Trang",
-        date: "10/06/2024",
-        hot: false,
-      },
-      {
-        title: "Chuyên Viên An Ninh Mạng",
-        company: "CÔNG TY TNHH AN TOÀN THÔNG TIN",
-        salary: "25 triệu - 35 triệu",
-        location: "TP. HCM",
-        date: "15/06/2024",
-        hot: true,
-      },
-      {
-        title: "Nhân Viên Telesales Công Nghệ",
-        company: "CÔNG TY TNHH BÁN HÀNG ONLINE",
-        salary: "6 triệu - 8 triệu",
-        location: "Hà Nội",
-        date: "20/06/2024",
-        hot: false,
-      },
-      {
-        title: "Nhân Viên Hỗ Trợ Khách Hàng CNTT",
-        company: "CÔNG TY CỔ PHẦN DỊCH VỤ KHÁCH HÀNG",
-        salary: "8 triệu - 10 triệu",
-        location: "Đà Nẵng",
-        date: "25/06/2024",
-        hot: true,
-      },
-];
+import { fetchNewJobs, NewJob } from "../../../../services/jobService"; // Điều chỉnh đường dẫn import nếu cần
 
-const JobsIT = () => {
-  const [current, setCurrent] = useState(1);
+const JobsList: React.FC = () => {
+  const [jobList, setJobList] = useState<NewJob[]>([]); // Sử dụng kiểu NewJob
+  const [current, setCurrent] = useState<number>(1);
   const pageSize = 6;
+
+  useEffect(() => {
+    const getJobs = async () => {
+      try {
+        const data = await fetchNewJobs();
+        console.log("Data from API Newjob:", data);  // Kiểm tra dữ liệu trả về
+
+        // Giả sử rằng dữ liệu trả về là một mảng công việc
+        const filteredJobs = data.filter((job: NewJob) => { 
+          const createAt = new Date(job.createAt);
+          const expireDate = new Date(job.expireDate);
+          const differenceInTime = expireDate.getTime() - createAt.getTime();
+          const differenceInDays = differenceInTime / (1000 * 3600 * 24);
+          return differenceInDays ; // Lọc những công việc có hạn chót trong 7 ngày
+        });
+        setJobList(filteredJobs);
+      } catch (error) {
+        console.error("Error fetching jobs:", error);
+      }
+    };
+
+    getJobs(); // Gọi hàm khi component mount
+  }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -114,29 +49,32 @@ const JobsIT = () => {
           backgroundColor: "#2F1471",
           padding: "15px",
           display: "flex",
-          alignItems: "center", // Căn giữa biểu tượng và chữ
+          alignItems: "center",
         }}
       >
-        <ClockCircleOutlined style={{ marginRight: "10px", fontSize: "20px", color: "#fff" }} /> {/* Biểu tượng đồng hồ */}
-        Việc làm ngành nghề IT-Phần mềm
+        <ClockCircleOutlined style={{ marginRight: "10px", fontSize: "20px", color: "#fff" }} />
+        Việc làm mới nhất
       </h2>
       <Row gutter={[16, 16]}>
-        {paginatedJobs.map((job, index) => (
-          <Col key={index} xs={24} sm={12} md={8}>
-            <Card hoverable style={{  borderRadius: "8px",
-                                      display: "flex",
-                                      flexDirection: "column",
-                                      height: "100%", }}>
-              <h3>{job.title}</h3>
-              <p>{job.company}</p>
-              <p>
-                {job.salary} - {job.location}
-              </p>
-              <p>{job.date}</p>
-              {job.hot && <Tag color="red">HOT</Tag>}
-            </Card>
+        {paginatedJobs.length > 0 ? (
+          paginatedJobs.map((job) => (
+            <Col key={job._id} xs={24} sm={12} md={8}>
+              <Card hoverable style={{ borderRadius: "8px", display: "flex", flexDirection: "column", height: "100%" }}>
+                <h3>{job.jobTitle}</h3>
+                <p>{job.jobDescription}</p>
+                <p>
+                  {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
+                </p>
+                <p>{new Date(job.createAt).toLocaleDateString()} - {new Date(job.expireDate).toLocaleDateString()}</p>
+                {job.isHot && <Tag color="red">HOT</Tag>}
+              </Card>
+            </Col>
+          ))
+        ) : (
+          <Col span={24}>
+            <p>Không có công việc nào để hiển thị.</p>
           </Col>
-        ))}
+        )}
       </Row>
       <Pagination
         style={{ marginTop: "20px", textAlign: "center" }}
@@ -149,4 +87,4 @@ const JobsIT = () => {
   );
 };
 
-export default JobsIT;
+export default JobsList;
