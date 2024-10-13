@@ -9,7 +9,7 @@ const HeaderUserDetail = () => (
     <div className={styles.subHeadRow}>
       <div className={styles.subHeadRow1}>
         <Avatar
-          size={{ xs: 29, sm: 39, md: 47, lg: 70, xl: 80, xxl: 100 }}
+          size={{ xs: 30, sm: 33, md: 38, lg: 70, xl: 80, xxl: 100 }}
           icon={<AntDesignOutlined />}
         />
         <div className={styles.flex}>
