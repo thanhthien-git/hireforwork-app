@@ -1,75 +1,35 @@
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import logo from '../../../../assets/google-icon.png'; 
-
-const similarJobs = [
-  {
-    id: '1',
-    company: 'Google',
-    title: 'Software Engineer',
-    salary: '20 triệu - 30 triệu',
-    location: 'Hà Nội',
-    datePosted: '15/09/2024',
-    logo: logo,
-  },
-  {
-    id: '2',
-    company: 'Microsoft',
-    title: 'Data Scientist',
-    salary: '15 triệu - 25 triệu',
-    location: 'Đà Nẵng',
-    datePosted: '10/09/2024',
-    logo: logo,
-},
-{
-    id: '3',
-    company: 'Amazon',
-    title: 'Cloud Architect',
-    salary: '30 triệu - 50 triệu',
-    location: 'TP.HCM',
-    datePosted: '05/09/2024',
-    logo: logo,
-},
-{
-    id: '4',
-    company: 'Amazon',
-    title: 'Cloud Architect',
-    salary: '30 triệu - 50 triệu',
-    location: 'TP.HCM',
-    datePosted: '05/09/2024',
-    logo: logo,
-},
-{
-    id: '5',
-    company: 'Amazon',
-    title: 'Cloud Architect',
-    salary: '30 triệu - 50 triệu',
-    location: 'TP.HCM',
-    datePosted: '05/09/2024',
-    logo: logo,
-}, {
-    id: '6',
-    company: 'Amazon',
-    title: 'Cloud Architect',
-    salary: '30 triệu - 50 triệu',
-    location: 'TP.HCM',
-    datePosted: '05/09/2024',
-    logo: logo,
-}, {
-    id: '7',
-    company: 'Amazon',
-    title: 'Cloud Architect',
-    salary: '30 triệu - 50 triệu',
-    location: 'TP.HCM',
-    datePosted: '05/09/2024',
-    logo: logo,
-},
-
-];
+import { fetchNewJobs, Job } from '../../../../services/jobService';
 
 const SimilarJobs = () => {
+  const [similarJobs, setSimilarJobs] = useState<Job[]>([]); // State for similar jobs
+  const [loading, setLoading] = useState<boolean>(true); // State for loading status
+  const [error, setError] = useState<string | null>(null); // State for error messages
+
+  useEffect(() => {
+    const getSimilarJobs = async () => {
+      try {
+        const data = await fetchNewJobs(); // Fetch similar jobs
+        setSimilarJobs(data);
+      } catch (error) {
+        console.error("Error fetching similar jobs:", error);
+        setError((error as Error).message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    getSimilarJobs();
+  }, []);
+
+  if (loading) return <p>Loading...</p>; // Show loading message
+  if (error) return <p>Error: {error}</p>; // Show error message
+
   return (
     <div className={styles.similarJobs}>
       <div className={styles.similarJobsHeader}>
@@ -81,20 +41,29 @@ const SimilarJobs = () => {
         </Link>
       </div>
       <div className={styles.similarJobsList}>
-        {similarJobs.map(job => (
-          <Link key={job.id} href={`/job-details/${job.id}`}>
-            <div className={styles.similarJobItem}>
-              <Image src={job.logo} alt={`${job.company} Logo`} width={60} height={60} />
-              <div className={styles.similarJobInfo}>
-                <h4>{job.title}</h4>
-                <p>{job.company}</p>
-                <p><DollarOutlined />{job.salary}</p>
-                <p><EnvironmentOutlined />{job.location}</p>
-                <p><CalendarOutlined />{job.datePosted}</p>
+        {similarJobs.length > 0 ? (
+          similarJobs.map(job => (
+            <Link key={job._id} href={`/job-details?=${job._id}`}>
+              <div className={styles.similarJobItem}>
+                <Image 
+                  src={job.companyImage?.imageURL || logo} // Use company logo or default logo
+                  alt={`${job.companyName} Logo`} 
+                  width={60} 
+                  height={60} 
+                />
+                <div className={styles.similarJobInfo}>
+                  <h4>{job.jobTitle}</h4>
+                  <p>{job.companyName}</p>
+                  <p><DollarOutlined />{job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu</p>
+                  <p><EnvironmentOutlined />{job.workingLocation}</p>
+                  <p><CalendarOutlined />{new Date(job.createAt).toLocaleDateString()}</p>
+                </div>
               </div>
-            </div>
-          </Link>
-        ))}
+            </Link>
+          ))
+        ) : (
+          <p>Không có công việc nào để hiển thị.</p> // No jobs to display
+        )}
       </div>
     </div>
   );
