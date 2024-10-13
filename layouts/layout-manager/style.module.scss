@@ -1,11 +1,17 @@
 .custom-sider {
-  background: #fff;         
-  margin: 10px;           
-  border-radius: 10px;   
-  height: fit-content;      
-  overflow: hidden;     
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   
+  background: #fff;
+  margin: 10px;
+  border-radius: 10px;
+  height: fit-content;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
 }
+
+.custom-sider .ant-menu-item-selected {
+  color: white !important; 
+}
+
 .menu-button {
   display: none; 
 }
@@ -14,7 +20,7 @@
   .custom-sider {
     display: none; 
   }
-  
+
   .menu-button {
     display: block; 
   }

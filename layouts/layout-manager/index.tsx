@@ -1,6 +1,8 @@
 import { Layout, Menu } from "antd";
-import { ReactNode } from "react";
+import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./style.module.scss";
+import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router";
 
 const { Content, Sider } = Layout;
 
@@ -16,18 +18,60 @@ interface IProps {
 }
 
 export default function LayoutManager({ menu, children }: Readonly<IProps>) {
+  const [collapsed, setCollapsed] = useState<boolean>(false);
+  const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const defaultSelectedKeys = useMemo(() => {
+    return ["/company"];
+  }, []);
+
+  const router = useRouter();
+
+  useEffect(() => {
+    if (router.pathname !== "toggle") {
+      setOpenKeys([router.pathname]);
+    }
+  }, [router.pathname]);
+
+  const handleOpen = useCallback((key: string[]) => {
+    if (key[0] !== "toggle") {
+      setOpenKeys(key);
+    }
+  }, []);
+
+  const toggleCollapsed = () => {
+    setCollapsed(!collapsed);
+  };
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider width={250} className={styles["custom-sider"]}>
+      <Sider
+        width={250}
+        className={styles["custom-sider"]}
+        collapsed={collapsed}
+        onCollapse={setCollapsed}
+      >
         <Menu
+          defaultSelectedKeys={defaultSelectedKeys}
           mode="inline"
-          defaultSelectedKeys={["1"]}
+          selectedKeys={openKeys}
+          onClick={(key) => handleOpen(key.keyPath)}
+          style={{ color: 'white' }}
         >
           {menu?.map((menuItem) => (
-            <Menu.Item key={menuItem.path} icon={menuItem.icon}>
+            <Menu.Item key={menuItem.path} icon={menuItem.icon} style={{ color: openKeys.includes(menuItem.path) ? 'white' : undefined }}>
               {menuItem.name}
             </Menu.Item>
           ))}
+
+          <Menu.Item
+            key="toggle"
+            onClick={toggleCollapsed}
+            icon={
+              <span>
+                {collapsed ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
+              </span>
+            }
+          />
         </Menu>
       </Sider>
       <Layout>

@@ -15,8 +15,7 @@ const JobDescription = () => {
       if (id && typeof id === 'string') {
         try {
           const jobData = await fetchJobById(id);
-          console.log("Fetched job data:", jobData.doc); // Adjusted to log jobData.doc
-          setJob(jobData.doc); // Set the job from jobData.doc
+          setJob(jobData.doc); 
         } catch (err) {
           setError((err as Error).message);
         } finally {
@@ -28,13 +27,13 @@ const JobDescription = () => {
     fetchJobDetails();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>; // Show loading state
-  if (error) return <p>Error: {error}</p>; // Show error message
+  if (loading) return <p>Loading...</p>; 
+  if (error) return <p>Error: {error}</p>; 
 
   return (
     <div className={styles.jobDescription}>
       <h3 className={styles.Description}>Mô tả công việc</h3>
-      <p>{job?.jobDescription || "No description available."}</p>
+      <p>{job?.jobDescription ?? "No description available."}</p>
     </div>
   );
 };

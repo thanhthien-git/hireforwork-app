@@ -1,10 +1,9 @@
-import UserService from "@/services/userService";
 import {
   ClockCircleOutlined,
   FileDoneOutlined,
-  HeartOutlined,
   PaperClipOutlined,
   PieChartOutlined,
+  SettingOutlined,
   TagOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -57,5 +56,28 @@ export const careerSider = [
     name: "Việc làm đã xem",
     path: "/",
     icon: <ClockCircleOutlined />,
-  }
+  },
+];
+
+export const companySider = [
+  {
+    name: "Tổng quan",
+    path: "/",
+    icon: <PieChartOutlined />,
+  },
+  {
+    name: "Việc làm đã đăng",
+    path: "/job-post",
+    icon: <FileDoneOutlined />,
+  },
+  {
+    name: "Danh sách ứng viên",
+    path: "/career-list",
+    icon: <UserOutlined />,
+  },
+  {
+    name: "Thông tin",
+    path: "/settings",
+    icon: <SettingOutlined />,
+  },
 ];
