@@ -9,7 +9,7 @@ const Breadcrumb = () => {
       <RightOutlined />
       <Link href="/jobs">Công việc</Link>
       <RightOutlined />
-      <Link href="/job-details">Chi tiết công việc</Link>
+      <a>Chi tiết công việc</a>
     </nav>
   );
 };

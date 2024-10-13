@@ -1,26 +1,27 @@
 import React, { useState, useEffect } from "react";
 import { Card, Col, Row, Pagination, Tag } from "antd";
-import { ClockCircleOutlined } from "@ant-design/icons"; 
-import { fetchNewJobs, Job } from "../../../../services/jobService"; // Điều chỉnh đường dẫn import nếu cần
+import { ClockCircleOutlined } from "@ant-design/icons";
+import { fetchNewJobs, Job } from "../../../../services/jobService";
+import { useRouter } from 'next/router'; // Import useRouter
 
 const JobsList: React.FC = () => {
-  const [jobList, setJobList] = useState<Job[]>([]); // Sử dụng kiểu NewJob
+  const [jobList, setJobList] = useState<Job[]>([]);
   const [current, setCurrent] = useState<number>(1);
   const pageSize = 6;
+  const router = useRouter(); // Create router instance
 
   useEffect(() => {
     const getJobs = async () => {
       try {
         const data = await fetchNewJobs();
-        console.log("Data from API Newjob:", data);  // Kiểm tra dữ liệu trả về
+        console.log("Data from API Newjob:", data);
 
-        // Giả sử rằng dữ liệu trả về là một mảng công việc
-        const filteredJobs = data.filter((job: Job) => { 
+        const filteredJobs = data.filter((job: Job) => {
           const createAt = new Date(job.createAt);
           const expireDate = new Date(job.expireDate);
           const differenceInTime = expireDate.getTime() - createAt.getTime();
           const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-          return differenceInDays ; // Lọc những công việc có hạn chót trong 7 ngày
+          return differenceInDays;
         });
         setJobList(filteredJobs);
       } catch (error) {
@@ -28,11 +29,15 @@ const JobsList: React.FC = () => {
       }
     };
 
-    getJobs(); // Gọi hàm khi component mount
+    getJobs();
   }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
+  };
+
+  const handleJobClick = (id: string) => {
+    router.push(`/client/job-details?id=${id}`); // Navigate to job details
   };
 
   const paginatedJobs = jobList.slice(
@@ -59,7 +64,11 @@ const JobsList: React.FC = () => {
         {paginatedJobs.length > 0 ? (
           paginatedJobs.map((job) => (
             <Col key={job._id} xs={24} sm={12} md={8}>
-              <Card hoverable style={{ borderRadius: "8px", display: "flex", flexDirection: "column", height: "100%" }}>
+              <Card 
+                hoverable 
+                style={{ borderRadius: "8px", display: "flex", flexDirection: "column", height: "100%" }} 
+                onClick={() => handleJobClick(job._id)} // Add click handler
+              >
                 <h3>{job.jobTitle}</h3>
                 <p>{job.jobDescription}</p>
                 <p>

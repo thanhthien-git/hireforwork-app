@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Card, Col, Row, Pagination, Tag, notification } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
+import { useRouter } from "next/router"; // Import useRouter
 import { fetchJobs, Job } from "../../../../services/jobService";
+
 const JobsList = () => {
   const [jobList, setJobList] = useState<Job[]>([]);
   const [current, setCurrent] = useState(1);
   const pageSize = 6;
+  const router = useRouter(); // Initialize router
 
   const fetchJob = useCallback(async () => {
     try {
@@ -13,7 +16,9 @@ const JobsList = () => {
       setJobList(
         response.docs.filter((item: Job) => {
           return (
-            (new Date(item.expireDate).getTime() -new Date(item.createAt).getTime()) / (1000 * 3600 * 24) <=7
+            (new Date(item.expireDate).getTime() -
+              new Date(item.createAt).getTime()) /
+              (1000 * 3600 * 24) <= 7
           );
         })
       );
@@ -23,7 +28,7 @@ const JobsList = () => {
   }, [notification]);
 
   useEffect(() => {
-     fetchJob()
+    fetchJob();
   }, [fetchJob]);
 
   const handlePaginationChange = (page: number) => {
@@ -34,6 +39,10 @@ const JobsList = () => {
     (current - 1) * pageSize,
     current * pageSize
   );
+
+  const handleJobClick = (jobId: string) => {
+    router.push(`/client/job-details?id=${jobId}`); // Updated route
+  };
 
   return (
     <div style={{ padding: "20px" }}>
@@ -62,6 +71,7 @@ const JobsList = () => {
           <Col key={job._id} xs={24} sm={12} md={8}>
             <Card
               hoverable
+              onClick={() => handleJobClick(job._id)} // Add click event
               style={{
                 borderRadius: "8px",
                 display: "flex",
@@ -70,8 +80,7 @@ const JobsList = () => {
               }}
             >
               <h3>{job.jobTitle}</h3>
-              <p>{job.jobDescription}</p>{" "}
-              {/* Có thể cần lấy tên công ty từ một API khác */}
+              <p>{job.jobDescription}</p>
               <p>
                 {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
               </p>
