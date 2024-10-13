@@ -55,7 +55,7 @@ export default function LayoutClientHeader() {
     {
       key: "1",
       label: (
-        <Button href="/me" type="link" className={styles["custom-button"]}>
+        <Button href="/user" type="link" className={styles["custom-button"]}>
           Hồ sơ của tôi
         </Button>
       ),
