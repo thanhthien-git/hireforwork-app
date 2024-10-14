@@ -62,3 +62,4 @@ export interface Company {
 export const fetchCompanies = async () => {
   return await fetchData('/companies'); // Sử dụng hàm fetchData với endpoint /companies
 };
+
