@@ -11,6 +11,7 @@ const initialState: AuthState = {
   isAuth: isBrowser() ? !!localStorage.getItem("token") : false,
   token: isBrowser() ? localStorage.getItem("token") : null,
 };
+
 export const forceLogout = () => {
   localStorage.removeItem("token")
   localStorage.removeItem("id")
@@ -28,6 +29,7 @@ const authSlice = createSlice({
       state.isAuth = false;
       state.token = null;
       localStorage.removeItem("token");
+      localStorage.removeItem("id");
     },
   },
 });

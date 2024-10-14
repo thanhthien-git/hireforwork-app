@@ -4,7 +4,7 @@ import LayoutClient from '@/layouts/layout-client';
 import Breadcrumb from '../../../components/commons/user/item-jobdetails/breadcrumb';
 import SimilarJobs from '../../../components/commons/user/item-jobdetails/similar-jobs';
 import styles from '../../../components/commons/user/item-jobdetails/style.module.scss';
-import JobPage from '@/components/commons/user/item-jobdetails/job-details';
+import JobPage from '../../../components/commons/user/item-jobdetails/job-details';
 
 const JobDetail: React.FC = () => {
   return (
