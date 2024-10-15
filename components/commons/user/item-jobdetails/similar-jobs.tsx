@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
@@ -7,28 +7,28 @@ import logo from '../../../../assets/google-icon.png';
 import { fetchNewJobs, Job } from '../../../../services/jobService';
 
 const SimilarJobs = () => {
-  const [similarJobs, setSimilarJobs] = useState<Job[]>([]); // State for similar jobs
-  const [loading, setLoading] = useState<boolean>(true); // State for loading status
-  const [error, setError] = useState<string | null>(null); // State for error messages
+  const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const getSimilarJobs = async () => {
-      try {
-        const data = await fetchNewJobs(); // Fetch similar jobs
-        setSimilarJobs(data);
-      } catch (error) {
-        console.error("Error fetching similar jobs:", error);
-        setError((error as Error).message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    getSimilarJobs();
+  const getSimilarJobs = useCallback(async () => {
+    try {
+      const data = await fetchNewJobs();
+      setSimilarJobs(data);
+    } catch (error) {
+      console.error("Error fetching similar jobs:", error);
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  if (loading) return <p>Loading...</p>; // Show loading message
-  if (error) return <p>Error: {error}</p>; // Show error message
+  useEffect(() => {
+    getSimilarJobs();
+  }, [getSimilarJobs]);
+
+  if (loading) return <p>Đang tải...</p>;
+  if (error) return <p>Lỗi: {error}</p>;
 
   return (
     <div className={styles.similarJobs}>
@@ -43,10 +43,10 @@ const SimilarJobs = () => {
       <div className={styles.similarJobsList}>
         {similarJobs.length > 0 ? (
           similarJobs.map(job => (
-            <Link key={job._id} href={`/job-details?=${job._id}`}>
+            <Link key={job._id} href={`/client/job-details?id=${job._id}`}>
               <div className={styles.similarJobItem}>
                 <Image 
-                  src={job.companyImage?.imageURL || logo} // Use company logo or default logo
+                  src={job.companyImage?.imageURL || logo}
                   alt={`${job.companyName} Logo`} 
                   width={60} 
                   height={60} 
@@ -62,7 +62,7 @@ const SimilarJobs = () => {
             </Link>
           ))
         ) : (
-          <p>Không có công việc nào để hiển thị.</p> // No jobs to display
+          <p>Không có công việc nào để hiển thị.</p>
         )}
       </div>
     </div>
