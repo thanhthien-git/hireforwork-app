@@ -1,0 +1,30 @@
+.registerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .registerCard {
+    width: 90%; 
+    max-width: 750px;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Media Queries cho màn hình nhỏ */
+  @media (max-width: 768px) {
+    .registerCard {
+      padding: 20px 15px; // Giảm padding cho màn hình nhỏ
+    }
+  }
+  
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }
