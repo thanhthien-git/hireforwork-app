@@ -27,9 +27,6 @@ const SimilarJobs = () => {
     getSimilarJobs();
   }, [getSimilarJobs]);
 
-  if (loading) return <p>Đang tải...</p>;
-  if (error) return <p>Lỗi: {error}</p>;
-
   return (
     <div className={styles.similarJobs}>
       <div className={styles.similarJobsHeader}>

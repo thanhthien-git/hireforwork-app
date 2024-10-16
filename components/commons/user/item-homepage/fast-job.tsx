@@ -8,7 +8,7 @@ const JobsList = () => {
   const [jobList, setJobList] = useState<Job[]>([]);
   const [current, setCurrent] = useState(1);
   const pageSize = 6;
-  const router = useRouter(); // Initialize router
+  const router = useRouter(); 
 
   const fetchJob = useCallback(async () => {
     try {
@@ -41,7 +41,7 @@ const JobsList = () => {
   );
 
   const handleJobClick = (jobId: string) => {
-    router.push(`/client/job-details?id=${jobId}`); // Updated route
+    router.push(`/jobs/${jobId}`); 
   };
 
   return (
@@ -71,7 +71,7 @@ const JobsList = () => {
           <Col key={job._id} xs={24} sm={12} md={8}>
             <Card
               hoverable
-              onClick={() => handleJobClick(job._id)} // Add click event
+              onClick={() => handleJobClick(job._id)}
               style={{
                 borderRadius: "8px",
                 display: "flex",
