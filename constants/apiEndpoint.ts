@@ -15,6 +15,7 @@ const endpoint = {
     },
     job: {
         base: '/jobs',
+        newJobs:'/suggest',
     }
 }   
 export default endpoint
