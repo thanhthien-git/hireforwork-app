@@ -25,7 +25,7 @@ const Banner = () => {
           </h2>
         </Col>
           <Col xs={24} sm={8} className={styles.buttonContainer}>
-            <Button type="primary" size="large" className={styles.bannerButton} onClick={()=> router.push('/login')}>
+            <Button type="primary" size="large" className={styles.bannerButton} onClick={()=> router.push('/home-search')}>
               Bắt đầu khám phá
             </Button>
           </Col>

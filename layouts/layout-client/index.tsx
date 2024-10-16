@@ -24,7 +24,7 @@ export default function LayoutClient({ title, children }: Readonly<IProps>) {
 
       <LayoutClientHeader />
 
-      <Content className={styles["content"]}>{children}</Content>
+      <Content className={styles["content"]}><div style={{maxWidth:1500,margin:"auto"}} >{children}</div></Content>
 
       <LayoutClientFooter />
     </Layout>
