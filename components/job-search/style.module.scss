@@ -1,0 +1,40 @@
+.ant-form-item {
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+}
+
+.searchFormContainer {
+  padding: 20px;
+  background-color: #441da0;
+  border-radius: 5px;
+}
+
+.inputField {
+  border-radius: 5px;
+  height: 40px;
+}
+
+.advancedFilterContainer {
+  margin-top: -8px;
+  background-color: #FFF;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+}
+
+.filterTitle {
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.actionButtons {
+  width: 100%;
+  border-radius: 5px;
+  height: 40px;
+}
+
+.searchButton {
+  background-color: #f1a238;
+  color: #fff;
+}

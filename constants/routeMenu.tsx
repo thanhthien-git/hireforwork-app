@@ -1,4 +1,8 @@
+import UserService from "@/services/userService";
 import {
+  ClockCircleOutlined,
+  FileDoneOutlined,
+  HeartOutlined,
   PaperClipOutlined,
   PieChartOutlined,
   TagOutlined,
@@ -28,7 +32,7 @@ export const menuItems = [
   },
   {
     name: "Job Post",
-    path: "",
+    path: "/admin/jobs-manager",
     icon: <PaperClipOutlined />,
   },
   {
@@ -36,4 +40,22 @@ export const menuItems = [
     path: "",
     icon: <TagOutlined />,
   },
+];
+
+export const careerSider = [
+  {
+    name: "Thông tin của tôi",
+    path: "/",
+    icon: <UserOutlined />,
+  },
+  {
+    name: "Việc làm đã lưu",
+    path: "/",
+    icon: <FileDoneOutlined />,
+  },
+  {
+    name: "Việc làm đã xem",
+    path: "/",
+    icon: <ClockCircleOutlined />,
+  }
 ];

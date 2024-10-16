@@ -2,6 +2,7 @@ import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { fetchData } from './api'; 
+
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
     try {
@@ -38,17 +39,15 @@ export default class CompanyService {
 
   static async getById(id: string) {
     try {
-      const response = await api.get(`${endpoint.company.base}/${id}`)
-      return response.data
-    }
-    catch (err) {
-      const error = err as Error
-      throw new Error(error.message)
+      const response = await api.get(`${endpoint.company.base}/${id}`);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
     }
   }
 }
 
-// services/companyService.ts
 // Hàm gọi API để lấy danh sách công ty
 export interface Company {
   _id: string;
@@ -63,3 +62,12 @@ export const fetchCompanies = async () => {
   return await fetchData('/companies'); // Sử dụng hàm fetchData với endpoint /companies
 };
 
+
+export const fetchCompaniesByID = async (id: string) => {
+  try {
+    const response = await api.get(`/companies/${id}`);
+    return response.data;
+  } catch (err) {
+    throw new Error(`Error fetching company by ID: ${err}`);
+  }
+};

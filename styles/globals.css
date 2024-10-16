@@ -56,6 +56,6 @@ a {
 @font-face {
   font-family: "mainFont";
   src: url("/assets/fonts/mainFont2.ttf") format("truetype");
-  font-weight: normal;
+  font-weight: bold;
   font-style: normal;
 }

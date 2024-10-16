@@ -25,15 +25,11 @@
       margin: 0;
 
       li {
-        margin: 0 9px; /* Giảm khoảng cách giữa các mục menu */
+        margin: 0 9px;
         a {
           text-decoration: none;
           color: white;
-          font-size: 14px; /* Kích thước chữ của menu */
-
-          &:hover {
-            text-decoration: underline;
-          }
+          font-size: 14px;
         }
       }
     }
@@ -42,29 +38,57 @@
   .styled-button {
     font-size: 14px;
     margin-left: 5px;
+    font-weight: bold;
     background-color: transparent;
-    color: white; 
+    color: white;
+  }
+}
+.hamburgerMenu {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  .nav,
+  .styled-button {
+    display: none;
   }
 
-  .authButtons {
-    display: flex;
-    align-items: center;
-
-    .employer {
-      position: relative; /* Để cho dropdown có thể được định vị tương đối */
-      margin-left: 5px; /* Giảm khoảng cách giữa nút Nhà Tuyển Dụng */
-    }
+  .drawer {
+    width: 50%;
+  }
+  .ant-drawer-content {
+    width: 100%;
   }
 
-  @media (max-width: 768px) {
-    .nav {
-      display: none; /* Ẩn phần menu điều hướng trên màn hình nhỏ */
-    }
-    
-    .authButtons {
-      .employer {
-        margin-left: 5px; /* Giảm khoảng cách giữa nút Nhà Tuyển Dụng */
+  .hamburgerMenu {
+    display: block;
+  }
+
+  .mobileNav {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 20px;
+      a {
+        text-decoration: none;
+        color: #3c1990;
       }
     }
   }
+
+  .mobileAuthButtons {
+    margin-top: 20px;
+
+    .styled-button {
+      margin-bottom: 10px;
+      font-weight: bold;
+    }
+  }
+}
+
+.custom-button {
+  color: #3c1990;
+  font-size: 13px;
+  font-weight: bold;
 }
