@@ -1,6 +1,7 @@
 import {
   ClockCircleOutlined,
   FileDoneOutlined,
+  LogoutOutlined,
   PaperClipOutlined,
   PieChartOutlined,
   SettingOutlined,
@@ -62,22 +63,27 @@ export const careerSider = [
 export const companySider = [
   {
     name: "Tổng quan",
-    path: "/",
+    path: "/company",
     icon: <PieChartOutlined />,
   },
   {
     name: "Việc làm đã đăng",
-    path: "/job-post",
+    path: "/company/jobs",
     icon: <FileDoneOutlined />,
   },
   {
     name: "Danh sách ứng viên",
-    path: "/career-list",
+    path: "/company/career-list",
     icon: <UserOutlined />,
   },
   {
     name: "Thông tin",
-    path: "/settings",
+    path: "/company/settings",
     icon: <SettingOutlined />,
   },
+  {
+    name: "Đăng xuất",
+    path: "/",
+    icon: <LogoutOutlined />,
+  }
 ];

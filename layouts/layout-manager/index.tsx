@@ -1,10 +1,11 @@
-import { Layout, Menu } from "antd";
+import { Card, Grid, Layout, Menu } from "antd";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./style.module.scss";
 import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 
 const { Content, Sider } = Layout;
+const { useBreakpoint } = Grid;
 
 interface MenuItem {
   path: string;
@@ -25,6 +26,7 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
   }, []);
 
   const router = useRouter();
+  const screens = useBreakpoint();
 
   useEffect(() => {
     if (router.pathname !== "toggle") {
@@ -44,47 +46,77 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Sider
-        width={250}
-        className={styles["custom-sider"]}
-        collapsed={collapsed}
-        onCollapse={setCollapsed}
-      >
+      {screens.md ? (
+        <Sider
+          width={250}
+          className={styles["custom-sider"]}
+          collapsed={collapsed}
+          onCollapse={setCollapsed}
+        >
+          <Menu
+            defaultSelectedKeys={defaultSelectedKeys}
+            mode="inline"
+            selectedKeys={openKeys}
+            onClick={(key) => handleOpen(key.keyPath)}
+          >
+            {menu?.map((menuItem) => (
+              <Menu.Item
+                key={menuItem.path}
+                icon={menuItem.icon}
+                onClick={() => router.push(menuItem.path)}
+                style={{
+                  color: openKeys.includes(menuItem.path) ? "white" : undefined,
+                }}
+              >
+                {menuItem.name}
+              </Menu.Item>
+            ))}
+
+            <Menu.Item
+              key="toggle"
+              onClick={toggleCollapsed}
+              icon={
+                <span>
+                  {collapsed ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
+                </span>
+              }
+            />
+          </Menu>
+        </Sider>
+      ) : (
         <Menu
+          mode="horizontal"
           defaultSelectedKeys={defaultSelectedKeys}
-          mode="inline"
           selectedKeys={openKeys}
           onClick={(key) => handleOpen(key.keyPath)}
-          style={{ color: 'white' }}
+          className={styles["custom-mobile-menu"]}
         >
           {menu?.map((menuItem) => (
-            <Menu.Item key={menuItem.path} icon={menuItem.icon} style={{ color: openKeys.includes(menuItem.path) ? 'white' : undefined }}>
-              {menuItem.name}
-            </Menu.Item>
+            <Menu.Item
+              key={menuItem.path}
+              onClick={() => router.push(menuItem.path)}
+              style={{
+                color: openKeys.includes(menuItem.path) ? "white" : undefined,
+                margin: '10px',
+                borderRadius: '10px'
+              }}
+            >{menuItem.icon}</Menu.Item>
           ))}
-
-          <Menu.Item
-            key="toggle"
-            onClick={toggleCollapsed}
-            icon={
-              <span>
-                {collapsed ? <ArrowRightOutlined /> : <ArrowLeftOutlined />}
-              </span>
-            }
-          />
         </Menu>
-      </Sider>
+      )}
       <Layout>
-        <Content
-          style={{
-            padding: "10px",
-            margin: 0,
-            minHeight: "calc(100vh - 64px)",
-            width: "100%",
-          }}
-        >
-          {children}
-        </Content>
+        <Card className={styles["content-card"]}>
+          <Content
+            style={{
+              padding: "10px",
+              margin: 0,
+              minHeight: "calc(100vh - 64px)",
+              width: "100%",
+            }}
+          >
+            {children}
+          </Content>
+        </Card>
       </Layout>
     </Layout>
   );
