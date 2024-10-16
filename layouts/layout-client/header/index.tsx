@@ -42,7 +42,7 @@ export default function LayoutClientHeader() {
     {
       key: "2",
       label: (
-        <Link href="/employer/login" passHref>
+        <Link href="/company/login" passHref>
           <Button type="link" className={styles["custom-button"]}>
             Đăng nhập
           </Button>

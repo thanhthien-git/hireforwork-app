@@ -1,16 +1,12 @@
 import { Input } from "antd";
-import { ChangeEvent } from "react";
+import { SearchProps } from "antd/lib/input";
 
 const { Search } = Input;
 
-interface HeaderSearchComponentProp {
-  onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
+interface HeaderSearchComponentProp extends SearchProps {
+  props? : SearchProps
 }
 
-export default function HeaderSearchComponent({
-  onChange,
-  placeholder,
-}: Readonly<HeaderSearchComponentProp>) {
-  return <Search placeholder={placeholder} onChange={onChange} enterButton />;
+export default function HeaderSearchComponent( props: Readonly<HeaderSearchComponentProp>) {
+  return <Search {...props} enterButton />;
 }

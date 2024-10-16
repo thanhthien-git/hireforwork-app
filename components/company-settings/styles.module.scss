@@ -1,0 +1,49 @@
+.company-image {
+  position: relative;
+  width: 100%;
+}
+
+.cover {
+  width: 100%;
+  min-height: 150px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  transition: box-shadow 0.3s, filter 0.3s, background-color 0.3s;
+}
+
+.cover:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.414);
+}
+
+.avatar {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 1100;
+  position: absolute;
+  top: 50%;
+  left: 50px;
+  border-radius: 10px;
+  transition: box-shadow 0.3s;
+}
+.avatar:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.414);
+}
+.form-info {
+  width: 100%;
+}
+.company-info{
+  width: 100%;
+}
+
+.company-input-box{
+  min-height: 50px;
+  width: 100%;
+}
+.company-input-number{
+  width: 50%;
+  min-height: 50px;
+}
+
+.company-input-quill{
+  width: 100%;
+}

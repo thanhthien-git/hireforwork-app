@@ -26,6 +26,8 @@ import { setAuthState } from "@/redux/slices/authSlice";
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  console.log(router.pathname);
+
   const dispatch = useDispatch();
   const handleLogin = useCallback(async () => {
     try {
@@ -33,12 +35,13 @@ export default function LoginForm() {
       const user: ILogin = {
         username: getValues().email,
         password: getValues().password,
-        role: ROLE.CAREER,
+        role: router.pathname === "/login" ? ROLE.CAREER : ROLE.COMPANY,
       };
       const response = await AuthenticationService.login(user);
       dispatch(setAuthState(response));
-
-      await router.push("/");
+      router.pathname === "/login"
+        ? await router.push("/")
+        : await router.push("/company");
       notification.success({ message: `Chào bạn, ${user.username} ` });
     } catch (err) {
       err instanceof Error && notification.error({ message: err.message });
