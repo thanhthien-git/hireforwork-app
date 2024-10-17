@@ -1,4 +1,3 @@
-// pages/job-detail.tsx
 import React from 'react';
 import LayoutClient from '@/layouts/layout-client';
 import SimilarJobs from '../../../components/commons/user/item-jobdetails/similar-jobs';

@@ -37,7 +37,7 @@ const JobsList: React.FC = () => {
   };
 
   const handleJobClick = (id: string) => {
-    router.push(`/client/job-details?id=${id}`); // Navigate to job details
+    router.push(`/jobs/${id}`); // Navigate to job details
   };
 
   const paginatedJobs = jobList.slice(

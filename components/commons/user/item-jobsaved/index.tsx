@@ -10,8 +10,6 @@ export default function SupJobPostCard({
   salary,
   location,
   deadline,
-  isHot = false,
-  isUrgent = false,
   companyImageUrl = '/default-image.png',
 }: IJobPostCard) {
   return (
@@ -33,8 +31,7 @@ export default function SupJobPostCard({
           <Typography.Text className={styles['company-name']}>{company}</Typography.Text>
         </Col>
         <Col className={styles['tag-container']}>
-          {isHot && <Tag color="red">HOT</Tag>}
-          {isUrgent && <Tag color="orange">Tuyển gấp</Tag>}
+          {<Button >Bỏ lưu</Button>}
         </Col>
       </Row>
       <Row gutter={[16, 16]} className={styles['job-info']}>

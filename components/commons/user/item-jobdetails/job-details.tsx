@@ -1,88 +1,66 @@
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import {
-  ContainerOutlined,
-  EyeOutlined,
-  ClockCircleOutlined,
-  HeartOutlined,
-  ShareAltOutlined,
-} from "@ant-design/icons";
+import { ContainerOutlined, EyeOutlined, ClockCircleOutlined, HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { fetchJobById } from "../../../../services/jobService";
 import { fetchCompaniesByID } from "../../../../services/companyService";
+import { Spin, notification, Button, Row } from "antd";
+import { useForm } from "react-hook-form";
+import { Job, Company } from "../../../../interfaces/IJobDetail"; 
 import styles from "./style.module.scss";
 import logo from "../../../../assets/google-icon.png";
-import { Spin } from "antd";
-
-interface Company {
-  _id: string;
-  companyImage: {
-    imageURL: string;
-  };
-  companyName: string;
-  employeeSize: number;
-  contact: {
-    companyPhone: string;
-    companyEmail: string;
-    companyAddress: string;
-  };
-}
 
 const JobPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const [job, setJob] = useState<any>(null);
-  const [company, setCompany] = useState<Company | null>(null);
+  const { control, setValue, getValues } = useForm();
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
         const jobResponse = await fetchJobById(id);
-        setJob(jobResponse.doc);
+        const fetchedJob: Job = jobResponse.doc;
 
-        const companyID = jobResponse.doc.companyID?.toString();
+        const companyID = fetchedJob.companyID?.toString();
+        let fetchedCompany: Company | null = null;
+
         if (companyID) {
           const companyResponse = await fetchCompaniesByID(companyID);
-          setCompany(companyResponse.doc);
+          fetchedCompany = companyResponse.doc;
         }
+
+        setValue("jobTitle", fetchedJob.jobTitle);
+        setValue("expireDate", new Date(fetchedJob.expireDate).toLocaleDateString());
+        setValue("createAt", new Date(fetchedJob.createAt).toLocaleDateString());
+        setValue("viewCount", fetchedJob.viewCount);
+        setValue("companyName", fetchedCompany?.companyName || "Unknown Company");
+        setValue("employeeSize", fetchedCompany?.employeeSize || 0);
+        setValue("companyImage", fetchedCompany?.companyImage?.imageURL || logo);
+        setValue("contactPhone", fetchedCompany?.contact?.companyPhone || "N/A");
+        setValue("contactEmail", fetchedCompany?.contact?.companyEmail || "N/A");
+        setValue("address", fetchedCompany?.contact?.companyAddress || "N/A");
+
       } catch (err) {
-        console.error("Lỗi khi lấy dữ liệu:", err);
-        setError((err as Error).message);
+        console.error("Error fetching data:", err);
+        notification.error({ message: "There was an error fetching the job details." });
       } finally {
         setLoading(false);
       }
     }
-  }, [id, setLoading]);
+  }, [id, setValue]);
 
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  
-  const imageUrl = company?.companyImage?.imageURL || logo;
-  const companyName = company?.companyName || "Unknown Company";
-  const employeeSize = company?.employeeSize || 0;
-  const jobTitle = job?.jobTitle || "Chưa có tiêu đề";
-  const expireDate = job?.expireDate
-    ? new Date(job.expireDate).toLocaleDateString()
-    : "N/A";
-  const createAt = job?.createAt
-    ? new Date(job.createAt).toLocaleDateString()
-    : "N/A";
-
-  const contactPhone = company?.contact?.companyPhone || "N/A";
-  const contactEmail = company?.contact?.companyEmail || "N/A";
-  const address = company?.contact?.companyAddress || "N/A";
 
   return (
     <div className={styles.jobPage}>
       <Spin spinning={loading}>
-        {/* Job Header */}
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>
             <Image
-              src={imageUrl}
+              src={getValues("companyImage")}
               alt="Company Logo"
               width={60}
               height={60}
@@ -90,24 +68,24 @@ const JobPage = () => {
               className={styles.imgCompany}
             />
             <div>
-              <h2>{companyName}</h2>
-              <p>{employeeSize} nhân viên</p>
+              <h2>{getValues("companyName")}</h2>
+              <p>{getValues("employeeSize")} nhân viên</p>
             </div>
           </div>
           <div className={styles.jobTitle}>
-            <h2>{jobTitle}</h2>
+            <h2>{getValues("jobTitle")}</h2>
             <div className={styles.jobMeta}>
               <span>
                 <ContainerOutlined />
-                Hạn nộp hồ sơ: {expireDate}
+                Hạn nộp hồ sơ: {getValues("expireDate")}
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: {job?.viewCount ?? 0}
+                Lượt xem: 0
               </span>
               <span>
                 <ClockCircleOutlined />
-                Đăng ngày: {createAt}
+                Đăng ngày: {getValues("createAt")}
               </span>
             </div>
             <div className={styles.actionButtons}>
@@ -122,81 +100,24 @@ const JobPage = () => {
           </div>
         </div>
 
-        {/* Job Information */}
-        <div className={styles.jobInformation}>
-          {/* Job Details Section */}
-          <div className={styles.jobDetails}>
-            <div className={styles.jobInfo}>
-              <h3>Yêu cầu kinh nghiệm</h3>
-              <p>{job?.jobRequireMent || "Chưa có thông tin"}</p>
-            </div>
-            <div className={styles.jobInfo}>
-              <h3>Mức lương</h3>
-              <p>
-                {job?.jobSalaryMin} triệu - {job?.jobSalaryMax} triệu
-              </p>
-            </div>
-            <div className={styles.jobInfo}>
-              <h3>Cấp bậc</h3>
-              <p>{job?.jobLevel || "Chưa có thông tin"}</p>
-            </div>
-            <div className={styles.jobInfo}>
-              <h3>Hình thức làm việc</h3>
-              <p>
-                {job?.quantity > 1 ? "Nhân viên chính thức" : "Thực tập sinh"}
-              </p>
-            </div>
-          </div>
-
-          {/* Additional Info Section */}
-          <div className={styles.additionalInfo}>
-            <div className={styles.infoItem}>
-              <h4>Nghề nghiệp</h4>
-              <p>{job?.jobCategory || "N/A"}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <h4>Nơi làm việc</h4>
-              <p>{job?.workingLocation || "N/A"}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <h4>Học vấn</h4>
-              <p>{job?.education || "N/A"}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <h4>Số lượng tuyển</h4>
-              <p>{job?.quantity || 0}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <h4>Khu vực tuyển</h4>
-              <p>{job?.workingLocation || "N/A"}</p>
-            </div>
-            <div className={styles.infoItem}>
-              <h4>Yêu cầu giới tính</h4>
-              <p>Nam/Nữ</p>
-            </div>
-          </div>
-
-          {/* Job Description Section */}
-          <div className={styles.jobDescription}>
-            <h3>Mô tả công việc</h3>
-            <p>{job?.jobDescription || "Không có mô tả."}</p>
-          </div>
+        <div className={styles.jobDescription}>
+          <h3>Mô tả công việc</h3>
+          <p>{getValues("jobDescription") || "Không có mô tả."}</p>
         </div>
 
-        {/* Contact Info */}
         <div className={styles.contactInfo}>
           <h3>Thông tin liên hệ</h3>
           <p>
-            <strong>Người liên hệ:</strong> {companyName}
+            <strong>Người liên hệ:</strong> {getValues("companyName")}
           </p>
           <p>
-            <strong>Email liên hệ:</strong> {contactEmail}
+            <strong>Email liên hệ:</strong> {getValues("contactEmail")}
           </p>
           <p>
-            <strong>SDT liên hệ:</strong> {contactPhone}
+            <strong>SDT liên hệ:</strong> {getValues("contactPhone")}
           </p>
           <p>
-            <strong>Địa chỉ:</strong> {address}
+            <strong>Địa chỉ:</strong> {getValues("address")}
           </p>
         </div>
       </Spin>
