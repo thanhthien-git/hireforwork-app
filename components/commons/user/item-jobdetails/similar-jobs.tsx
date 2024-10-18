@@ -40,7 +40,7 @@ const SimilarJobs = () => {
       <div className={styles.similarJobsList}>
         {similarJobs.length > 0 ? (
           similarJobs.map(job => (
-            <Link key={job._id} href={`/client/job-details?id=${job._id}`}>
+            <Link key={job._id} href={`/jobs/${job._id}`}>
               <div className={styles.similarJobItem}>
                 <Image 
                   src={job.companyImage?.imageURL || logo}
