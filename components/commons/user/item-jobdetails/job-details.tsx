@@ -4,43 +4,32 @@ import Image from "next/image";
 import { ContainerOutlined, EyeOutlined, ClockCircleOutlined, HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { fetchJobById } from "../../../../services/jobService";
 import { fetchCompaniesByID } from "../../../../services/companyService";
-import { Spin, notification, Button, Row } from "antd";
+import { Spin, notification, Button, Row, Col } from "antd";
 import { useForm } from "react-hook-form";
-import { Job, Company } from "../../../../interfaces/IJobDetail"; 
+import { Job, Company } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "../../../../assets/google-icon.png";
 
 const JobPage = () => {
   const router = useRouter();
   const { id } = router.query;
-  const { control, setValue, getValues } = useForm();
+  const { control, setValue } = useForm();
   const [loading, setLoading] = useState(true);
+  const [jobDetail, setJobDetail] = useState<Job | null>(null);
+  const [companyDetail, setCompanyDetail] = useState<Company | null>(null);
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
         const jobResponse = await fetchJobById(id);
         const fetchedJob: Job = jobResponse.doc;
+        setJobDetail(fetchedJob);
 
         const companyID = fetchedJob.companyID?.toString();
-        let fetchedCompany: Company | null = null;
-
         if (companyID) {
           const companyResponse = await fetchCompaniesByID(companyID);
-          fetchedCompany = companyResponse.doc;
+          setCompanyDetail(companyResponse.doc);
         }
-
-        setValue("jobTitle", fetchedJob.jobTitle);
-        setValue("expireDate", new Date(fetchedJob.expireDate).toLocaleDateString());
-        setValue("createAt", new Date(fetchedJob.createAt).toLocaleDateString());
-        setValue("viewCount", fetchedJob.viewCount);
-        setValue("companyName", fetchedCompany?.companyName || "Unknown Company");
-        setValue("employeeSize", fetchedCompany?.employeeSize || 0);
-        setValue("companyImage", fetchedCompany?.companyImage?.imageURL || logo);
-        setValue("contactPhone", fetchedCompany?.contact?.companyPhone || "N/A");
-        setValue("contactEmail", fetchedCompany?.contact?.companyEmail || "N/A");
-        setValue("address", fetchedCompany?.contact?.companyAddress || "N/A");
-
       } catch (err) {
         console.error("Error fetching data:", err);
         notification.error({ message: "Lỗi khi lấy dữ liệu từ ID công việc." });
@@ -48,7 +37,7 @@ const JobPage = () => {
         setLoading(false);
       }
     }
-  }, [id, setValue]);
+  }, [id]);
 
   useEffect(() => {
     fetchData();
@@ -60,7 +49,7 @@ const JobPage = () => {
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>
             <Image
-              src={getValues("companyImage")}
+              src={companyDetail?.companyImage?.imageURL || logo}
               alt="Company Logo"
               width={60}
               height={60}
@@ -68,56 +57,57 @@ const JobPage = () => {
               className={styles.imgCompany}
             />
             <div>
-              <h2>{getValues("companyName")}</h2>
-              <p>{getValues("employeeSize")} nhân viên</p>
+              <h2>{companyDetail?.companyName || "Unknown Company"}</h2>
+              <p>{companyDetail?.employeeSize || 0} nhân viên</p>
             </div>
           </div>
+
           <div className={styles.jobTitle}>
-            <h2>{getValues("jobTitle")}</h2>
+            <h2>{jobDetail?.jobTitle || "Unknown Job Title"}</h2>
             <div className={styles.jobMeta}>
               <span>
                 <ContainerOutlined />
-                Hạn nộp hồ sơ: {getValues("expireDate")}
+                Hạn nộp hồ sơ: {jobDetail?.expireDate ? new Date(jobDetail.expireDate).toLocaleDateString() : "N/A"}
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: 0
+                Lượt xem: {jobDetail?.viewCount || 0}
               </span>
               <span>
                 <ClockCircleOutlined />
-                Đăng ngày: {getValues("createAt")}
+                Đăng ngày: {jobDetail?.createAt ? new Date(jobDetail.createAt).toLocaleDateString() : "N/A"}
               </span>
             </div>
             <div className={styles.actionButtons}>
-              <button className={styles.applyBtn}>Nộp hồ sơ</button>
-              <button className={styles.saveBtn}>
+              <Button className={styles.applyBtn}>Nộp hồ sơ</Button>
+              <Button className={styles.saveBtn}>
                 <HeartOutlined /> Lưu
-              </button>
-              <button className={styles.shareBtn}>
+              </Button>
+              <Button className={styles.shareBtn}>
                 <ShareAltOutlined /> Chia sẻ
-              </button>
+              </Button>
             </div>
           </div>
         </div>
 
         <div className={styles.jobDescription}>
           <h3>Mô tả công việc</h3>
-          <p>{getValues("jobDescription") || "Không có mô tả."}</p>
+          <p>{jobDetail?.jobDescription || "Không có mô tả."}</p>
         </div>
 
         <div className={styles.contactInfo}>
           <h3>Thông tin liên hệ</h3>
           <p>
-            <strong>Người liên hệ:</strong> {getValues("companyName")}
+            <strong>Người liên hệ:</strong> {companyDetail?.companyName || "N/A"}
           </p>
           <p>
-            <strong>Email liên hệ:</strong> {getValues("contactEmail")}
+            <strong>Email liên hệ:</strong> {companyDetail?.contact?.companyEmail || "N/A"}
           </p>
           <p>
-            <strong>SDT liên hệ:</strong> {getValues("contactPhone")}
+            <strong>SDT liên hệ:</strong> {companyDetail?.contact?.companyPhone || "N/A"}
           </p>
           <p>
-            <strong>Địa chỉ:</strong> {getValues("address")}
+            <strong>Địa chỉ:</strong> {companyDetail?.contact?.companyAddress || "N/A"}
           </p>
         </div>
       </Spin>
