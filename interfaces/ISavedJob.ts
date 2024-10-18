@@ -13,5 +13,6 @@ export interface Company {
     jobSalaryMax: number;
     workingLocation: string;
     expireDate: string;
+    onRemove?: boolean;
   }
   

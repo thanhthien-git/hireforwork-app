@@ -56,35 +56,35 @@ const JobPage = () => {
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id"); // Lấy ID của career từ localStorage
     if (!careerID) {
-        notification.warning({
-            message: "Bạn cần đăng nhập để lưu công việc.",
-        });
-        return;
+      notification.warning({
+        message: "Bạn cần đăng nhập để lưu công việc.",
+      });
+      return;
     }
 
     try {
-        if (isSaved) {
-            // Nếu đã lưu, thực hiện hủy lưu
-            await UserService.removeSavedJob(careerID, jobDetail._id);
-            setIsSaved(false); // Cập nhật trạng thái
-            notification.success({
-                message: "Công việc đã được hủy lưu!",
-            });
-        } else {
-            // Nếu chưa lưu, thực hiện lưu
-            await UserService.saveJob(careerID, jobDetail._id);
-            setIsSaved(true); // Cập nhật trạng thái
-            notification.success({
-                message: "Công việc đã được lưu thành công!",
-            });
-        }
-    } catch (error) {
-        const errorMessage = error.response ? error.response.data.message : "Có lỗi xảy ra khi thao tác với công việc.";
-        notification.error({
-            message: errorMessage,
+      if (isSaved) {
+        // Nếu đã lưu, thực hiện hủy lưu
+        await UserService.removeSavedJob(careerID, jobDetail._id);
+        setIsSaved(false); // Cập nhật trạng thái
+        notification.success({
+          message: "Công việc đã được hủy lưu!",
         });
+      } else {
+        // Nếu chưa lưu, thực hiện lưu
+        await UserService.saveJob(careerID, jobDetail._id);
+        setIsSaved(true); // Cập nhật trạng thái
+        notification.success({
+          message: "Công việc đã được lưu thành công!",
+        });
+      }
+    } catch (error) {
+      const errorMessage = error.response ? error.response.data.message : "Có lỗi xảy ra khi thao tác với công việc.";
+      notification.error({
+        message: errorMessage,
+      });
     }
-};
+  };
 
   return (
     <div className={styles.jobPage}>
@@ -138,7 +138,58 @@ const JobPage = () => {
             </div>
           </div>
         </div>
-
+        <div className={styles.jobInformation}>
+          <div className={styles.jobDetails}>
+            <div className={styles.jobInfo}>
+              <h3>Yêu cầu kinh nghiệm</h3>
+              <p>{jobDetail?.jobRequireMent || "Chưa có thông tin"}</p>
+            </div>
+            <div className={styles.jobInfo}>
+              <h3>Mức lương</h3>
+              <p>
+                {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax} triệu
+              </p>
+            </div>
+            <div className={styles.jobInfo}>
+              <h3>Cấp bậc</h3>
+              <p>{jobDetail?.jobLevel || "Chưa có thông tin"}</p>
+            </div>
+            <div className={styles.jobInfo}>
+              <h3>Hình thức làm việc</h3>
+              <p>
+                {jobDetail?.quantity > 1 ? "Nhân viên chính thức" : "Thực tập sinh"}
+              </p>
+            </div>
+          </div>
+          <div className={styles.additionalInfo}>
+            <h3>Thông tin</h3>
+            <h2></h2> 
+            <div className={styles.infoItem}>
+              <h4>Nghề nghiệp</h4>
+              <p>{jobDetail?.jobCategory || "N/A"}</p>
+            </div>
+            <div className={styles.infoItem}>
+              <h4>Nơi làm việc</h4>
+              <p>{jobDetail?.workingLocation || "N/A"}</p>
+            </div>
+            <div className={styles.infoItem}>
+              <h4>Học vấn</h4>
+              <p>{jobDetail?.education || "Đại học"}</p>
+            </div>
+            <div className={styles.infoItem}>
+              <h4>Số lượng tuyển</h4>
+              <p>{jobDetail?.quantity || 0}</p>
+            </div>
+            <div className={styles.infoItem}>
+              <h4>Khu vực tuyển</h4>
+              <p>{jobDetail?.workingLocation || "N/A"}</p>
+            </div>
+            <div className={styles.infoItem}>
+              <h4>Yêu cầu giới tính</h4>
+              <p>Nam/Nữ</p>
+            </div>
+          </div>
+        </div>
         <div className={styles.jobDescription}>
           <h3>Mô tả công việc</h3>
           <p>{jobDetail?.jobDescription || "Không có mô tả."}</p>
