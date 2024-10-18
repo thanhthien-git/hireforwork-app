@@ -43,7 +43,7 @@ const JobPage = () => {
 
       } catch (err) {
         console.error("Error fetching data:", err);
-        notification.error({ message: "There was an error fetching the job details." });
+        notification.error({ message: "Lỗi khi lấy dữ liệu từ ID công việc." });
       } finally {
         setLoading(false);
       }

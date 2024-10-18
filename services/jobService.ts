@@ -32,3 +32,5 @@ export const fetchJobById = async (id: string): Promise<Job> => {
 export const fetchNewJobs = async () => {
     return await fetchData('/suggest'); // Chỉ cần thêm endpoint
 };
+
+

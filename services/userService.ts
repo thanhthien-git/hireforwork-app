@@ -51,4 +51,22 @@ export default class UserService {
       return err;
     }
   }
+  static async getViewedJobs(careerID: string) {
+    try {
+      const response = await api.get(`${endpoint.users.viewedJobs}/${careerID}`);
+      return response.data; // Đảm bảo rằng API trả về dữ liệu đúng
+    } catch (err) {
+      console.error("Error fetching viewed jobs:", err);
+      throw err; // Ném lại lỗi để có thể bắt lỗi ở nơi gọi hàm
+    }
+  }
+  static async getSavedJobs(careerID: string) {
+    try {
+      const response = await api.get(`${endpoint.users.savedJobs}/${careerID}`);
+      return response.data; // Đảm bảo rằng API trả về dữ liệu đúng
+    } catch (err) {
+      console.error("Error fetching saved jobs:", err);
+      throw err; // Ném lại lỗi để có thể bắt lỗi ở nơi gọi hàm
+    }
+  }
 }

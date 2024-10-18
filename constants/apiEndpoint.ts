@@ -8,6 +8,8 @@ const endpoint = {
     users: {
         base: '/careers',
         createUser: '/careers/create',
+        viewedJobs: '/careers/viewedjobs',    
+        savedJobs: '/careers/savedjobs',   
     },
     company: {
         base: '/companies',

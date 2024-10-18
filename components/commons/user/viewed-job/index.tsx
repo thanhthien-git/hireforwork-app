@@ -3,7 +3,7 @@ import { Col, Pagination, Row, Typography } from 'antd';
 import SupJobPostCard from '../../../SupJobPostCard';
 import styles from './style.module.scss';
 
-const SuggestedJobsList: React.FC = () => {
+const ViewedJobsList: React.FC = () => {
   const mockJobs = [
     {
       id: '1',
@@ -87,7 +87,7 @@ const SuggestedJobsList: React.FC = () => {
       <Row gutter={[16, 16]} className={styles['job-col']}>
         {currentJobs.map((job, index) => (
           <Col span={24} key={index}>
-            <SupJobPostCard 
+            <SupJobPostCard
               id={job.id}
               title={job.title}
               company={job.company}
@@ -114,4 +114,4 @@ const SuggestedJobsList: React.FC = () => {
   );
 };
 
-export default SuggestedJobsList;
+export default ViewedJobsList;
