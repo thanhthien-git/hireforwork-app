@@ -42,7 +42,7 @@ export default function LayoutClientHeader() {
     {
       key: "2",
       label: (
-        <Link href="/employer/login" passHref>
+        <Link href="/company/login" passHref>
           <Button type="link" className={styles["custom-button"]}>
             Đăng nhập
           </Button>
@@ -55,7 +55,7 @@ export default function LayoutClientHeader() {
     {
       key: "1",
       label: (
-        <Button href="/me" type="link" className={styles["custom-button"]}>
+        <Button href="/user" type="link" className={styles["custom-button"]}>
           Hồ sơ của tôi
         </Button>
       ),

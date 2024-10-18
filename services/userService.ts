@@ -42,4 +42,13 @@ export default class UserService {
       return err;
     }
   }
+
+  static async getById(id: string) {
+    try {
+      const response = await api.get(`${endpoint.users.base}/${id}`);
+      return response.data;
+    } catch (err) {
+      return err;
+    }
+  }
 }

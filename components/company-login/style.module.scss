@@ -1,0 +1,61 @@
+.form {
+    padding: 30px;
+    border-radius: 5px;
+  }
+  
+  .form-card {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 80%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    min-height: 500px;
+  }
+  .form-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;   
+    margin-bottom: 30px;
+  }
+  .form-body {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .form-input{
+    min-height: 50px;
+  }
+  
+  .option{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+  }
+  
+  .option-forgot{
+    color: black;
+    padding: 8px;
+  }
+  .option-donthaveaccount{
+    color: black;
+    padding: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .form {
+      padding: 20px;
+    }
+    .form-card {
+      width: 100%;
+    }
+    .option-checkbox{
+      margin: 0;
+    }
+    .option-forgot{
+        font-size: 12px;
+    }
+    .option-donthaveaccount{
+        font-size: 12px;
+    }
+  }

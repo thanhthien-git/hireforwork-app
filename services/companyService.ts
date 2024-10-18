@@ -2,6 +2,7 @@ import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { fetchData } from './api'; 
+
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
     try {
@@ -38,16 +39,14 @@ export default class CompanyService {
 
   static async getById(id: string) {
     try {
-      const response = await api.get(`${endpoint.company.base}/${id}`)
-      return response.data
-    }
-    catch (err) {
-      const error = err as Error
-      throw new Error(error.message)
+      const response = await api.get(`${endpoint.company.base}/${id}`);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
     }
   }
 }
-
 
 export interface Company {
   _id: string;
@@ -64,4 +63,4 @@ export const fetchCompanies = async () => {
 
 export const fetchCompaniesByID = async (id: string) => {
   return await fetchData(`/companies/${id}`);
-  }
+}
