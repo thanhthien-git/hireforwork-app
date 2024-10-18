@@ -4,13 +4,15 @@ import Image from "next/image";
 import { ContainerOutlined, EyeOutlined, ClockCircleOutlined, HeartOutlined, ShareAltOutlined } from "@ant-design/icons";
 import { fetchJobById } from "../../../../services/jobService";
 import { fetchCompaniesByID } from "../../../../services/companyService";
-import { Spin, notification} from "antd";
+import { Spin, notification } from "antd";
 import { useForm } from "react-hook-form";
 import { Job, Company } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "../../../../assets/google-icon.png";
+import UserService from "@/services/userService";
 
 const JobPage = () => {
+  const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const { control, setValue } = useForm();
@@ -30,6 +32,14 @@ const JobPage = () => {
           const companyResponse = await fetchCompaniesByID(companyID);
           setCompanyDetail(companyResponse.doc);
         }
+        const careerID = localStorage.getItem("id");
+        if (careerID) {
+          const savedJobsResponse = await UserService.getSavedJobs(careerID);
+          const isJobSaved = savedJobsResponse.some(
+            (job) => job.jobID === fetchedJob._id && !job.isDeleted
+          );
+          setIsSaved(isJobSaved); // Cập nhật trạng thái nếu công việc đã lưu và không bị xóa
+        }
       } catch (err) {
         console.error("Error fetching data:", err);
         notification.error({ message: "Lỗi khi lấy dữ liệu từ ID công việc." });
@@ -42,6 +52,39 @@ const JobPage = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
+
+  const handleSaveJob = async () => {
+    const careerID = localStorage.getItem("id"); // Lấy ID của career từ localStorage
+    if (!careerID) {
+        notification.warning({
+            message: "Bạn cần đăng nhập để lưu công việc.",
+        });
+        return;
+    }
+
+    try {
+        if (isSaved) {
+            // Nếu đã lưu, thực hiện hủy lưu
+            await UserService.removeSavedJob(careerID, jobDetail._id);
+            setIsSaved(false); // Cập nhật trạng thái
+            notification.success({
+                message: "Công việc đã được hủy lưu!",
+            });
+        } else {
+            // Nếu chưa lưu, thực hiện lưu
+            await UserService.saveJob(careerID, jobDetail._id);
+            setIsSaved(true); // Cập nhật trạng thái
+            notification.success({
+                message: "Công việc đã được lưu thành công!",
+            });
+        }
+    } catch (error) {
+        const errorMessage = error.response ? error.response.data.message : "Có lỗi xảy ra khi thao tác với công việc.";
+        notification.error({
+            message: errorMessage,
+        });
+    }
+};
 
   return (
     <div className={styles.jobPage}>
@@ -80,8 +123,14 @@ const JobPage = () => {
             </div>
             <div className={styles.actionButtons}>
               <button className={styles.applyBtn}>Nộp hồ sơ</button>
-              <button className={styles.saveBtn}>
-                <HeartOutlined /> Lưu
+              <button className={styles.saveBtn} onClick={handleSaveJob}>
+                {isSaved ? (
+                  <span>Đã lưu</span>
+                ) : (
+                  <span>
+                    <HeartOutlined /> Lưu
+                  </span>
+                )}
               </button>
               <button className={styles.shareBtn}>
                 <ShareAltOutlined /> Chia sẻ
