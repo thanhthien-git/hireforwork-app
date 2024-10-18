@@ -6,16 +6,16 @@ export interface Job {
     jobTitle: string;
     jobSalaryMin: number;
     jobSalaryMax: number;
-    createAt: string; // có thể chuyển thành Date nếu cần
-    expireDate: string; // có thể chuyển thành Date nếu cần
+    createAt: string;
+    expireDate: string;
     jobDescription: string;
     isHot: boolean;
-    companyID: string; // Nếu bạn muốn lấy tên công ty từ một API khác, có thể lưu tên công ty trong một biến khác
+    companyID: string;
 }
 
 
 export const fetchJobs = async () => {
-    return await fetchData('/jobs'); // Chỉ cần thêm endpoint
+    return await fetchData('/jobs'); 
 };
 
 export const fetchJobById = async (id: string): Promise<Job> => {
@@ -30,5 +30,10 @@ export const fetchJobById = async (id: string): Promise<Job> => {
 };
 
 export const fetchNewJobs = async () => {
-    return await fetchData('/suggest'); // Chỉ cần thêm endpoint
+    return await fetchData('/suggest');
 };
+
+export const fetchJobByCompanyID = async (id: string) => {
+    return await fetchData(`/companies/${id}/jobs`);
+  };
+  
