@@ -57,6 +57,26 @@ export default class CompanyService {
       throw new Error((err as Error).message);
     }
   }
+
+  static async getCareerList(id : string) {
+    try {
+      const response = await api.get(`${endpoint.company.getCareerList}/${id}`)
+      return response.data
+    }
+    catch (err) {
+      throw new Error((err as Error).message)
+    }
+  }
+
+  static async getStatic (id: string) {
+    try {
+      const response = await api.get(`${endpoint.company.getStatic}/${id}`)
+      return response
+    }
+    catch (err) {
+      throw new Error((err as Error).message)
+    }
+  }
 }
 
 // Hàm gọi API để lấy danh sách công ty

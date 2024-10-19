@@ -1,9 +1,25 @@
 .add-row {
   min-height: 70px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: flex-end;
 }
+.col-add {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0;
+  
+  @media (max-width: 576px) {
+    justify-content: flex-start;
+    margin-bottom: 20px;
+  }
+  
+}
 .btn-add {
   min-height: 40px;
+}
+.text-column{
+  padding: 10px;
+  text-wrap: wrap;
 }

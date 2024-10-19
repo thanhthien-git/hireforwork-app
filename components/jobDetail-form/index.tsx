@@ -1,13 +1,15 @@
-import { Form, Input, Select, Button, Row, Col } from "antd";
+import { Form, Input, Select, Button, Row, Col, notification } from "antd";
 import InputComponent from "../input";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { IJob } from "@/interfaces/IJob";
 import RichTextEditor from "../quill";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 import styles from "./styles.module.scss";
 import { REQUIRED_MESSAGE } from "@/constants/message";
+import SelectComponent from "../custom/select";
+import { JobService } from "@/jobPostService";
 const skillSeedData = [
   "JavaScript",
   "React",
@@ -33,6 +35,7 @@ const skillSeedData = [
 ];
 
 export default function JobForm() {
+
   const [filteredSkills, setFilteredSkills] = useState(skillSeedData);
 
   const onSearchSkills = (value) => {
@@ -42,21 +45,41 @@ export default function JobForm() {
     setFilteredSkills(filtered);
   };
 
-  const { control, handleSubmit } = useForm();
+  const { control, handleSubmit, getValues, setValue } = useForm();
   const router = useRouter();
+
   const [data, setData] = useState<IJob>({
     jobTitle: "",
     jobSalaryMin: 0,
     jobSalaryMax: 1,
     jobDescription: "",
-    jobLevel: JOB_LEVEL.NO, // Set default value here
-    jobCategory: [""],
+    jobLevel: JOB_LEVEL.NO,
     jobRequirement: [""],
     workingLocation: [""],
+    companyID: "",
   });
 
+  const onSubmit = useCallback(async () => {
+    try {
+      const formData: IJob = {
+        jobTitle: getValues("jobTitle"),
+        jobSalaryMin: Number(getValues("jobSalaryMin")),
+        jobSalaryMax: Number(getValues("jobSalaryMax")),
+        jobRequirement: getValues("jobRequirement"),
+        jobDescription: getValues("jobDescription"),
+        jobLevel: getValues("jobLevel"),
+        workingLocation: getValues("workingLocation"),
+        companyID: localStorage.getItem("id") as string,
+      };
+      await JobService.create(formData);
+      notification.success({ message: "Tạo bài đăng thành công" });
+    } catch (err) {
+      notification.error({ message: (err as Error).message });
+    }
+  }, [getValues, notification]);
+
   return (
-    <Form layout="vertical">
+    <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
       <Row gutter={16}>
         <Col span={24}>
           <InputComponent
@@ -91,44 +114,34 @@ export default function JobForm() {
           />
         </Col>
         <Col xs={24} sm={24}>
-          <Form.Item
+          <SelectComponent
             label="Kinh nghiệm"
+            item={JOB_LEVEL}
+            name="jobLevel"
+            control={control}
+            placeholder="Kinh nghiệm"
             rules={{ required: REQUIRED_MESSAGE("Kinh nghiệm") }}
-          >
-            <Select
-              allowClear
-              defaultValue={JOB_LEVEL.NO}
-              className={styles["input-custom"]}
-            >
-              {Object.entries(JOB_LEVEL).map(([key, value]) => (
-                <Select.Option key={key} value={key}>
-                  {value}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          />
+        </Col>
+        <Col xs={24} sm={24}>
+          <InputComponent
+            label="Địa điểm làm việc"
+            name="workingLocation"
+            control={control}
+            placeholder="Địa điểm làm việc"
+            rules={{ required: REQUIRED_MESSAGE("Địa điểm làm việc") }}
+          />
         </Col>
         <Col xs={24}>
-          <Form.Item label="Yêu cầu kĩ năng">
-            <Select
-              mode="multiple"
-              allowClear
-              placeholder="Chọn kĩ năng"
-              onChange={(selectedSkills) => {
-                console.log(selectedSkills);
-              }}
-            >
-              {filteredSkills.map((skill) => (
-                <Select.Option
-                  className={styles["input-custom"]}
-                  key={skill}
-                  value={skill}
-                >
-                  {skill}
-                </Select.Option>
-              ))}
-            </Select>
-          </Form.Item>
+          <SelectComponent
+            label="Yêu cầu"
+            item={filteredSkills}
+            name="jobRequirement"
+            control={control}
+            placeholder="Yêu cầu"
+            rules={{ required: REQUIRED_MESSAGE("Yêu cầu") }}
+            mode="multiple"
+          />
         </Col>
         <Col xs={24}>
           <Form.Item
