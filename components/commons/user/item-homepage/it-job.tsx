@@ -42,7 +42,7 @@ const JobsList = () => {
   };
 
   const handleJobClick = (id: string) => {
-    router.push(`/client/job-details?id=${id}`);
+    router.push(`/jobs/${id}`); 
   };
 
   const paginatedJobs = jobList.slice(

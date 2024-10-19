@@ -1,7 +1,6 @@
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { IJobPostCard } from "@/interfaces/IJobPostCard";
-
 export default class JobService {
 static async getJob(){
     try {
@@ -10,8 +9,7 @@ static async getJob(){
     } catch (err) {
       const error=err as Error;
       throw new Error(error.message);
-    }
-    
+    } 
   }
   static async getNewJob(){
     try {
@@ -23,3 +21,4 @@ static async getJob(){
     }
   }
 }
+

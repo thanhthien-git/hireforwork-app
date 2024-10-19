@@ -1,0 +1,43 @@
+.registerContainer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .registerCard {
+    width: 90%; 
+    max-width: 750px;
+    padding: 30px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .steps {
+    margin-top: 25px;
+    margin-bottom: 30px;
+  }
+  
+  .registerForm {
+    margin-top: 24px;
+  }
+  
+  .continueButton {
+    height: 45px;
+    font-size: 16px;
+  }
+  
+  @media (max-width: 768px) {
+    .registerCard {
+      padding: 20px 15px;
+    }
+  }
+  
+  .right {
+    display: flex;
+    justify-content: flex-end;
+  }

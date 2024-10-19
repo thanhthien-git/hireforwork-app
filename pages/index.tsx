@@ -11,9 +11,10 @@ const HomePage = () => {
   const { isAuth } = useSelector((state) => state.auth);
   
   return (
-    <div >
-      <LayoutClient title="Home page">
-        <div >
+
+    <div>
+      <LayoutClient title="Trang chủ">
+        <div style={{ margin: "50px 0" }}>
           <App />
           <CompaniesList />
           <JobsList />

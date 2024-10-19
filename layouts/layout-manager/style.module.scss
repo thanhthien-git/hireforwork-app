@@ -1,21 +1,43 @@
 .custom-sider {
-  background: #fff;         
-  margin: 10px;           
-  border-radius: 10px;   
-  height: fit-content;      
-  overflow: hidden;     
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);   
+  background: #fff;
+  margin: 10px;
+  border-radius: 10px;
+  height: fit-content;
+  overflow: hidden;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: sticky;
 }
+
+.custom-sider .ant-menu-item-selected {
+  color: white !important;
+}
+
+.custom-mobile-menu {
+  box-shadow: 0px -8px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  color: white;
+  z-index: 1000;
+}
+
 .menu-button {
-  display: none; 
+  display: none;
+}
+.content-card {
+  margin: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 @media (max-width: 768px) {
   .custom-sider {
-    display: none; 
+    display: none;
   }
-  
+
   .menu-button {
-    display: block; 
+    display: block;
   }
 }

@@ -1,0 +1,35 @@
+.job-card {
+  border-radius: 8px;
+  background-color: #FFF;
+}
+
+.company-logo {
+  width: 60px;
+  height: 60px;
+
+}
+
+.job-title {
+  margin-top: 10px;
+  font-size: 16px;
+}
+
+.company-name {
+  font-size: 16px;
+  color: #3c3c3c;
+}
+
+.tag-container {
+  display: flex;
+  gap: 4px;
+}
+
+.job-info {
+  margin-top: 10px;
+}
+
+.icon-text {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}

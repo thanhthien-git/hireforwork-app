@@ -56,7 +56,7 @@ const JobsList = () => {
   const paginatedJobs = jobList.slice((current - 1) * pageSize, current * pageSize);
 
   const handleJobClick = (jobId: string) => {
-    router.push(`/client/job-details?id=${jobId}`);
+    router.push(`/jobs/${jobId}`); 
   };
 
   return (

@@ -51,4 +51,46 @@ export default class UserService {
       return err;
     }
   }
+  static async getViewedJobs(careerID: string) {
+    try {
+      const response = await api.get(`${endpoint.users.viewedJobs}/${careerID}`);
+      return response.data; 
+    } catch (err) {
+      console.error("Error fetching viewed jobs:", err);
+      throw err; 
+    }
+  }
+
+  static async getSavedJobs(careerID: string) {
+    try {
+      const response = await api.get(`${endpoint.users.savedJobs}/${careerID}`);
+      return response.data; 
+    } catch (err) {
+      console.error("Error fetching saved jobs:", err);
+      throw err; 
+    }
+  }
+
+  static async saveJob(careerID: string, jobID: string) {
+    try {
+      const res = await api.post(endpoint.users.saveJob, {
+        careerID,
+        jobID,
+      });
+      return res.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
+  static async removeSavedJob(careerID: string, jobID: string) {
+    try {
+        const res = await api.delete(`${endpoint.users.base}/${careerID}/saved-jobs/${jobID}`);
+        return res.data;
+    } catch (err) {
+        const error = err as Error;
+        throw new Error(error.message);
+    }
+}
 }

@@ -8,6 +8,10 @@ const endpoint = {
     users: {
         base: '/careers',
         createUser: '/careers/create',
+        viewedJobs: '/careers/viewedjobs',
+        saveJob: '/careers/savejob',
+        savedJobs: '/careers/savedjobs',
+        removeSavedJob: '/careers/{careerID}/saved-jobs/{jobID}', 
     },
     company: {
         base: '/companies',
@@ -17,5 +21,5 @@ const endpoint = {
         base: '/jobs',
         newJobs:'/suggest',
     }
-}   
+}
 export default endpoint
