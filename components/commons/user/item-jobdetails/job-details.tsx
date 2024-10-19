@@ -30,6 +30,7 @@ interface Company {
 
 const JobPage = () => {
   const router = useRouter();
+
   const { id } = router.query;
   const [job, setJob] = useState<any>(null);
   const [company, setCompany] = useState<Company | null>(null);
@@ -59,7 +60,7 @@ const JobPage = () => {
   useEffect(() => {
     fetchData();
   }, [fetchData]);
-  
+
   const imageUrl = company?.companyImage?.imageURL || logo;
   const companyName = company?.companyName || "Unknown Company";
   const employeeSize = company?.employeeSize || 0;

@@ -21,6 +21,20 @@ const SimilarJobs = () => {
     } finally {
       setLoading(false);
     }
+  const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
+  const getSimilarJobs = useCallback(async () => {
+    try {
+      const data = await fetchNewJobs();
+      setSimilarJobs(data);
+    } catch (error) {
+      console.error("Error fetching similar jobs:", error);
+      setError((error as Error).message);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -41,8 +55,10 @@ const SimilarJobs = () => {
         {similarJobs.length > 0 ? (
           similarJobs.map(job => (
             <Link key={job._id} href={`/client/job-details?id=${job._id}`}>
+            <Link key={job._id} href={`/client/job-details?id=${job._id}`}>
               <div className={styles.similarJobItem}>
                 <Image 
+                  src={job.companyImage?.imageURL || logo}
                   src={job.companyImage?.imageURL || logo}
                   alt={`${job.companyName} Logo`} 
                   width={60} 
@@ -59,6 +75,7 @@ const SimilarJobs = () => {
             </Link>
           ))
         ) : (
+          <p>Không có công việc nào để hiển thị.</p>
           <p>Không có công việc nào để hiển thị.</p>
         )}
       </div>
