@@ -1,12 +1,54 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TableCustom from "../tableCustom";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import HeaderDateRange from "../date-range";
-import { Button, Row } from "antd";
+import { Button, notification, Row } from "antd";
 import { PlusSquareOutlined } from "@ant-design/icons";
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
+import CompanyService from "@/services/companyService";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 export default function CompanyJobTable() {
+  const [loading, setLoading] = useState(false);
+  const [job, setJob] = useState([]);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    limit: 10,
+  });
+  const [total, setTotal] = useState<number>();
+  const fetchCompanyJob = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await CompanyService.getCompanyJob(
+        localStorage.getItem("id") as string,
+        pagination.page,
+        pagination.limit
+      );
+      setJob(res.docs);
+      setTotal(res.totalDocs);
+    } catch (err) {
+      notification.error({ message: (err as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }, [setLoading, setJob, setTotal, pagination]);
+
+  useEffect(() => {
+    fetchCompanyJob();
+  }, [fetchCompanyJob, pagination]);
+
+  const handlePagination = useCallback(
+    (currentPage: number) => {
+      setPagination((prev) => ({
+        ...prev,
+        page: currentPage,
+      }));
+    },
+    [setPagination]
+  );
+
+  const router = useRouter()
   const columns = useMemo(
     () => [
       {
@@ -22,6 +64,7 @@ export default function CompanyJobTable() {
         dataIndex: "jobTitle",
         key: "jobTitle",
         width: "16em",
+        render: (_, record) => <Link href={`/company/jobs/${record._id}`}>{record.jobTitle} </Link>,
       },
       {
         title: (
@@ -89,9 +132,30 @@ export default function CompanyJobTable() {
   return (
     <>
       <Row className={styles["add-row"]}>
-        <Button icon={<PlusSquareOutlined/>} className={styles["btn-add"]} type="primary">Tạo bài đăng</Button>
+        <Button
+          icon={<PlusSquareOutlined />}
+          className={styles["btn-add"]}
+          type="primary"
+          onClick={() => router.push('/company/jobs/create')}
+        >
+          Tạo bài đăng
+        </Button>
       </Row>
-      <TableCustom scroll={{ x: "max-content" }} columns={columns} />;
+      <TableCustom
+        scroll={{ x: "max-content" }}
+        columns={columns}
+        dataSource={job}
+        loading={loading}
+        pagination={{
+          current: pagination.page,
+          pageSize: pagination.limit,
+          total: total,
+          onChange: (page) => {
+            handlePagination(page);
+          },
+        }}
+      />
+      ;
     </>
   );
 }

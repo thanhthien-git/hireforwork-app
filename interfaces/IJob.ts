@@ -4,8 +4,6 @@ export interface IJob{
     jobSalaryMax: number,
     jobRequirement: string[],
     workingLocation: string[],
-    createAt: Date,
-    expireDate: Date, 
     jobCategory: string[],
     jobDescription: string, 
     jobLevel: string

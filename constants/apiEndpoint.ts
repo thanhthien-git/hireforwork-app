@@ -11,7 +11,8 @@ const endpoint = {
     },
     company: {
         base: '/companies',
-        createUser: '/companies/create',
+        createCompany: '/companies/create',
+        getJob: '/companies/get-job'
     },
     job: {
         base: '/jobs',
