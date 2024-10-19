@@ -1,7 +1,6 @@
-// ViewedJobsList.tsx
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Col, Pagination, Row, Typography, notification } from 'antd';
-import SubJobPostCard from '../../../SupJobPostCard'; // Đảm bảo sử dụng đúng tên file
+import SubJobPostCard from '../item-jobviewed'; 
 import UserService from '@/services/userService';
 import { fetchJobById } from '@/services/jobService';
 import { fetchCompaniesByID } from '@/services/companyService'; 
@@ -15,64 +14,63 @@ const ViewedJobsList: React.FC = () => {
     const pageSize = 4;
     const router = useRouter();
 
-    useEffect(() => {
-        const fetchViewedJobs = async () => {
-            try {
-                const id = localStorage.getItem("id") as string;
-                if (!id) {
-                    notification.error({ message: "User ID not found" });
-                    return;
-                }
-
-                const viewedJobsResponse = await UserService.getViewedJobs(id);
-
-                if (viewedJobsResponse && Array.isArray(viewedJobsResponse)) {
-                    const jobDetailsPromises = viewedJobsResponse.map(async (job) => {
-                        const jobDetail = await fetchJobById(job.jobID);
-                        const fetchedJob = jobDetail.doc;
-
-                        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
-                        const companyDetail = companyResponse.doc;
-
-                        return {
-                            _id: fetchedJob._id,
-                            jobTitle: fetchedJob.jobTitle,
-                            jobSalaryMin: fetchedJob.jobSalaryMin,
-                            jobSalaryMax: fetchedJob.jobSalaryMax,
-                            workingLocation: fetchedJob.workingLocation.join(', '),
-                            expireDate: fetchedJob.expireDate,
-                            companyID: companyDetail.companyName || "Unknown Company",
-                            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
-                            isHot: fetchedJob.isHot || false, // Thêm thông tin về "HOT"
-                            isUrgent: fetchedJob.isUrgent || false, // Thêm thông tin về "Tuyển gấp"
-                        };
-                    });
-
-                    const jobDetails = await Promise.all(jobDetailsPromises);
-                    setViewedJobs(jobDetails);
-                }
-            } catch (err) {
-                notification.error({
-                    message: "Error fetching viewed jobs",
-                    description: err.response?.data?.message || err.message,
-                });
+    const fetchViewedJobs = useCallback(async () => {
+        try {
+            const userId = localStorage.getItem("id");
+            if (!userId) {
+                notification.error({ message: "User ID not found" });
+                return;
             }
-        };
 
-        fetchViewedJobs();
+            const viewedJobsResponse = await UserService.getViewedJobs(userId);
+            if (viewedJobsResponse && Array.isArray(viewedJobsResponse)) {
+                const jobDetails = await Promise.all(viewedJobsResponse.map(fetchJobDetails));
+                setViewedJobs(jobDetails);
+            }
+        } catch (err) {
+            notification.error({
+                message: "Error fetching viewed jobs",
+                description: err.response?.data?.message || err.message,
+            });
+        }
     }, []);
 
-    const handleJobClick = (jobId: string) => {
+    const fetchJobDetails = useCallback(async (job) => {
+        const jobDetail = await fetchJobById(job.jobID);
+        const fetchedJob = jobDetail.doc;
+
+        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
+        const companyDetail = companyResponse.doc;
+
+        return {
+            _id: fetchedJob._id,
+            jobTitle: fetchedJob.jobTitle,
+            jobSalaryMin: fetchedJob.jobSalaryMin,
+            jobSalaryMax: fetchedJob.jobSalaryMax,
+            workingLocation: fetchedJob.workingLocation.join(', '),
+            expireDate: fetchedJob.expireDate,
+            companyID: companyDetail.companyName || "Unknown Company",
+            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
+            isHot: fetchedJob.isHot || false,
+            isUrgent: fetchedJob.isUrgent || false,
+        };
+    }, []);
+
+    useEffect(() => {
+        fetchViewedJobs();
+    }, [fetchViewedJobs]);
+
+    const handleJobClick = useCallback((jobId: string) => {
         router.push(`/jobs/${jobId}`);
-    };
+    }, [router]);
 
     const indexOfLastJob = currentPage * pageSize;
     const indexOfFirstJob = indexOfLastJob - pageSize;
     const currentJobs = viewedJobs.slice(indexOfFirstJob, indexOfLastJob);
 
-    const handleChangePage = (page: number) => {
+    const handleChangePage = useCallback((page: number) => {
         setCurrentPage(page);
-    };
+    }, []);
 
     return (
         <div className={styles.viewedjob}>
@@ -91,9 +89,9 @@ const ViewedJobsList: React.FC = () => {
                             location={job.workingLocation}
                             deadline={new Date(job.expireDate).toLocaleDateString()}
                             companyImageUrl={job.companyImageUrl}
-                            isHot={job.isHot} // Truyền thông tin về "HOT"
-                            isUrgent={job.isUrgent} // Truyền thông tin về "Tuyển gấp"
-                            onClick={() => handleJobClick(job._id)} // Truyền id công việc
+                            isHot={job.isHot}
+                            isUrgent={job.isUrgent}
+                            onClick={() => handleJobClick(job._id)}
                         />
                     </Col>
                 ))}

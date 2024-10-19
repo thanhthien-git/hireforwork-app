@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Col, Pagination, Row, Typography, notification } from 'antd';
 import SupJobPostCard from '../item-jobsaved';
 import UserService from '@/services/userService';
@@ -14,51 +14,51 @@ const SavedJobList: React.FC = () => {
     const pageSize = 4;
     const router = useRouter(); 
 
-    useEffect(() => {
-        const fetchSavedJobs = async () => {
-            try {
-                const id = localStorage.getItem("id") as string;
-                if (!id) {
-                    notification.error({ message: "User ID not found" });
-                    return;
-                }
-                const savedJobsResponse = await UserService.getSavedJobs(id);
-
-                if (savedJobsResponse && Array.isArray(savedJobsResponse)) {
-                    const jobDetailsPromises = savedJobsResponse.map(async (job) => {
-                        const jobDetail = await fetchJobById(job.jobID);
-                        const fetchedJob = jobDetail.doc;
-
-                        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
-                        const companyDetail = companyResponse.doc;
-
-                        return {
-                            _id: fetchedJob._id,
-                            jobTitle: fetchedJob.jobTitle,
-                            jobSalaryMin: fetchedJob.jobSalaryMin,
-                            jobSalaryMax: fetchedJob.jobSalaryMax,
-                            workingLocation: fetchedJob.workingLocation.join(', '),
-                            expireDate: fetchedJob.expireDate,
-                            companyID: companyDetail.companyName || "Unknown Company",
-                            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
-                        };
-                    });
-
-                    const jobDetails = await Promise.all(jobDetailsPromises);
-                    setSavedJobs(jobDetails);
-                }
-            } catch (err) {
-                notification.error({
-                    message: "Error fetching saved jobs",
-                    description: err.response?.data?.message || err.message,
-                });
+    const fetchSavedJobs = useCallback(async () => {
+        try {
+            const userId = localStorage.getItem("id");
+            if (!userId) {
+                notification.error({ message: "User ID not found" });
+                return;
             }
-        };
-
-        fetchSavedJobs();
+            
+            const savedJobsResponse = await UserService.getSavedJobs(userId);
+            if (savedJobsResponse && Array.isArray(savedJobsResponse)) {
+                const jobDetails = await Promise.all(savedJobsResponse.map(fetchJobDetails));
+                setSavedJobs(jobDetails);
+            }
+        } catch (err) {
+            notification.error({
+                message: "Error fetching saved jobs",
+                description: err.response?.data?.message || err.message,
+            });
+        }
     }, []);
 
-    const handleRemoveSavedJob = async (id: string) => {
+    const fetchJobDetails = async (job) => {
+        const jobDetail = await fetchJobById(job.jobID);
+        const fetchedJob = jobDetail.doc;
+
+        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
+        const companyDetail = companyResponse.doc;
+
+        return {
+            _id: fetchedJob._id,
+            jobTitle: fetchedJob.jobTitle,
+            jobSalaryMin: fetchedJob.jobSalaryMin,
+            jobSalaryMax: fetchedJob.jobSalaryMax,
+            workingLocation: fetchedJob.workingLocation.join(', '),
+            expireDate: fetchedJob.expireDate,
+            companyID: companyDetail.companyName || "Unknown Company",
+            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
+        };
+    };
+
+    useEffect(() => {
+        fetchSavedJobs();
+    }, [fetchSavedJobs]);
+
+    const handleRemoveSavedJob = useCallback(async (id: string) => {
         const userId = localStorage.getItem("id") as string;
         try {
             await UserService.removeSavedJob(userId, id);
@@ -67,19 +67,19 @@ const SavedJobList: React.FC = () => {
         } catch (err) {
             notification.error({ message: "Error removing saved job", description: err.message });
         }
-    };
+    }, []);
 
-    const handleJobClick = (jobId: string) => {
+    const handleJobClick = useCallback((jobId: string) => {
         router.push(`/jobs/${jobId}`); 
-    };
+    }, [router]);
 
     const indexOfLastJob = currentPage * pageSize;
     const indexOfFirstJob = indexOfLastJob - pageSize;
     const currentJobs = savedJobs.slice(indexOfFirstJob, indexOfLastJob);
 
-    const handleChangePage = (page: number) => {
+    const handleChangePage = useCallback((page: number) => {
         setCurrentPage(page);
-    };
+    }, []);
 
     return (
         <div className={styles.viewedjob}>
