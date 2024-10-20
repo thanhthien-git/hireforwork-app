@@ -1,7 +1,6 @@
 import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-import { fetchData } from './api'; 
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -46,21 +45,14 @@ export default class CompanyService {
       throw new Error(error.message);
     }
   }
+  static async getCompany(){
+    try {
+      const response = await api.get(endpoint.company.base);
+      return response.data
+    } catch (err) {
+      const error=err as Error;
+      throw new Error(error.message);
+    }
+  }
 }
 
-export interface Company {
-  _id: string;
-  companyImage: {
-    imageURL: string;
-  };
-  companyName: string;
-  description: string;
-}
-
-export const fetchCompanies = async () => {
-  return await fetchData('/companies'); 
-};
-
-export const fetchCompaniesByID = async (id: string) => {
-  return await fetchData(`/companies/${id}`);
-}
