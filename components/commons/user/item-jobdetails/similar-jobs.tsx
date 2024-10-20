@@ -3,20 +3,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
-import logo from '../../../../assets/google-icon.png'; 
-import { fetchNewJobs, Job } from '../../../../services/jobService';
+import logo from '../../../../assets/google-icon.png';
+import JobService from '../../../../services/jobService';
+import { Job } from '@/interfaces/IJobPostCard';
 
 const SimilarJobs = () => {
   const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const getSimilarJobs = useCallback(async () => {
+  const fetchSimilarJobs = useCallback(async () => {
     try {
-      const data = await fetchNewJobs();
+      const data = await JobService.getNewJob();  
       setSimilarJobs(data);
     } catch (error) {
-      console.error("Error fetching similar jobs:", error);
+      console.error('Error fetching similar jobs:', error);
       setError((error as Error).message);
     } finally {
       setLoading(false);
@@ -24,36 +25,47 @@ const SimilarJobs = () => {
   }, []);
 
   useEffect(() => {
-    getSimilarJobs();
-  }, [getSimilarJobs]);
+    fetchSimilarJobs();
+  }, [fetchSimilarJobs]);
 
   return (
     <div className={styles.similarJobs}>
       <div className={styles.similarJobsHeader}>
         <h3>Việc làm tương tự</h3>
         <Link href="/jobs">
-          <button className={styles.viewAllButton}>
-            Xem tất cả
-          </button>
+          <button className={styles.viewAllButton}>Xem tất cả</button>
         </Link>
       </div>
       <div className={styles.similarJobsList}>
-        {similarJobs.length > 0 ? (
-          similarJobs.map(job => (
+        {loading ? (
+          <p>Đang tải...</p>
+        ) : error ? (
+          <p>Lỗi: {error}</p>
+        ) : similarJobs.length > 0 ? (
+          similarJobs.map((job) => (
             <Link key={job._id} href={`/jobs/${job._id}`}>
               <div className={styles.similarJobItem}>
-                <Image 
-                  src={job.companyImage?.imageURL || logo}
-                  alt={`${job.companyName} Logo`} 
-                  width={60} 
-                  height={60} 
+                <Image
+                  src={job.companyImageUrl || logo} 
+                  alt={`${job.companyID} Logo`}
+                  width={60}
+                  height={60}
                 />
                 <div className={styles.similarJobInfo}>
                   <h4>{job.jobTitle}</h4>
-                  <p>{job.companyName}</p>
-                  <p><DollarOutlined />{job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu</p>
-                  <p><EnvironmentOutlined />{job.workingLocation}</p>
-                  <p><CalendarOutlined />{new Date(job.createAt).toLocaleDateString()}</p>
+                  <p>{job.companyID}</p>
+                  <p>
+                    <DollarOutlined />
+                    {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
+                  </p>
+                  <p>
+                    <EnvironmentOutlined />
+                    {job.workingLocation.join(', ')}
+                  </p>
+                  <p>
+                    <CalendarOutlined />
+                    {new Date(job.createAt).toLocaleDateString()}
+                  </p>
                 </div>
               </div>
             </Link>

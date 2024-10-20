@@ -47,6 +47,16 @@ export default class CompanyService {
     }
   }
 
+  static async getCompany() { // Đưa phương thức này vào trong lớp
+    try {
+      const response = await api.get(endpoint.company.base);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
   static async getCompanyJob(id: string, page: number, limit: number) {
     try {
       const response = await api.get(
@@ -58,23 +68,21 @@ export default class CompanyService {
     }
   }
 
-  static async getCareerList(id : string) {
+  static async getCareerList(id: string) {
     try {
-      const response = await api.get(`${endpoint.company.getCareerList}/${id}`)
-      return response.data
-    }
-    catch (err) {
-      throw new Error((err as Error).message)
+      const response = await api.get(`${endpoint.company.getCareerList}/${id}`);
+      return response.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
     }
   }
 
-  static async getStatic (id: string) {
+  static async getStatic(id: string) {
     try {
-      const response = await api.get(`${endpoint.company.getStatic}/${id}`)
-      return response
-    }
-    catch (err) {
-      throw new Error((err as Error).message)
+      const response = await api.get(`${endpoint.company.getStatic}/${id}`);
+      return response;
+    } catch (err) {
+      throw new Error((err as Error).message);
     }
   }
 }
@@ -100,14 +108,3 @@ export const fetchCompaniesByID = async (id: string) => {
     throw new Error(`Error fetching company by ID: ${err}`);
   }
 };
-  static async getCompany(){
-    try {
-      const response = await api.get(endpoint.company.base);
-      return response.data
-    } catch (err) {
-      const error=err as Error;
-      throw new Error(error.message);
-    }
-  }
-}
-
