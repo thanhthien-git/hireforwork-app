@@ -14,6 +14,7 @@ import UserService from "@/services/userService";
 const JobPage = () => {
   const [isSaved, setIsSaved] = useState(false);
   const router = useRouter();
+
   const { id } = router.query;
   const { control, setValue } = useForm();
   const [loading, setLoading] = useState(true);
@@ -53,6 +54,17 @@ const JobPage = () => {
     fetchData();
   }, [fetchData]);
 
+  const imageUrl = company?.companyImage?.imageURL || logo;
+  const companyName = company?.companyName || "Unknown Company";
+  const employeeSize = company?.employeeSize || 0;
+  const jobTitle = job?.jobTitle || "Chưa có tiêu đề";
+  const expireDate = job?.expireDate
+    ? new Date(job.expireDate).toLocaleDateString()
+    : "N/A";
+  const createAt = job?.createAt
+    ? new Date(job.createAt).toLocaleDateString()
+    : "N/A";
+
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id"); // Lấy ID của career từ localStorage
     if (!careerID) {
@@ -64,16 +76,14 @@ const JobPage = () => {
 
     try {
       if (isSaved) {
-        // Nếu đã lưu, thực hiện hủy lưu
         await UserService.removeSavedJob(careerID, jobDetail._id);
-        setIsSaved(false); // Cập nhật trạng thái
+        setIsSaved(false); 
         notification.success({
           message: "Công việc đã được hủy lưu!",
         });
       } else {
-        // Nếu chưa lưu, thực hiện lưu
         await UserService.saveJob(careerID, jobDetail._id);
-        setIsSaved(true); // Cập nhật trạng thái
+        setIsSaved(true); 
         notification.success({
           message: "Công việc đã được lưu thành công!",
         });

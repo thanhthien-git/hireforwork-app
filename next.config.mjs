@@ -20,6 +20,10 @@ const nextConfig = {
         destination: "/admin/:path*", 
       },
       {
+        source: "/company/:path*",
+        destination: "/company/:path*",
+      },
+      {
         source: "/:path*", 
         destination: "/client/:path*", 
       },

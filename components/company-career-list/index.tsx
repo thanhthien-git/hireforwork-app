@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import TableCustom from "../tableCustom";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import HeaderDateRange from "../date-range";
@@ -7,8 +7,28 @@ import { JOB_LEVEL } from "@/enum/jobLevel";
 import { EyeFilled } from "@ant-design/icons";
 import { RESUME_STATUS } from "@/enum/sending";
 import styles from "./styles.module.scss";
+import CompanyService from "@/services/companyService";
+import { notification } from "antd";
 
 export default function CareerListTable() {
+  
+  const [career, setCareer] = useState([])
+
+  const fetchCareerList = useCallback(async () => {
+    try {
+      const res = await CompanyService.getCareerList(
+        localStorage.getItem("id") as string
+      );
+      setCareer(res)
+    } catch (err) {
+      notification.error({ message: (err as Error).message });
+    }
+  }, [notification]);
+
+  useEffect(() => {
+    fetchCareerList();
+  }, [fetchCareerList]);
+
   const columns = useMemo(
     () => [
       {
@@ -22,39 +42,9 @@ export default function CareerListTable() {
             />
           </>
         ),
-        dataIndex: "jobTitle",
-        key: "jobTitle",
+        dataIndex: "careerEmail",
+        key: "careerEmail",
         width: "16em",
-      },
-      {
-        title: (
-          <>
-            <div>Họ</div>
-            <HeaderSearchComponent
-              placeholder="Họ"
-              onChange={(e) => console.log(e.target.value)}
-              allowClear
-            />
-          </>
-        ),
-        dataIndex: "careerFirstName",
-        key: "careerFirstName",
-        width: "12em",
-      },
-      {
-        title: (
-          <>
-            <div>Tên</div>
-            <HeaderSearchComponent
-              placeholder="Email"
-              onChange={(e) => console.log(e.target.value)}
-              allowClear
-            />
-          </>
-        ),
-        dataIndex: "jobTitle",
-        key: "jobTitle",
-        width: "12em",
       },
       {
         title: (
@@ -102,8 +92,8 @@ export default function CareerListTable() {
           </>
         ),
         width: "12rem",
-        dataIndex: "jobLevel",
-        key: "jobLevel",
+        dataIndex: "status",
+        key: "status",
       },
       {
         title: <div className={styles["text-header"]}>Hồ sơ ứng tuyển</div>,
@@ -114,5 +104,5 @@ export default function CareerListTable() {
     ],
     []
   );
-  return <TableCustom scroll={{ x: "max-content" }} columns={columns as any} />;
+  return <TableCustom scroll={{ x: "max-content" }} columns={columns} dataSource={career}/>;
 }

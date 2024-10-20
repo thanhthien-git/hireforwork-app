@@ -15,10 +15,14 @@ const endpoint = {
     },
     company: {
         base: '/companies',
-        createUser: '/companies/create',
+        createCompany: '/companies/create',
+        getJob: '/companies/get-job',
+        getCareerList: '/companies/get-applier',
+        getStatic: '/companies/get-statis'
     },
     job: {
         base: '/jobs',
+        create: '/jobs/create'
         newJobs:'/suggest',
     }
 }
