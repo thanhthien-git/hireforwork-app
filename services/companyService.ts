@@ -79,7 +79,6 @@ export default class CompanyService {
   }
 }
 
-// Hàm gọi API để lấy danh sách công ty
 export interface Company {
   _id: string;
   companyImage: {
@@ -90,7 +89,7 @@ export interface Company {
 }
 
 export const fetchCompanies = async () => {
-  return await fetchData("/companies"); // Sử dụng hàm fetchData với endpoint /companies
+  return await fetchData("/companies"); 
 };
 
 export const fetchCompaniesByID = async (id: string) => {
@@ -101,3 +100,14 @@ export const fetchCompaniesByID = async (id: string) => {
     throw new Error(`Error fetching company by ID: ${err}`);
   }
 };
+  static async getCompany(){
+    try {
+      const response = await api.get(endpoint.company.base);
+      return response.data
+    } catch (err) {
+      const error=err as Error;
+      throw new Error(error.message);
+    }
+  }
+}
+
