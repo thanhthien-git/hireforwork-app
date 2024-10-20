@@ -1,9 +1,22 @@
 import endpoint from "@/constants/apiEndpoint";
-import axios from "axios";
+import axios, { InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
   baseURL: `${endpoint.base}`,
 });
+
+api.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    const token = localStorage.getItem("token");
+    if (token && config.headers) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error as Error);
+  }
+);
 
 api.interceptors.response.use(
   (res) => res,
@@ -18,8 +31,7 @@ api.interceptors.response.use(
       }
 
       //return message in catch
-      const errorMessage =
-        error?.response?.data || "Oops, something xc!";
+      const errorMessage = error?.response?.data || "Oops, something xc!";
       const customError = new Error(errorMessage);
 
       customError.name = "API Error";
@@ -40,5 +52,4 @@ api.interceptors.response.use(
   }
 );
 
-export default api
-
+export default api;

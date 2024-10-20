@@ -85,6 +85,15 @@ export default class CompanyService {
       throw new Error((err as Error).message);
     }
   }
+  static async getCompany(){
+    try {
+      const response = await api.get(endpoint.company.base);
+      return response.data
+    } catch (err) {
+      const error=err as Error;
+      throw new Error(error.message);
+    }
+  }
 }
 
 export interface Company {
@@ -107,4 +116,10 @@ export const fetchCompaniesByID = async (id: string) => {
   } catch (err) {
     throw new Error(`Error fetching company by ID: ${err}`);
   }
+<<<<<<< Updated upstream
 };
+=======
+};
+
+
+>>>>>>> Stashed changes
