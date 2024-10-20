@@ -18,6 +18,7 @@ export const fetchJobs = async () => {
     return await fetchData('/jobs'); // Chỉ cần thêm endpoint
 };
 
+
 export const fetchJobById = async (id: string): Promise<Job> => {
     try {
         const response = await api.get(`${endpoint.job.base}/${id}`);
