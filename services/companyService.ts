@@ -1,7 +1,7 @@
 import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-import { fetchData } from './api'; 
+import { fetchData } from "./api";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -29,7 +29,7 @@ export default class CompanyService {
 
   static async create() {
     try {
-      const response = await api.post(endpoint.company.createUser);
+      const response = await api.post(endpoint.company.createCompany);
       return response.data;
     } catch (err) {
       const error = err as Error;
@@ -46,9 +46,47 @@ export default class CompanyService {
       throw new Error(error.message);
     }
   }
+
+  static async getCompany() { // Đưa phương thức này vào trong lớp
+    try {
+      const response = await api.get(endpoint.company.base);
+      return response.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
+  static async getCompanyJob(id: string, page: number, limit: number) {
+    try {
+      const response = await api.get(
+        `${endpoint.company.getJob}/${id}?page=${page}&limit=${limit}`
+      );
+      return response.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async getCareerList(id: string) {
+    try {
+      const response = await api.get(`${endpoint.company.getCareerList}/${id}`);
+      return response.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async getStatic(id: string) {
+    try {
+      const response = await api.get(`${endpoint.company.getStatic}/${id}`);
+      return response;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
 }
 
-// Hàm gọi API để lấy danh sách công ty
 export interface Company {
   _id: string;
   companyImage: {
@@ -59,7 +97,7 @@ export interface Company {
 }
 
 export const fetchCompanies = async () => {
-  return await fetchData('/companies'); // Sử dụng hàm fetchData với endpoint /companies
+  return await fetchData("/companies"); 
 };
 
 export const fetchCompaniesByID = async (id: string) => {
