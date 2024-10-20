@@ -116,10 +116,4 @@ export const fetchCompaniesByID = async (id: string) => {
   } catch (err) {
     throw new Error(`Error fetching company by ID: ${err}`);
   }
-<<<<<<< Updated upstream
 };
-=======
-};
-
-
->>>>>>> Stashed changes
