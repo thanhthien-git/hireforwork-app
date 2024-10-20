@@ -22,7 +22,7 @@ const JobsList = () => {
         const expireDate = new Date(job.expireDate);
         const differenceInTime = expireDate.getTime() - createAt.getTime();
         const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-        return differenceInDays > 0; // Giữ lại công việc còn hạn
+        return differenceInDays > 0; 
       });
 
       setJobList(filteredJobs);
@@ -30,7 +30,7 @@ const JobsList = () => {
       console.error("Error fetching jobs:", error);
       message.error("Lỗi khi lấy dữ liệu công việc!");
     } finally {
-      setLoading(false); // Kết thúc trạng thái loading
+      setLoading(false);
     }
   };
   useEffect(() => {
