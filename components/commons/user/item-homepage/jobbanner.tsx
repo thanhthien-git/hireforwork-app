@@ -12,10 +12,10 @@ const Banner = () => {
       <Row align="middle" justify="center">
         <Col xs={24} sm={6} className={styles.imageContainer}>
           <Image
-            src="/thinkingwoman.png" // Đặt đường dẫn ảnh ở đây (trong thư mục public)
+            src="/thinkingwoman.png" 
             alt="Thinking Woman"
-            width={150} // Kích thước ảnh
-            height={150} // Kích thước ảnh
+            width={150} 
+            height={150} 
             className={styles.bannerImage}
           />
         </Col>
