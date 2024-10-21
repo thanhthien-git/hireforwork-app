@@ -8,6 +8,7 @@ import styles from "./styles.module.scss";
 import CompanyService from "@/services/companyService";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import JobService from "@/services/jobService";
 
 export default function CompanyJobTable() {
   const [loading, setLoading] = useState(false);
@@ -17,13 +18,7 @@ export default function CompanyJobTable() {
     limit: 10,
   });
   const [total, setTotal] = useState<number>();
-  const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
-
-  const htmlToText = (html: string) => {
-    const tempDiv = document.createElement("div");
-    tempDiv.innerHTML = html;
-    return tempDiv.innerText;
-  };
+  const [selectedRowKeys, setSelectedRowKeys] = useState([]);
 
   const fetchCompanyJob = useCallback(async () => {
     try {
@@ -41,6 +36,18 @@ export default function CompanyJobTable() {
       setLoading(false);
     }
   }, [setLoading, setJob, setTotal, pagination]);
+  
+  const handleDelete = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await JobService.delete(selectedRowKeys);
+      notification.success({ message: res.message });
+    } catch (err) {
+      notification.error({ message: (err as Error).message });
+    } finally {
+      setLoading(false);
+    }
+  }, [setLoading, notification, selectedRowKeys, fetchCompanyJob]);
 
   useEffect(() => {
     fetchCompanyJob();
@@ -132,7 +139,10 @@ export default function CompanyJobTable() {
         dataIndex: "jobDescription",
         key: "jobDescription",
         render: (item: string) => (
-          <div dangerouslySetInnerHTML={{ __html: item }} className={styles["text-column"]}/>
+          <div
+            dangerouslySetInnerHTML={{ __html: item }}
+            className={styles["text-column"]}
+          />
         ),
       },
       {
@@ -163,6 +173,7 @@ export default function CompanyJobTable() {
               icon={<DeleteFilled />}
               className={styles["btn-add"]}
               type="primary"
+              onClick={handleDelete}
             >
               Xóa {selectedRowKeys.length} bài đăng ?
             </Button>

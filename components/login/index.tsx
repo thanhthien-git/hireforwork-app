@@ -26,7 +26,6 @@ import { setAuthState } from "@/redux/slices/authSlice";
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-  console.log(router.pathname);
 
   const dispatch = useDispatch();
   const handleLogin = useCallback(async () => {

@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
 import { useRouter } from "next/router";
 import { ROLE } from "@/constants/role";
-import AuthenticationService from "@/services/authentication";
 
 export default function LayoutClientHeader() {
   const [drawerVisible, setDrawerVisible] = useState(false);
