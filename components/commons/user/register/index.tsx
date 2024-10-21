@@ -31,7 +31,7 @@ export default function RegisterCareer() {
 
       dispatch(setAuthState(loginResponse));
 
-      notification.success({ message: `Chào bạn, ${values.firstName}` });
+      notification.success({ message: `Chào bạn, ${values.email}` });
 
       router.push('/');
     } catch (err) {
