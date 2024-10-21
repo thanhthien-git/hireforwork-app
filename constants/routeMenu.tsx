@@ -1,3 +1,4 @@
+import AuthenticationService from "@/services/authentication";
 import {
   ClockCircleOutlined,
   FileDoneOutlined,
@@ -8,7 +9,8 @@ import {
   TagOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-
+import { useRouter } from "next/router";
+const router = useRouter;
 export const menuItems = [
   {
     name: "Dashboard",
@@ -81,9 +83,4 @@ export const companySider = [
     path: "/company/settings",
     icon: <SettingOutlined />,
   },
-  {
-    name: "Đăng xuất",
-    path: "/",
-    icon: <LogoutOutlined />,
-  }
 ];

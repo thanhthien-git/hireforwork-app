@@ -1,8 +1,14 @@
-import { Card, Grid, Layout, Menu } from "antd";
+import { Button, Card, Grid, Layout, Menu } from "antd";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./style.module.scss";
-import { ArrowLeftOutlined, ArrowRightOutlined } from "@ant-design/icons";
+import {
+  ArrowLeftOutlined,
+  ArrowRightOutlined,
+  LogoutOutlined,
+} from "@ant-design/icons";
 import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { logout } from "@/redux/slices/authSlice";
 
 const { Content, Sider } = Layout;
 const { useBreakpoint } = Grid;
@@ -20,6 +26,7 @@ interface IProps {
 
 export default function LayoutManager({ menu, children }: Readonly<IProps>) {
   const [collapsed, setCollapsed] = useState<boolean>(false);
+  const dispatch = useDispatch();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
   const defaultSelectedKeys = useMemo(() => {
     return ["/company"];
@@ -39,6 +46,11 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
       setOpenKeys(key);
     }
   }, []);
+
+  const handleLogout = useCallback(async () => {
+    await dispatch(logout());
+    router.push("/");
+  }, [router, dispatch]);
 
   const toggleCollapsed = () => {
     setCollapsed(!collapsed);
@@ -63,7 +75,9 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
               <Menu.Item
                 key={menuItem.path}
                 icon={menuItem.icon}
-                onClick={() => router.push(menuItem.path)}
+                onClick={() =>
+                  router.pathname !== "/logout" && router.push(menuItem.path)
+                }
                 style={{
                   color: openKeys.includes(menuItem.path) ? "white" : undefined,
                 }}
@@ -71,7 +85,13 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
                 {menuItem.name}
               </Menu.Item>
             ))}
-
+            <Menu.Item
+              key="logout"
+              onClick={handleLogout}
+              icon={<LogoutOutlined />}
+            >
+              Đăng xuất
+            </Menu.Item>
             <Menu.Item
               key="toggle"
               onClick={toggleCollapsed}
@@ -97,10 +117,12 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
               onClick={() => router.push(menuItem.path)}
               style={{
                 color: openKeys.includes(menuItem.path) ? "white" : undefined,
-                margin: '10px',
-                borderRadius: '10px'
+                margin: "10px",
+                borderRadius: "10px",
               }}
-            >{menuItem.icon}</Menu.Item>
+            >
+              {menuItem.icon}
+            </Menu.Item>
           ))}
         </Menu>
       )}

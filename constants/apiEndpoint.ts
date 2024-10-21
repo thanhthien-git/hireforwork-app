@@ -23,7 +23,9 @@ const endpoint = {
     job: {
         base: '/jobs',
         create: '/jobs/create',
-        newJobs:'/suggest',
+        newJobs:'/jobs/suggest',
+        update: '/jobs/update',
+        delete: 'jobs/delete'
     },
 }
 export default endpoint
