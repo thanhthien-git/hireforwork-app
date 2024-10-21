@@ -3,6 +3,7 @@ import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { ROLE } from "@/constants/role";
 import { useDispatch } from "react-redux";
+import { IRegister } from "@/interfaces/IRegister";
 
 export default class AuthenticationService {
   dispatch = useDispatch();
@@ -26,14 +27,22 @@ export default class AuthenticationService {
       }
     }
   }
-  static async registerCareer(user: { careerEmail: string, password: string }) {
+  static async registerCareer(user: IRegister) {
     try {
-      const response = await api.post(endpoint.users.createUser, user);
+      const response = await api.post(endpoint.auth.registerCareer, { ...user });
+
+      if (response?.data) {
+        localStorage.setItem("token", response?.data.token);
+        localStorage.setItem("id", response?.data._id);
+      }
       return response.data;
     } catch (error) {
-      throw error;
+      if (error instanceof Error) {
+        throw new Error(error.message);
+      }
     }
   }
+
   static async logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("userID");
