@@ -1,6 +1,6 @@
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-import { IJobPostCard } from "@/interfaces/IJobPostCard";
+import { IJobPostCard, Job } from "@/interfaces/IJobPostCard";
 
 export const fetchJobById = async (id: string): Promise<Job> => {
     try {

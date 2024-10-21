@@ -45,17 +45,17 @@ export const menuItems = [
 export const careerSider = [
   {
     name: "Thông tin của tôi",
-    path: "/",
+    path: "/user",
     icon: <UserOutlined />,
   },
   {
     name: "Việc làm đã lưu",
-    path: "/",
+    path: "/user/saved-job",
     icon: <FileDoneOutlined />,
   },
   {
     name: "Việc làm đã xem",
-    path: "/",
+    path: "/user/viewed-job",
     icon: <ClockCircleOutlined />,
   },
 ];

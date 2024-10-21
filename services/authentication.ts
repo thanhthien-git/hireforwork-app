@@ -23,7 +23,14 @@ export default class AuthenticationService {
       }
     }
   }
-
+  static async registerCareer(user: { careerEmail: string, password: string }) {
+    try {
+      const response = await api.post(endpoint.users.createUser, user);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  }
   static async logout() {
     localStorage.removeItem("token");
     localStorage.removeItem("userID");
