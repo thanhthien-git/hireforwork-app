@@ -2,8 +2,11 @@ import { ILogin } from "@/interfaces/ILogin";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { ROLE } from "@/constants/role";
+import { useDispatch } from "react-redux";
 
 export default class AuthenticationService {
+  dispatch = useDispatch();
+
   static async login(user: ILogin) {
     try {
       const option =
