@@ -20,13 +20,13 @@ const JobsList = () => {
 
       if (response?.docs && Array.isArray(response.docs)) {
         // Kiểm tra nếu response.docs là một mảng
-        const filteredJobs = response.docs.filter((job: Job) => {
-          const differenceInDays =
-            (new Date(job.expireDate).getTime() - new Date(job.createAt).getTime()) /
-            (1000 * 3600 * 24);
-          return differenceInDays <= 7; // Kiểm tra nếu thời gian còn hạn trong vòng 7 ngày
-        });
-        setJobList(filteredJobs); // Cập nhật danh sách công việc
+        // const filteredJobs = response.docs.filter((job: Job) => {
+        //   const differenceInDays =
+        //     (new Date(job.expireDate).getTime() - new Date(job.createAt).getTime()) /
+        //     (1000 * 3600 * 24);
+        //   return differenceInDays <= 7; // Kiểm tra nếu thời gian còn hạn trong vòng 7 ngày
+        // });
+        setJobList(response?.docs); // Cập nhật danh sách công việc
       } else {
         console.error("Expected an array in docs, but received:", typeof response.docs, response.docs);
         notification.error({
