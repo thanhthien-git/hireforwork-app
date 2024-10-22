@@ -2,6 +2,7 @@ const endpoint = {
     base: process.env.NEXT_PUBLIC_API_URL,
     auth: {
         base: '/auth',
+        registerCareer: 'careers/register',
         loginCareer: 'careers/auth/login',
         loginCompany: 'companies/auth/login'
     },
