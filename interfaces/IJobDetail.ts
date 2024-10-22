@@ -18,11 +18,11 @@ export interface Company {
     jobDescription: string;
     jobSalaryMin: number;
     jobSalaryMax: number;
-    jobRequireMent: string;
+    jobRequirement: string[];
     jobLevel: string;
     jobCategory: string;
     quantity: number;
-    workingLocation: string;
+    workingLocation: string[];
     education: string;
     expireDate: string;
     createAt: string;
