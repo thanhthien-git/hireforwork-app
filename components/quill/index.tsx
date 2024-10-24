@@ -35,7 +35,9 @@ export default function RichTextEditor({
         name={name}
         defaultValue={defaultValue}
         control={control}
-        rules={validation}
+        rules={{
+          ...validation,
+        }}
         render={({ field: { onChange, value } }) => (
           <ReactQuill
             theme="snow"

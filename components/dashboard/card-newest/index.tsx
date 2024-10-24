@@ -1,5 +1,5 @@
 import { Card, Col, Row } from "antd";
-import logo from "@/assets/logo.svg";
+import logo from "@/public/assets/logo.svg";
 import Image from "next/image";
 import styles from "./style.module.scss";
 

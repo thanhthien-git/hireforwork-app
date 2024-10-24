@@ -1,7 +1,7 @@
 import { Button, Card, Col, Form, notification, Row } from "antd";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import logo from "@/assets/logo.svg";
+import logo from "@/public/assets/logo.svg";
 import styles from "./styles.module.scss";
 import InputComponent from "../input";
 import { useForm } from "react-hook-form";

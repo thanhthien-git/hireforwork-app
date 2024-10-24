@@ -55,7 +55,7 @@ a {
 
 @font-face {
   font-family: "mainFont";
-  src: url("/assets/fonts/mainFont2.ttf") format("truetype");
+  src: url("/assets/fonts/mainFont.ttf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }

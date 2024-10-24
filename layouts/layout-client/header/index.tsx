@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styles from "./style.module.scss";
-import logo from "../../../assets/logo.svg";
+import logo from "@/public/assets/logo.svg";
 import Image from "next/image";
 import { Header } from "antd/lib/layout/layout";
 import { Button, Dropdown, Menu, Drawer } from "antd";

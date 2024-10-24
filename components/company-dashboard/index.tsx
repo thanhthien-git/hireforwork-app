@@ -1,17 +1,27 @@
 import { useCallback, useEffect, useState } from "react";
-import BarChart from "../dashboard/bar-chart";
 import CompanyService from "@/services/companyService";
-import { notification } from "antd";
+import { Card, Col, notification, Row } from "antd";
+import styles from "./styles.module.scss";
+import LineChart from "../dashboard/bar-chart";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
+import DoughnutChart from "../dashboard/doughnut-chart";
 
 export default function CompanyDashboardPage() {
+  const { loading } = useSelector((state) => state.loading);
+  const [displayPercentage, setDisplayPercentage] = useState(0);
+  const dispatch = useDispatch();
+
   const [statics, setStatics] = useState({
     totalCareer: 0,
     totalJob: 0,
-    totalResume: 2,
+    totalResume: 0, 
   });
+  
 
   const fetchStatic = useCallback(async () => {
     try {
+      dispatch(setLoading(true));
       const res = await CompanyService.getStatic(
         localStorage.getItem("id") as string
       );
@@ -22,44 +32,78 @@ export default function CompanyDashboardPage() {
       });
     } catch (err) {
       notification.error({ message: (err as Error).message });
+    } finally {
+      dispatch(setLoading(false));
     }
-  }, []);
+  }, [dispatch]);
 
   useEffect(() => {
     fetchStatic();
   }, [fetchStatic]);
-  const data = {
-    labels: ["Ứng viên", "Bài đăng", "Số lượt ứng tuyển"],
-    datasets: [
-      {
-        label: "Số lượng",
-        data: [statics.totalCareer, statics.totalJob, statics.totalResume],
-        backgroundColor: "#5422c9",
-        borderWidth: 1,
-        barThickness: 40,
-        maxBarThickness: 50,
-      },
-    ],
-  };
+
+  const percentages = 96;
+
+  useEffect(() => {
+    const duration = 1000;
+    const incrementTime = duration / percentages;
+    let currentPercentage = 0;
+
+    const interval = setInterval(() => {
+      if (currentPercentage < percentages) {
+        currentPercentage++;
+        setDisplayPercentage(currentPercentage);
+      } else {
+        clearInterval(interval);
+      }
+    }, incrementTime);
+
+    return () => clearInterval(interval);
+  }, [statics.totalResume]);
+
+  const data = [
+    { label: "Ứng viên", value: statics.totalCareer },
+    { label: "Số bài đăng", value: statics.totalJob },
+    { label: "Số lượt ứng tuyển", value: statics.totalResume },
+  ];
+
   const options = {
     responsive: true,
-    maintainAspectRatio: false,
     plugins: {
       legend: {
-        position: "top" as const,
+        display: false,
       },
       title: {
         display: true,
         text: "Thống kê hoạt động",
       },
     },
-    scales: {
-      x: {
-        ticks: {
-          autoSkip: false,
-        },
-      },
-    },
   };
-  return <BarChart data={data} options={options} />;
+
+  return (
+    <Row className={styles["chart-content"]}>
+      <Col span={16}>
+        <Card
+          title="Hoạt động"
+          className={styles["static-chart"]}
+          loading={loading}
+        >
+          <LineChart
+            data={data}
+            xField="label"
+            yField="value"
+            options={options}
+          />
+        </Card>
+      </Col>
+      <Col span={6}>
+        <Card
+          title="Phần trăm ứng tuyển"
+          className={styles["static-chart"]}
+          loading={loading}
+        >
+          {displayPercentage}%
+        </Card>
+      </Col>
+    </Row>
+  );
 }

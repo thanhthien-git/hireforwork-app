@@ -12,6 +12,7 @@
     "@ant-design/charts": "^2.2.1",
     "@ant-design/cssinjs": "^1.21.1",
     "@ant-design/icons": "^5.5.1",
+    "@antv/g2": "^5.2.7",
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.2",
