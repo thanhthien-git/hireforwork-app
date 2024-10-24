@@ -5,7 +5,7 @@ import styles from "./styles.module.scss";
 import { menuItems } from "@/constants/routeMenu";
 import Link from "next/link";
 import Image from "next/image";
-import logo from "../../assets/logo.svg";
+import logo from "@/public/assets/logo.svg";
 
 interface IProp {
   collapsed: boolean;

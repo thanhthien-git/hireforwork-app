@@ -2,6 +2,7 @@ import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { fetchData } from "./api";
+import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -47,7 +48,7 @@ export default class CompanyService {
     }
   }
 
-  static async getCompany() { // Đưa phương thức này vào trong lớp
+  static async getCompany() {
     try {
       const response = await api.get(endpoint.company.base);
       return response.data;
@@ -85,13 +86,45 @@ export default class CompanyService {
       throw new Error((err as Error).message);
     }
   }
-  static async getCompany(){
+
+  static async uploadCover(id: string, data: FormData) {
     try {
-      const response = await api.get(endpoint.company.base);
-      return response.data
+      const res = await api.post(
+        `${endpoint.company.base}/${id}/upload-cover`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return res.data;
     } catch (err) {
-      const error=err as Error;
-      throw new Error(error.message);
+      throw new Error((err as Error).message);
+    }
+  }
+  static async uploadIMG(id: string, data: FormData) {
+    try {
+      const res = await api.post(
+        `${endpoint.company.base}/${id}/upload-img`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return res.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+  static async update(id: string, data: ICompanyDetail) {
+    try {
+      const res = await api.post(`${endpoint.company.base}/${id}/update`, data);
+      return res.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
     }
   }
 }
@@ -106,7 +139,7 @@ export interface Company {
 }
 
 export const fetchCompanies = async () => {
-  return await fetchData("/companies"); 
+  return await fetchData("/companies");
 };
 
 export const fetchCompaniesByID = async (id: string) => {

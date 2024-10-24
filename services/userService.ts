@@ -97,4 +97,22 @@ export default class UserService {
       throw new Error(error.message);
     }
   }
+
+  static async updateImage(id: string, data: FormData) {
+    try {
+      const res = await api.post(
+        `${endpoint.users.base}/${id}/upload-image`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
 }

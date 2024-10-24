@@ -5,8 +5,7 @@
 
 .cover {
   width: 100%;
-  min-height: 150px;
-  padding: 20px;
+  min-height: 300px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   transition: box-shadow 0.3s, filter 0.3s, background-color 0.3s;
@@ -18,32 +17,51 @@
 
 .avatar {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 1100;
-  position: absolute;
-  top: 50%;
-  left: 50px;
   border-radius: 10px;
   transition: box-shadow 0.3s;
+  background-color: #fff;
 }
+
 .avatar:hover {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.414);
 }
+
+.button-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 10px;
+  z-index: 1200;
+}
+
 .form-info {
   width: 100%;
 }
-.company-info{
+
+.company-info {
   width: 100%;
 }
 
-.company-input-box{
+.company-input-box {
   min-height: 50px;
   width: 100%;
 }
-.company-input-number{
+
+.company-input-number {
   width: 50%;
   min-height: 50px;
 }
 
-.company-input-quill{
+.company-input-quill {
   width: 100%;
+}
+.cover-container {
+  width: 100%;
+}
+.image-container {
+  position: absolute;
+  top: 80%;
+  left: 10%;
 }

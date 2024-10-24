@@ -16,7 +16,7 @@ interface InputComponentProps extends InputProps {
   className?: string;
   error?: FieldError;
   control: Control;
-  style?: React.CSSProperties
+  style?: React.CSSProperties;
 }
 
 export default function InputComponent({

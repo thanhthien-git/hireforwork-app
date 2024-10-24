@@ -1,6 +1,6 @@
 export interface ICompanyDetail {
   companyName: string;
-  companyImage: {
+  companyImage?: {
     imageURL: string;
     coverURL: string;
   };
@@ -10,9 +10,10 @@ export interface ICompanyDetail {
     companyWebsite: string;
     companyAddress: string;
   };
-  createAt: Date;
+  createAt?: Date;
   description: string;
-  typeOfCompany: string[];
+  typeOfCompany?: string[];
+  employeeSize?: number;
 }
 
 export interface ICompanyDetails {

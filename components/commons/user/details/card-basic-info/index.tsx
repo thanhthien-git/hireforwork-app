@@ -3,9 +3,11 @@ import { Col, Form, Row, Skeleton } from "antd";
 import { useForm } from "react-hook-form";
 import styles from "./style.module.scss";
 import { useEffect } from "react";
+import { useSelector } from "react-redux";
 
 export default function UserDetailInfo({ user }: Readonly<{ user: any }>) {
   const { control, setValue } = useForm();
+  const { loading } = useSelector((state) => state.loading);
 
   useEffect(() => {
     if (user) {
@@ -18,7 +20,7 @@ export default function UserDetailInfo({ user }: Readonly<{ user: any }>) {
   return (
     <Form layout="vertical" className={styles["form-card"]}>
       <Row gutter={[16, 0]}>
-        <Skeleton loading={false} paragraph={{ style : { height: "100%" } }}>
+        <Skeleton loading={loading} paragraph={{ style: { height: "100%" } }}>
           <Col xs={24} sm={24} md={12}>
             <InputComponent
               label="Họ"

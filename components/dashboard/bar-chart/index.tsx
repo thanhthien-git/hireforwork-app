@@ -1,16 +1,41 @@
-import { Bar } from "react-chartjs-2";
+import React from "react";
+import { Line } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  BarElement,
+  PointElement,
+  LineElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+// Đăng ký các thành phần cần thiết cho biểu đồ
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
-export default function BarChart({ data, options }: any) {
-  return <Bar data={data} options={options} />;
+export default function LineChart({ data, xField, yField, options }: any) {
+  // Tạo dữ liệu cho biểu đồ
+  const chartData = {
+    labels: data.map((item: any) => item[xField]), // Nhãn trên trục x
+    datasets: [
+      {
+        label: yField, // Nhãn cho dataset
+        data: data.map((item: any) => item[yField]), // Dữ liệu cho trục y
+        borderColor: "rgba(75, 192, 192, 1)", // Màu đường
+        backgroundColor: "rgba(75, 192, 192, 0.2)", // Màu nền (không dùng trong biểu đồ đường)
+        fill: true, // Bật chế độ lấp đầy vùng dưới đường
+      },
+    ],
+  };
+
+  return <Line data={chartData} options={options} />;
 }

@@ -1,0 +1,13 @@
+.static-chart {
+  font-size: 48px; /* Increase the font size */
+  font-weight: bold; /* Make it bold */
+  text-align: center; /* Center the text */
+  transition: all 0.5s ease; /* Smooth transition for the change */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+
+}
+.chart-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
