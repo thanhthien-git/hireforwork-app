@@ -11,16 +11,8 @@ const RegisterFormStepOne: React.FC<Props> = ({ onFinish }) => {
   return (
     <Form layout="vertical" onFinish={onFinish} className={styles.registerForm}>
       <Form.Item
-        label="Họ và tên"
-        name="fullName"
-        rules={[{ required: true, message: 'Vui lòng nhập họ và tên!' }]}
-      >
-        <Input placeholder="Nhập họ và tên" />
-      </Form.Item>
-
-      <Form.Item
         label="Email"
-        name="email"
+        name="companyEmail"
         rules={[
           { required: true, message: 'Vui lòng nhập email!' },
           { type: 'email', message: 'Email không hợp lệ!' },
@@ -45,6 +37,7 @@ const RegisterFormStepOne: React.FC<Props> = ({ onFinish }) => {
       <Form.Item
         label="Nhập lại mật khẩu"
         name="confirmPassword"
+        dependencies={['password']}
         rules={[
           { required: true, message: 'Vui lòng nhập lại mật khẩu!' },
           ({ getFieldValue }) => ({

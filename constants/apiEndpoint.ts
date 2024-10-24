@@ -13,6 +13,7 @@ const endpoint = {
     savedJobs: "/careers/savedjobs",
     removeSavedJob: "/careers/{careerID}/saved-jobs/{jobID}",
     uploadImage: "/career/{id}/upload-image",
+    registerCareer: 'careers/register',
   },
   company: {
     base: "/companies",
@@ -20,6 +21,7 @@ const endpoint = {
     getJob: "/companies/get-job",
     getCareerList: "/companies/get-applier",
     getStatic: "/companies/get-static",
+    registerCompany: '/companies/register',
   },
   job: {
     base: "/jobs",

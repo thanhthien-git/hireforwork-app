@@ -3,16 +3,16 @@ import { List, Button, Image, Pagination, Typography, notification, Skeleton } f
 import { EnvironmentOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import { useRouter } from 'next/router';
-import { IJobPostCard } from '@/interfaces/IJobPostCard';
-import { fetchJobByCompanyID } from '@/services/jobService';
+import { IJob } from '@/interfaces/IJobPostCard';
+import JobService from '@/services/jobService';
 import RecruitmentSearch from './RecruitmentSearch';
 
 const { Text } = Typography;
 
 export default function JobList({ companyName, companyImage }: { companyName: string, companyImage: string }) {
   const router = useRouter();
-  const [jobList, setJobList] = useState<IJobPostCard[]>([]);
-  const [filteredJobList, setFilteredJobList] = useState<IJobPostCard[]>([]);
+  const [jobList, setJobList] = useState<IJob[]>([]);
+  const [filteredJobList, setFilteredJobList] = useState<IJob[]>([]);
   const [current, setCurrent] = useState(1);
   const [loading, setLoading] = useState(true);
   const pageSize = 5;
@@ -20,7 +20,8 @@ export default function JobList({ companyName, companyImage }: { companyName: st
   const fetchJob = useCallback(async (value: string) => {
     try {
       setLoading(true);
-      const response = await fetchJobByCompanyID(value);
+      const response = await JobService.getById(value);
+      console.log("Fetched job list: ", response.docs);
       setJobList(response?.docs || []);
       setFilteredJobList(response?.docs || []);
     } catch (err) {
@@ -61,6 +62,7 @@ export default function JobList({ companyName, companyImage }: { companyName: st
     (current - 1) * pageSize,
     current * pageSize
   );
+  console.log(jobList)
   return (
     <>
       <RecruitmentSearch onSearch={handleSearch} />
@@ -101,7 +103,8 @@ export default function JobList({ companyName, companyImage }: { companyName: st
       />
       <Pagination 
         current={current} 
-        total={jobList.length} 
+        total={filteredJobList.length} 
+        pageSize={pageSize}
         onChange={handlePaginationChange} 
         className={styles.pagination} />
      </>

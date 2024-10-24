@@ -9,6 +9,7 @@ export interface IJobPostCard {
     isUrgent?: boolean;
     companyImageUrl?: string;
 }
+
 export interface Job {
     _id: string;
     jobTitle: string;
@@ -19,6 +20,13 @@ export interface Job {
     jobDescription: string;
     isHot: boolean;
     companyID: string; // Nếu bạn muốn lấy tên công ty từ một API khác, có thể lưu tên công ty trong một biến khác
+    jobTitle: string;
+    jobSalaryMin: number;
+    jobSalaryMax: number;
+    workingLocation: string[];
+}
+
+export interface IJob {
     jobTitle: string;
     jobSalaryMin: number;
     jobSalaryMax: number;
