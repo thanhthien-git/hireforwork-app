@@ -47,7 +47,7 @@ const ViewedJobsList: React.FC = () => {
             jobTitle: fetchedJob.jobTitle,
             jobSalaryMin: fetchedJob.jobSalaryMin,
             jobSalaryMax: fetchedJob.jobSalaryMax,
-            workingLocation: fetchedJob.workingLocation.join(', '),
+            workingLocation: fetchedJob.workingLocation ? fetchedJob.workingLocation.join(', ') : 'Unknown Location',
             expireDate: fetchedJob.expireDate,
             companyID: companyDetail.companyName || "Unknown Company",
             companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
@@ -85,7 +85,7 @@ const ViewedJobsList: React.FC = () => {
                             id={job._id}
                             title={job.jobTitle}
                             company={job.companyID}
-                            salary={`${job.jobSalaryMin} - ${job.jobSalaryMax} triệu`}
+                            salary={`${job.jobSalaryMin} - ${job.jobSalaryMax}`}
                             location={job.workingLocation}
                             deadline={new Date(job.expireDate).toLocaleDateString()}
                             companyImageUrl={job.companyImageUrl}

@@ -13,6 +13,15 @@ export const fetchJobById = async (id: string): Promise<Job> => {
     throw new Error(error.message);
   }
 };
+export const fetchViewCount = async (id: string): Promise<number> => {
+  try {
+    const response = await api.get(`${endpoint.job.viewcount}/${id}`);
+    return response.data.viewCount;
+  } catch (err) {
+    console.error("Error fetching view count:", err);
+    throw err;
+  }
+};
 export default class JobService {
   static async getJob() {
     try {

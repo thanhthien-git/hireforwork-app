@@ -3,6 +3,7 @@ const endpoint = {
   auth: {
     base: "/auth",
     loginCareer: "careers/auth/login",
+    registerCareer: 'careers/register',
     loginCompany: "companies/auth/login",
   },
   users: {
@@ -27,6 +28,7 @@ const endpoint = {
     newJobs: "/jobs/suggest",
     update: "/jobs/update",
     delete: "jobs/delete",
+    viewcount: "/viewjobcount"
   },
 };
 export default endpoint;
