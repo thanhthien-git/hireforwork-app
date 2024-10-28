@@ -68,4 +68,14 @@ export default class JobService {
       throw new Error((err as Error).message);
     }
   }
+
+  static async getById(id: string) {
+    try {
+        const response = await api.get(`${endpoint.company.base}/get-job/${id}`);
+        return response.data;
+      } catch (err) {
+        const error = err as Error;
+        throw new Error(error.message);
+      }
+  }
 }
