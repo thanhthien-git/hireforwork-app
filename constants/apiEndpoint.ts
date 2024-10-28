@@ -28,5 +28,11 @@ const endpoint = {
     update: "/jobs/update",
     delete: "jobs/delete",
   },
+  tech: {
+    base: "/tech",
+  },
+  field: {
+    base: "/company-field"
+  }
 };
 export default endpoint;

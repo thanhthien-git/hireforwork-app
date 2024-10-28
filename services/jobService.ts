@@ -6,7 +6,6 @@ import { IJobPostCard } from "@/interfaces/IJobPostCard";
 export const fetchJobById = async (id: string): Promise<Job> => {
   try {
     const response = await api.get(`${endpoint.job.base}/${id}`);
-    console.log(response.data); // Check the response data
     return response.data;
   } catch (err) {
     const error = err as Error;
