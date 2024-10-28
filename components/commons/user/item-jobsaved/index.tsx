@@ -27,8 +27,8 @@ export default function JobPostCard({
                   <Image
                       src={companyImageUrl}
                       alt="Company Logo"
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       preview={false}
                   />
               </Col>
@@ -38,13 +38,16 @@ export default function JobPostCard({
                   </Typography.Title>
                   <Typography.Text className={styles['company-name']}>{company}</Typography.Text>
               </Col>
-              <Col className={styles['tag-container']}>
-                  <Button onClick={(e) => {
-                      e.stopPropagation(); 
-                      onRemove(id);
-                  }}>Bỏ lưu</Button>
-              </Col>
           </Row>
+          <Button 
+              className={styles['btn-unsave']} 
+              onClick={(e) => {
+                  e.stopPropagation(); 
+                  onRemove(id);
+              }}
+          >
+              Bỏ lưu
+          </Button>
           <Row gutter={[16, 16]} className={styles['job-info']}>
               <Col className={styles['icon-text']}>
                   <DollarOutlined />

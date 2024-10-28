@@ -20,8 +20,7 @@ const SavedJobList: React.FC = () => {
             if (!userId) {
                 notification.error({ message: "User ID not found" });
                 return;
-            }
-            
+            }           
             const savedJobsResponse = await UserService.getSavedJobs(userId);
             if (savedJobsResponse && Array.isArray(savedJobsResponse)) {
                 const jobDetails = await Promise.all(savedJobsResponse.map(fetchJobDetails));
@@ -47,7 +46,7 @@ const SavedJobList: React.FC = () => {
             jobTitle: fetchedJob.jobTitle,
             jobSalaryMin: fetchedJob.jobSalaryMin,
             jobSalaryMax: fetchedJob.jobSalaryMax,
-            workingLocation: fetchedJob.workingLocation.join(', '),
+            workingLocation: fetchedJob.workingLocation ? fetchedJob.workingLocation.join(', ') : 'Unknown Location',
             expireDate: fetchedJob.expireDate,
             companyID: companyDetail.companyName || "Unknown Company",
             companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
