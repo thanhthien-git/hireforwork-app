@@ -1,58 +1,102 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import {
+import { 
   ContainerOutlined,
   EyeOutlined,
   ClockCircleOutlined,
   HeartOutlined,
-  ShareAltOutlined,
+  ShareAltOutlined 
 } from "@ant-design/icons";
-import { fetchJobById } from "../../../../services/jobService";
+import { fetchJobById, fetchViewCount } from "../../../../services/jobService";
 import { fetchCompaniesByID } from "../../../../services/companyService";
 import { Button, Spin, notification } from "antd";
 import { useForm } from "react-hook-form";
 import { Job, Company } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
-import logo from "../../../../assets/google-icon.png";
 import UserService from "@/services/userService";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 
 const JobPage = () => {
   const [isSaved, setIsSaved] = useState(false);
+  const [hasViewed, setHasViewed] = useState(false); // Trạng thái kiểm tra đã xem
   const router = useRouter();
-  const { id } = router.query;
+  const { id } = router.query; // Lấy ID của công việc từ URL
   const { control, setValue } = useForm();
   const [loading, setLoading] = useState(true);
+  const [viewCount, setViewCount] = useState<number>(0); 
   const [jobDetail, setJobDetail] = useState<Job | null>(null);
   const [companyDetail, setCompanyDetail] = useState<Company | null>(null);
 
+  // Hàm dùng để fetch dữ liệu từ backend
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
+        // Fetch thông tin công việc
         const jobResponse = await fetchJobById(id);
-        const fetchedJob: Job = jobResponse.doc;
+        const fetchedJob: Job = jobResponse?.doc;
         setJobDetail(fetchedJob);
-
-        const companyID = fetchedJob.companyID?.toString();
+  
+        // Fetch thông tin công ty
+        const companyID = fetchedJob?.companyID?.toString();
         if (companyID) {
           const companyResponse = await fetchCompaniesByID(companyID);
-          setCompanyDetail(companyResponse.doc);
+          setCompanyDetail(companyResponse?.doc);
         }
+        // Kiểm tra xem có người dùng đã đăng nhập không
         const careerID = localStorage.getItem("id");
         if (careerID) {
-          const savedJobsResponse = await UserService.getSavedJobs(careerID);
-          const isJobSaved = savedJobsResponse.some(
+          // Fetch công việc đã xem của người dùng
+          let viewedJobs = [];
+          try {
+            viewedJobs = (await UserService.getViewedJobs(careerID)) || [];
+          } catch (error) {
+            console.warn("Người dùng chưa có công việc nào đã xem.");
+            viewedJobs = []; // Nếu không có công việc nào đã xem, ta gán mảng rỗng
+          }
+  
+          // Kiểm tra xem công việc này đã được xem chưa
+          const hasAlreadyViewed = viewedJobs?.some(
             (job) => job.jobID === fetchedJob._id && !job.isDeleted
           );
-          setIsSaved(isJobSaved); // Cập nhật trạng thái nếu công việc đã lưu và không bị xóa
+  
+          // Fetch công việc đã lưu của người dùng
+          let savedJobsResponse = [];
+          try {
+            savedJobsResponse = (await UserService.getSavedJobs(careerID)) || [];
+          } catch (error) {
+            console.warn("Người dùng chưa có công việc nào đã lưu.");
+            savedJobsResponse = []; // Nếu không có công việc nào đã lưu, ta gán mảng rỗng
+          }
+  
+          // Kiểm tra xem công việc này đã được lưu chưa
+          const isJobSaved = savedJobsResponse?.some(
+            (job) => job.jobID === fetchedJob._id && !job.isDeleted
+          );
+  
+          // Cập nhật trạng thái đã lưu
+          setIsSaved(isJobSaved);
+  
+          // Cập nhật trạng thái đã xem
+          setHasViewed(hasAlreadyViewed);
+  
+          // Nếu công việc chưa được xem, lưu nó vào danh sách công việc đã xem
+          if (!hasAlreadyViewed) {
+            await UserService.viewedJob(careerID, id);
+          }
         }
       } catch (err) {
         console.error("Error fetching data:", err);
-        notification.error({ message: "Lỗi khi lấy dữ liệu từ ID công việc." });
+        notification.error({
+          message: "Lỗi khi lấy dữ liệu từ ID công việc.",
+        });
+        
       } finally {
         setLoading(false);
       }
+
+      const viewCountResponse = await fetchViewCount(id);
+      setViewCount(viewCountResponse);
     }
   }, [id]);
 
@@ -60,8 +104,10 @@ const JobPage = () => {
     fetchData();
   }, [fetchData]);
 
+  // Hàm xử lý lưu công việc
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id"); // Lấy ID của career từ localStorage
+    
     if (!careerID) {
       notification.warning({
         message: "Bạn cần đăng nhập để lưu công việc.",
@@ -101,7 +147,7 @@ const JobPage = () => {
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>
             <Image
-              src={companyDetail?.companyImage?.imageURL || logo}
+              src={companyDetail?.companyImage?.imageURL || '/logo.png'}
               alt="Company Logo"
               width={60}
               height={60}
@@ -126,7 +172,7 @@ const JobPage = () => {
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: {jobDetail?.viewCount || 0}
+                Lượt xem: {viewCount || 0}
               </span>
               <span>
                 <ClockCircleOutlined />

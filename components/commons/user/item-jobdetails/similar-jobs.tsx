@@ -3,7 +3,6 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
-import logo from '../../../../assets/google-icon.png';
 import JobService from '../../../../services/jobService';
 import { Job } from '@/interfaces/IJobPostCard';
 
@@ -46,7 +45,7 @@ const SimilarJobs = () => {
             <Link key={job._id} href={`/jobs/${job._id}`}>
               <div className={styles.similarJobItem}>
                 <Image
-                  src={job.companyImageUrl || logo} 
+                  src={job.companyImageUrl || '/logo.png'} 
                   alt={`${job.companyID} Logo`}
                   width={60}
                   height={60}

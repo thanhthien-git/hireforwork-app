@@ -63,6 +63,19 @@ export default class UserService {
     }
   }
 
+  static async viewedJob(careerID: string, jobID: string) {
+    try {
+      const res = await api.post(endpoint.users.viewedJobs, {
+        careerID,
+        jobID,
+      });
+      return res.data;
+    } catch (err) {
+      const error = err as Error;
+      throw new Error(error.message);
+    }
+  }
+
   static async getSavedJobs(careerID: string) {
     try {
       const response = await api.get(`${endpoint.users.savedJobs}/${careerID}`);

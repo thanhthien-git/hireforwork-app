@@ -30,8 +30,8 @@ export default function SubJobPostCard({
                   <Image
                       src={companyImageUrl}
                       alt="Company Logo"
-                      width={50}
-                      height={50}
+                      width={40}
+                      height={40}
                       preview={false}
                   />
               </Col>
