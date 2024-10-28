@@ -14,6 +14,7 @@ import { Button, Spin, notification } from "antd";
 import { useForm } from "react-hook-form";
 import { Job, Company } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
+import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 
@@ -272,7 +273,7 @@ const JobPage = () => {
                   <Button
                     key={item}
                     type="primary"
-                    style={{ marginRight: "10px", marginTop: "10px"}}
+                    style={{ marginRight: "10px", marginTop: "10px" }}
                   >
                     {item}
                   </Button>

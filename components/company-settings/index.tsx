@@ -1,20 +1,27 @@
-import { Button, Col, Form, notification, Row } from "antd";
+import { Button, Col, Form, notification, Row, Select, Skeleton } from "antd";
 import Image from "next/image";
 import logo from "@/public/assets/logo.svg";
 import styles from "./styles.module.scss";
 import InputComponent from "../input";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import RichTextEditor from "../quill";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { DeleteFilled, UploadOutlined } from "@ant-design/icons";
 import CompanyService from "@/services/companyService";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { REQUIRED_MESSAGE } from "@/constants/message";
+import { FieldService } from "@/services/fieldService";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 
 export default function CompanySettingPage() {
   const { control, setValue, handleSubmit, getValues } = useForm();
+  const [companyFieldData, setCompanyFieldData] = useState([]);
   const [coverHovered, setCoverHovered] = useState(false);
   const [avatarHovered, setAvatarHovered] = useState(false);
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
   const [image, setImage] = useState({
     cover: "",
     img: "",
@@ -38,27 +45,50 @@ export default function CompanySettingPage() {
     []
   );
 
+  const fetchField = useCallback(async () => {
+    try {
+      dispatch(setLoading(true));
+      const res = await FieldService.get(1, 9999);
+      setCompanyFieldData(res.docs);
+    } catch {
+      notification.error({ message: "Đã có lỗi xảy ra" });
+      dispatch(setLoading(false));
+    }
+  }, [notification, setCompanyFieldData, dispatch]);
+
   const handleUploadFile = useCallback(
     async (file: File, field: string) => {
       try {
+        dispatch(setLoading(true));
         const id = localStorage?.getItem("id") as string;
         const formData = new FormData();
         formData.append("avatar", file);
         if (field === "cover") {
-          await CompanyService.uploadCover(id, formData);
+          const res = await CompanyService.uploadCover(id, formData);
+          setImage((prev) => ({
+            ...prev,
+            cover: res.url,
+          }));
         } else {
-          await CompanyService.uploadIMG(id, formData);
+          const res = await CompanyService.uploadIMG(id, formData);
+          setImage((prev) => ({
+            ...prev,
+            img: res.url,
+          }));
         }
-        notification.success({ message: "Cập nhật ảnh bìa thành công!" });
+        notification.success({ message: "Cập nhật ảnh thành công!" });
       } catch (err) {
         notification.error({ message: "Cập nhập ảnh bìa thất bại" });
+      } finally {
+        dispatch(setLoading(false));
       }
     },
-    [notification]
+    [notification, dispatch, setImage]
   );
 
   const fetchCompanyDetails = useCallback(async () => {
     try {
+      dispatch(setLoading(true));
       const res = await CompanyService.getById(id);
       setValue("companyName", res?.doc?.companyName);
       setValue("companyEmail", res?.doc?.contact?.companyEmail);
@@ -67,18 +97,22 @@ export default function CompanySettingPage() {
       setValue("companyWebsite", res?.doc?.contact?.companyWebsite);
       setValue("employeeSize", res?.doc?.employeeSize);
       setValue("companyDescription", res?.doc?.description);
+      setValue("companyField", res?.doc?.companyField);
       setImage({
         cover: res?.doc?.companyImage?.coverURL,
         img: res?.doc?.companyImage?.imageURL,
       });
     } catch (err) {
       notification.error({ message: (err as Error).message });
+    } finally {
+      dispatch(setLoading(false));
     }
-  }, [setValue, setImage, notification]);
+  }, [setValue, setImage, notification, dispatch]);
 
   useEffect(() => {
+    fetchField();
     fetchCompanyDetails();
-  }, [fetchCompanyDetails]);
+  }, [fetchCompanyDetails, fetchField]);
 
   const handleCoverMouseEnter = useCallback(() => {
     setCoverHovered(true);
@@ -108,6 +142,7 @@ export default function CompanySettingPage() {
         },
         description: getValues("companyDescription"),
         employeeSize: Number(getValues("employeeSize")),
+        companyField: getValues("companyField"),
       };
       await CompanyService.update(id, formData);
       notification.success({
@@ -126,14 +161,16 @@ export default function CompanySettingPage() {
           onMouseEnter={handleCoverMouseEnter}
           onMouseLeave={handleCoverMouseLeave}
         >
-          <Image
-            src={image.cover || logo}
-            width={1000}
-            height={150}
-            alt="cover"
-            className={styles["cover"]}
-            style={{ filter: coverHovered ? "blur(5px)" : "none" }}
-          />
+          <Skeleton active loading={loading}>
+            <Image
+              src={image.cover || logo}
+              width={1000}
+              height={150}
+              alt="cover"
+              className={styles["cover"]}
+              style={{ filter: coverHovered ? "blur(5px)" : "none" }}
+            />
+          </Skeleton>
 
           {coverHovered && (
             <div
@@ -170,13 +207,15 @@ export default function CompanySettingPage() {
           onMouseEnter={handleAvatarMouseEnter}
           onMouseLeave={handleAvatarMouseLeave}
         >
-          <Image
-            src={image.img || logo}
-            alt="avatar"
-            className={styles["avatar"]}
-            height={150}
-            width={150}
-          />
+          <Skeleton loading={loading} active>
+            <Image
+              src={image.img || logo}
+              alt="avatar"
+              className={styles["avatar"]}
+              height={150}
+              width={150}
+            />
+          </Skeleton>
           {avatarHovered && (
             <div className={styles["button-container"]}>
               <Button
@@ -248,6 +287,7 @@ export default function CompanySettingPage() {
             />
             <InputComponent
               label="Website"
+              required
               control={control}
               placeholder="Website"
               name="companyWebsite"
@@ -255,6 +295,38 @@ export default function CompanySettingPage() {
               rules={{ required: REQUIRED_MESSAGE("Website") }}
             />
           </Col>
+        </Row>
+        <Row>
+          <Controller
+            name="companyField"
+            control={control}
+            rules={{ required: "Please select a field" }}
+            render={({ field }) => (
+              <Form.Item
+                label="Lĩnh vực hoạt động"
+                required
+                style={{ width: "100%" }}
+              >
+                <Select
+                  {...field}
+                  placeholder="Lĩnh vực hoạt động"
+                  showSearch
+                  allowClear
+                  mode="multiple"
+                  style={{ minHeight: "50px", height: "50px" }}
+                  filterOption={(input, option) =>
+                    option.children.toLowerCase().includes(input.toLowerCase())
+                  }
+                >
+                  {companyFieldData.map((item) => (
+                    <Select.Option key={item._id} value={item._id}>
+                      {item.fieldName}
+                    </Select.Option>
+                  ))}
+                </Select>
+              </Form.Item>
+            )}
+          />
         </Row>
         <Row>
           <RichTextEditor

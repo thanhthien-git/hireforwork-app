@@ -1,4 +1,4 @@
-import { Button, Card, Grid, Layout, Menu } from "antd";
+import { Button, Card, Dropdown, Grid, Layout, Menu } from "antd";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./style.module.scss";
 import {
@@ -9,6 +9,9 @@ import {
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { logout } from "@/redux/slices/authSlice";
+import { Header } from "antd/lib/layout/layout";
+import { MenuProps } from "antd/lib";
+import { jwtDecode } from "jwt-decode";
 
 const { Content, Sider } = Layout;
 const { useBreakpoint } = Grid;
@@ -56,6 +59,19 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
     setCollapsed(!collapsed);
   };
 
+  const isCompany = router.pathname.startsWith("/company");
+
+  const email = jwtDecode(localStorage?.getItem("token") as string)?.username;
+
+  const items: MenuProps["items"] = [
+    {
+      key: "logout",
+      label: "Đăng xuất",
+      icon: <LogoutOutlined />,
+      onClick: handleLogout,
+    },
+  ];
+
   return (
     <Layout style={{ minHeight: "100vh" }}>
       {screens.md ? (
@@ -85,13 +101,6 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
                 {menuItem.name}
               </Menu.Item>
             ))}
-            <Menu.Item
-              key="logout"
-              onClick={handleLogout}
-              icon={<LogoutOutlined />}
-            >
-              Đăng xuất
-            </Menu.Item>
             <Menu.Item
               key="toggle"
               onClick={toggleCollapsed}
@@ -127,18 +136,45 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
         </Menu>
       )}
       <Layout>
-        <Card className={styles["content-card"]}>
-          <Content
+        {isCompany && (
+          <Header
             style={{
-              padding: "10px",
-              margin: 0,
-              minHeight: "calc(100vh - 64px)",
-              width: "100%",
+              background: "#fff",
+              padding: 0,
+              margin: "10px",
+              borderRadius: "5px",
+              boxShadow: "0 2px 8px rgba(0, 21, 41, 0.1)",
             }}
           >
-            {children}
-          </Content>
-        </Card>
+            <div
+              style={{
+                padding: "20px",
+                display: "flex",
+                alignItems: "center",
+                height: "64px",
+              }}
+            >
+              <h2 style={{ margin: 0 }}>Quản lý tuyển dụng</h2>
+              <Dropdown placement="bottomRight" menu={{ items }}>
+                <Button style={{ marginLeft: "auto" }}>{email}</Button>
+              </Dropdown>
+            </div>
+          </Header>
+        )}
+        <div className={styles["content-wrapper"]}>
+          <Card className={styles["content-card"]}>
+            <Content
+              style={{
+                padding: "10px",
+                margin: 0,
+                minHeight: "calc(100vh - 64px)",
+                width: "100%",
+              }}
+            >
+              {children}
+            </Content>
+          </Card>
+        </div>
       </Layout>
     </Layout>
   );

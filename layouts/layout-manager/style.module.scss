@@ -6,6 +6,7 @@
   overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: sticky;
+  top: 0;
 }
 
 .custom-sider .ant-menu-item-selected {
@@ -27,6 +28,7 @@
 .menu-button {
   display: none;
 }
+
 .content-card {
   margin: 10px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -39,5 +41,25 @@
 
   .menu-button {
     display: block;
+  }
+}
+
+.content-wrapper {
+  height: calc(100vh - 100px); 
+}
+
+@media (min-width: 769px) {
+  .content-wrapper {
+    overflow-y: auto; 
+  }
+
+  .content-wrapper::-webkit-scrollbar {
+    display: none; 
+  }
+
+  .ant-layout-content {
+    -ms-overflow-style: none; /* Internet Explorer and Edge */
+    scrollbar-width: none; /* Firefox */
+    overflow: hidden; /* Prevent horizontal overflow */
   }
 }

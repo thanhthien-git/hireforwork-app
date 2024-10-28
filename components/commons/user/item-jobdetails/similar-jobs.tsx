@@ -1,10 +1,15 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import Image from 'next/image';
-import Link from 'next/link';
-import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
-import styles from './style.module.scss';
-import JobService from '../../../../services/jobService';
-import { Job } from '@/interfaces/IJobPostCard';
+import React, { useEffect, useState, useCallback } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import {
+  DollarOutlined,
+  EnvironmentOutlined,
+  CalendarOutlined,
+} from "@ant-design/icons";
+import styles from "./style.module.scss";
+import logo from "@/public/assets/logo.svg";
+import JobService from "../../../../services/jobService";
+import { Job } from "@/interfaces/IJobPostCard";
 
 const SimilarJobs = () => {
   const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
@@ -13,10 +18,10 @@ const SimilarJobs = () => {
 
   const fetchSimilarJobs = useCallback(async () => {
     try {
-      const data = await JobService.getNewJob();  
+      const data = await JobService.getNewJob();
       setSimilarJobs(data);
     } catch (error) {
-      console.error('Error fetching similar jobs:', error);
+      console.error("Error fetching similar jobs:", error);
       setError((error as Error).message);
     } finally {
       setLoading(false);
@@ -45,7 +50,7 @@ const SimilarJobs = () => {
             <Link key={job._id} href={`/jobs/${job._id}`}>
               <div className={styles.similarJobItem}>
                 <Image
-                  src={job.companyImageUrl || '/logo.png'} 
+                  src={job.companyImageUrl || logo}
                   alt={`${job.companyID} Logo`}
                   width={60}
                   height={60}
@@ -59,7 +64,7 @@ const SimilarJobs = () => {
                   </p>
                   <p>
                     <EnvironmentOutlined />
-                    {job.workingLocation.join(', ')}
+                    {job.workingLocation.join(", ")}
                   </p>
                   <p>
                     <CalendarOutlined />

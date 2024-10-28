@@ -14,6 +14,7 @@ export interface ICompanyDetail {
   description: string;
   typeOfCompany?: string[];
   employeeSize?: number;
+  companyField?: number;
 }
 
 export interface ICompanyDetails {

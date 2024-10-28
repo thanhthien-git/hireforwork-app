@@ -10,52 +10,31 @@ import styles from "./styles.module.scss";
 import { REQUIRED_MESSAGE } from "@/constants/message";
 import SelectComponent from "../custom/select";
 import JobService, { fetchJobById } from "@/services/jobService";
-import {
-  MinusOutlined,
-  MinusSquareFilled,
-  PlusOutlined,
-  PlusSquareFilled,
-} from "@ant-design/icons";
+import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
 import Title from "antd/lib/typography/Title";
-const skillSeedData = [
-  "JavaScript",
-  "React",
-  "Node.js",
-  "Java",
-  "Python",
-  "SQL",
-  "CSS",
-  "HTML",
-  "C++",
-  "Ruby",
-  "PHP",
-  "Swift",
-  "Go",
-  "TypeScript",
-  "Agile",
-  "Scrum",
-  "UX/UI Design",
-  "Project Management",
-  "Data Analysis",
-  "Machine Learning",
-  "Communication",
-];
+import { TechService } from "@/services/techService";
 
 export default function JobForm() {
-  const [filteredSkills, setFilteredSkills] = useState(skillSeedData);
+  const [filteredSkills, setFilteredSkills] = useState([]);
   const [maxIndex, setMaxIndex] = useState(1);
-  const onSearchSkills = (value) => {
-    const filtered = skillSeedData.filter((skill) =>
-      skill.toLowerCase().includes(value.toLowerCase())
-    );
-    setFilteredSkills(filtered);
-  };
-  const [jobData, setJobState] = useState();
   const { control, handleSubmit, getValues, setValue } = useForm();
   const router = useRouter();
   const { id } = router.query;
   const [place, setPlace] = useState([{ id: 0, name: `workingLocation_0` }]);
   const [loading, setLoading] = useState(false);
+
+  const fetchSkill = useCallback(async () => {
+    try {
+      const res = await TechService.get(1, 9999);
+      setFilteredSkills(
+        res.docs.map((item) => {
+          return item.technology;
+        })
+      );
+    } catch (err) {
+      notification.error({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau" });
+    }
+  }, [setFilteredSkills, notification]);
 
   const handleAddRow = useCallback(() => {
     setMaxIndex((prev) => prev + 1);
@@ -111,10 +90,9 @@ export default function JobForm() {
         await JobService.update(formData);
         notification.success({ message: "Cập nhập thành công" });
       } else {
-        await JobService.create(formData)
+        await JobService.create(formData);
         notification.success({ message: "Tạo bài đăng thành công" });
       }
-      console.log(formData);
     } catch (err) {
       notification.error({ message: (err as Error).message });
     } finally {
@@ -160,10 +138,11 @@ export default function JobForm() {
   );
 
   useEffect(() => {
+    fetchSkill();
     if (id) {
-      fetchJobDetail(router.query.id as string);
+      fetchJobDetail(id as string);
     }
-  }, [router, fetchJobDetail]);
+  }, [id, fetchSkill]);
 
   return (
     <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
@@ -248,11 +227,11 @@ export default function JobForm() {
           </Col>
           <Col xs={24}>
             <SelectComponent
-              label="Yêu cầu"
+              label="Kĩ năng"
               item={filteredSkills}
               name="jobRequirement"
               control={control}
-              placeholder="Yêu cầu"
+              placeholder="Kĩ năng"
               rules={{ required: REQUIRED_MESSAGE("Yêu cầu") }}
               mode="multiple"
             />
