@@ -2,6 +2,7 @@ import endpoint from "@/constants/apiEndpoint";
 import api from "./api";
 import { ICareer } from "@/interfaces/user";
 import { IUserFilter } from "@/interfaces/iUserFilter";
+import { IUserDetail } from "@/interfaces/IUserDetail";
 
 export default class UserService {
   static async get(filter: IUserFilter) {
@@ -123,6 +124,45 @@ export default class UserService {
         }
       );
       console.log(res);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async updateResume(id: string, data: FormData) {
+    try {
+      const res = await api.post(
+        `${endpoint.users.base}/${id}/upload-resume`,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      console.log(res);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async removeResume(id: string, link: string) {
+    try {
+      const res = await api.post(`${endpoint.users.base}/${id}/remove-resume`, {
+        resumeURL: link,
+      });
+      console.log(res);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async updateByID(id: string, data: IUserDetail) {
+    try {
+      const res = await api.post(`${endpoint.users.base}/${id}/update`, data);
       return res;
     } catch (err) {
       throw new Error((err as Error).message);

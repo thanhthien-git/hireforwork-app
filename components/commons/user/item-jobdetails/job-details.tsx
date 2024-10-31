@@ -1,12 +1,12 @@
 import React, { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import { 
+import {
   ContainerOutlined,
   EyeOutlined,
   ClockCircleOutlined,
   HeartOutlined,
-  ShareAltOutlined 
+  ShareAltOutlined,
 } from "@ant-design/icons";
 import { fetchJobById, fetchViewCount } from "../../../../services/jobService";
 import { fetchCompaniesByID } from "../../../../services/companyService";
@@ -25,7 +25,6 @@ const JobPage = () => {
   const { id } = router.query; // Lấy ID của công việc từ URL
   const { control, setValue } = useForm();
   const [loading, setLoading] = useState(true);
-  const [viewCount, setViewCount] = useState<number>(0); 
   const [jobDetail, setJobDetail] = useState<Job | null>(null);
   const [companyDetail, setCompanyDetail] = useState<Company | null>(null);
 
@@ -37,7 +36,7 @@ const JobPage = () => {
         const jobResponse = await fetchJobById(id);
         const fetchedJob: Job = jobResponse?.doc;
         setJobDetail(fetchedJob);
-  
+
         // Fetch thông tin công ty
         const companyID = fetchedJob?.companyID?.toString();
         if (companyID) {
@@ -55,32 +54,33 @@ const JobPage = () => {
             console.warn("Người dùng chưa có công việc nào đã xem.");
             viewedJobs = []; // Nếu không có công việc nào đã xem, ta gán mảng rỗng
           }
-  
+
           // Kiểm tra xem công việc này đã được xem chưa
           const hasAlreadyViewed = viewedJobs?.some(
             (job) => job.jobID === fetchedJob._id && !job.isDeleted
           );
-  
+
           // Fetch công việc đã lưu của người dùng
           let savedJobsResponse = [];
           try {
-            savedJobsResponse = (await UserService.getSavedJobs(careerID)) || [];
+            savedJobsResponse =
+              (await UserService.getSavedJobs(careerID)) || [];
           } catch (error) {
             console.warn("Người dùng chưa có công việc nào đã lưu.");
             savedJobsResponse = []; // Nếu không có công việc nào đã lưu, ta gán mảng rỗng
           }
-  
+
           // Kiểm tra xem công việc này đã được lưu chưa
           const isJobSaved = savedJobsResponse?.some(
             (job) => job.jobID === fetchedJob._id && !job.isDeleted
           );
-  
+
           // Cập nhật trạng thái đã lưu
           setIsSaved(isJobSaved);
-  
+
           // Cập nhật trạng thái đã xem
           setHasViewed(hasAlreadyViewed);
-  
+
           // Nếu công việc chưa được xem, lưu nó vào danh sách công việc đã xem
           if (!hasAlreadyViewed) {
             await UserService.viewedJob(careerID, id);
@@ -91,13 +91,9 @@ const JobPage = () => {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
         });
-        
       } finally {
         setLoading(false);
       }
-
-      const viewCountResponse = await fetchViewCount(id);
-      setViewCount(viewCountResponse);
     }
   }, [id]);
 
@@ -108,7 +104,7 @@ const JobPage = () => {
   // Hàm xử lý lưu công việc
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id"); // Lấy ID của career từ localStorage
-    
+
     if (!careerID) {
       notification.warning({
         message: "Bạn cần đăng nhập để lưu công việc.",
@@ -148,7 +144,7 @@ const JobPage = () => {
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>
             <Image
-              src={companyDetail?.companyImage?.imageURL || '/logo.png'}
+              src={companyDetail?.companyImage?.imageURL || "/logo.png"}
               alt="Company Logo"
               width={60}
               height={60}
@@ -173,7 +169,7 @@ const JobPage = () => {
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: {viewCount || 0}
+                Lượt xem: {0}
               </span>
               <span>
                 <ClockCircleOutlined />

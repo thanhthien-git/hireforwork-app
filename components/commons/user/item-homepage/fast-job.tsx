@@ -8,7 +8,7 @@ import { Job } from "@/interfaces/IJobPostCard";
 const JobsList = () => {
   const [jobList, setJobList] = useState<Job[]>([]);
   const [current, setCurrent] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true); 
+  const [loading, setLoading] = useState<boolean>(true);
   const pageSize = 6;
   const router = useRouter();
 
@@ -28,7 +28,11 @@ const JobsList = () => {
         // });
         setJobList(response?.docs); // Cập nhật danh sách công việc
       } else {
-        console.error("Expected an array in docs, but received:", typeof response.docs, response.docs);
+        console.error(
+          "Expected an array in docs, but received:",
+          typeof response.docs,
+          response.docs
+        );
         notification.error({
           message: "Lỗi",
           description: "Dữ liệu từ server không hợp lệ!",
@@ -53,10 +57,13 @@ const JobsList = () => {
     setCurrent(page);
   };
 
-  const paginatedJobs = jobList.slice((current - 1) * pageSize, current * pageSize);
+  const paginatedJobs = jobList.slice(
+    (current - 1) * pageSize,
+    current * pageSize
+  );
 
   const handleJobClick = (jobId: string) => {
-    router.push(`/jobs/${jobId}`); 
+    router.push(`/jobs/${jobId}`);
   };
 
   return (
@@ -115,7 +122,6 @@ const JobsList = () => {
                   }}
                 >
                   <h3>{job.jobTitle}</h3>
-                  <p>{job.jobDescription}</p>
                   <p>
                     {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
                   </p>
@@ -137,7 +143,7 @@ const JobsList = () => {
       <Pagination
         style={{ marginTop: "20px", textAlign: "center" }}
         current={current}
-        total={jobList.length} // Sử dụng tổng số công việc
+        total={jobList.length}
         pageSize={pageSize}
         onChange={handlePaginationChange}
       />

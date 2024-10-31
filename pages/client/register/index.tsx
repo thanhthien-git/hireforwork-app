@@ -69,7 +69,7 @@ export default function RegisterCareer() {
                 { len: 10, message: 'Số điện thoại phải có đúng 10 chữ số!' },
               ]}
           >
-            <Input placeholder="Nhập số điện thoại công ty" />
+            <Input placeholder="Nhập số điện thoại" />
           </Form.Item>
 
             <Form.Item

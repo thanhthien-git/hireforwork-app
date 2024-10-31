@@ -47,7 +47,7 @@ export default function UserDetailImage({
         const formData = new FormData();
         formData.append("avatar", file);
         await UserService.updateImage(id, formData);
-        await fetchUserData();
+        fetchUserData();
         notification.success({ message: "Cập nhập hình đại diện thành công!" });
       } catch (err) {
         console.log(err);
@@ -65,6 +65,7 @@ export default function UserDetailImage({
           flexDirection: "row",
           justifyContent: "center",
           marginBottom: "20px",
+          width: "100%",
         }}
       >
         <Skeleton loading={loading}>

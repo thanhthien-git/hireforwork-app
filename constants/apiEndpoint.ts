@@ -3,7 +3,7 @@ const endpoint = {
   auth: {
     base: "/auth",
     loginCareer: "careers/auth/login",
-    registerCareer: 'careers/register',
+    registerCareer: "careers/register",
     loginCompany: "companies/auth/login",
   },
   users: {
@@ -14,7 +14,7 @@ const endpoint = {
     savedJobs: "/careers/savedjobs",
     removeSavedJob: "/careers/{careerID}/saved-jobs/{jobID}",
     uploadImage: "/career/{id}/upload-image",
-    registerCareer: 'careers/register',
+    registerCareer: "careers/register",
   },
   company: {
     base: "/companies",
@@ -22,21 +22,22 @@ const endpoint = {
     getJob: "/companies/get-job",
     getCareerList: "/companies/get-applier",
     getStatic: "/companies/get-static",
-    registerCompany: '/companies/register',
+    registerCompany: "/companies/register",
   },
   job: {
     base: "/jobs",
     create: "/jobs/create",
     newJobs: "/jobs/suggest",
     update: "/jobs/update",
-    delete: "jobs/delete",
-    viewcount: "/viewjobcount"
+    delete: "/jobs/delete",
+    apply: "/jobs/apply",
+    // viewcount: "/viewjobcount"
   },
   tech: {
     base: "/tech",
   },
   field: {
-    base: "/company-field"
-  }
+    base: "/company-field",
+  },
 };
 export default endpoint;

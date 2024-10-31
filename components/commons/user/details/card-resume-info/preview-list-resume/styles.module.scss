@@ -1,0 +1,23 @@
+.card {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 16px;
+}
+.modal-resume {
+  margin: 10px;
+  overflow-y: auto;
+  max-height: 450px;
+  width: 100%;
+  overflow-x: hidden;
+}
+.modal-resume::-webkit-scrollbar {
+  width: 5px;
+}
+
+.modal-resume::-webkit-scrollbar-thumb {
+  background-color: #5422c9;
+  border-radius: 6px; 
+}
+
+.modal-resume::-webkit-scrollbar-track {
+  background: transparent; 
+}

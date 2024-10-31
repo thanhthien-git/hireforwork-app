@@ -7,7 +7,7 @@ import withAuthenticated from "@/hocs/withAuthenticated";
 
 function UserDetail() {
   return (
-    <LayoutClient title="Profile">
+    <LayoutClient title="Hồ sơ của tôi">
       <LayoutManager menu={careerSider}>
         <UserDetailPage />
       </LayoutManager>
