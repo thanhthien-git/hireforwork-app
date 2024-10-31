@@ -27,6 +27,7 @@ export interface Job {
 }
 
 export interface IJob {
+    _id: string;
     jobTitle: string;
     jobSalaryMin: number;
     jobSalaryMax: number;
