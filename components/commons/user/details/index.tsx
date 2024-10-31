@@ -1,45 +1,96 @@
-import { Card, Col, notification, Row, Skeleton } from "antd";
+import { Button, Card, Col, message, notification, Row } from "antd";
 import UserDetailImage from "./card-image";
 import UserDetailInfo from "./card-basic-info";
 import styles from "./style.module.scss";
-import { useCallback, useEffect, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import UserService from "@/services/userService";
 import UserDetailResume from "./card-resume-info";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
-import { IProfile } from "@/interfaces/IProfile";
-import { useSelector } from "react-redux";
+import { useForm } from "react-hook-form";
+import { IUserDetail } from "@/interfaces/IUserDetail";
+
 export default function UserDetailPage() {
-  const [userData, setUserData] = useState();
+  const { control, handleSubmit, getValues, setValue } = useForm();
+  const [userData, setUserData] = useState<IUserDetail | undefined>();
+  const id = localStorage.getItem("id") as string;
+  const [isChanged, setIsChanged] = useState(true);
+
   const dispatch = useDispatch();
-  const { loading } = useSelector((state) => state.loading);
-  const [profile, setProfile] = useState<IProfile>();
 
   const fetchUserData = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      const id = localStorage.getItem("id") as string;
       const res = await UserService.getById(id);
-      await setUserData(res.doc);
-      setProfile({
-        language: res?.doc?.languages,
-        skills: res?.doc?.profile?.skills,
-        userCV: res?.doc?.profile?.userCV,
-      });
+      setUserData(res.doc);
+      setValue("skills", res?.doc?.profile?.skills);
+      setValue("languages", res?.doc?.languages)
     } catch (err) {
       notification.error({ message: (err as Error).message });
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch, notification, setUserData, setProfile]);
+  }, [dispatch, setUserData, notification]);
 
   useEffect(() => {
     fetchUserData();
   }, [fetchUserData]);
 
+  const onSubmit = useCallback(async () => {
+    try {
+      const data: IUserDetail = {
+        careerEmail: getValues("careerEmail"),
+        careerFirstName: getValues("careerFirstName"),
+        lastName: getValues("lastName"),
+        careerPhone: getValues("careerPhone"),
+        careerPicture: userData?.careerPicture,
+        languages: getValues("languages"),
+
+        profile: {
+          skills: getValues("skills"),
+          userCV: userData?.profile?.userCV,
+        },
+      };
+      await UserService.updateByID(id, data);
+      notification.success({ message: "Cập nhập thông tin thành công" });
+    } catch (err) {
+      notification.error({
+        message: "Lỗi khi cập nhập thông tin, vui lòng thử lại sau",
+      });
+    }
+  }, [notification, userData]);
+
+  const checkChanged = useCallback(
+    (e: ChangeEvent<HTMLInputElement>, field: keyof IUserDetail) => {
+      if (e.target.value !== userData?.[field]) {
+        setIsChanged(false);
+      } else {
+        setIsChanged(true);
+      }
+      setValue(field, e.target.value);
+    },
+    [userData, setValue, setIsChanged]
+  );
+
+  const checkChangedSelect = useCallback(
+    (selectedValues: string[], field: keyof IUserDetail["profile"]  ) => {
+      if (
+        JSON.stringify(selectedValues) !==
+        JSON.stringify(userData?.profile?.[field])
+      ) {
+        setIsChanged(false);
+      } else {
+        setIsChanged(true);
+      }
+      setValue(field, selectedValues);
+    },
+    [setIsChanged, userData, setValue]
+  );
+
+
   return (
     <Row gutter={[16, 16]}>
-      <Col xs={24} sm={24} md={8} lg={6} xl={6} className={styles["form-card"]}>
+      <Col xs={24} sm={24} md={8} lg={8} xl={6} className={styles["form-card"]}>
         <Card className={styles["card"]}>
           <UserDetailImage
             image={userData?.careerPicture}
@@ -47,20 +98,39 @@ export default function UserDetailPage() {
           />
         </Card>
       </Col>
-      <Col xs={24} sm={24} md={16} lg={12} xl={18}>
+
+      <Col xs={24} sm={24} md={16} lg={16} xl={18}>
         <Card className={styles["card"]}>
-          <UserDetailInfo user={userData} />
-        </Card>
-      </Col>
-      <Col xs={24} sm={24} md={24} lg={24} xl={24}>
-        <Card className={styles["card"]}>
-          <UserDetailResume
-            language={profile?.language}
-            userCV={profile?.userCV}
-            skills={profile?.skills}
+          <UserDetailInfo
+            user={userData}
+            control={control}
+            setValue={setValue}
+            checkChanged={checkChanged}
           />
         </Card>
       </Col>
+
+      <Col xs={24}>
+        <Card className={styles["card"]}>
+          <UserDetailResume
+            profile={userData?.profile}
+            fetchData={fetchUserData}
+            control={control}
+            checkChangedSelect={checkChangedSelect}
+          />
+        </Card>
+      </Col>
+      <Row style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+        <Button
+          htmlType="submit"
+          type="primary"
+          style={{ minHeight: "50px", minWidth: "100px" }}
+          onClick={handleSubmit(onSubmit)}
+          disabled={isChanged}
+        >
+          Lưu
+        </Button>
+      </Row>
     </Row>
   );
 }
