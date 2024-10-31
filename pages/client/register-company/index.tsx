@@ -16,16 +16,12 @@ const RegisterRecruiter: React.FC = () => {
   const [currentStep, setCurrentStep] = useState(0);
   const [stepOneData, setStepOneData] = useState<Partial<StepOneData>>({});
   const router = useRouter();
-
   const onFinishStepOne = (values: any) => {
-    console.log('Step 1 values:', values);
     setStepOneData(values);
     setCurrentStep(1);
   };
 
   const onFinishStepTwo = async (values: any) => {
-    console.log('Step 2 values:', values);
-
     const combinedData = {
       companyName: values.companyName,
       password: stepOneData.password as string,

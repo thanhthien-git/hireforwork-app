@@ -1,12 +1,12 @@
 export interface IJobPostCard {
-    id: string;
-    title: string;
-    company: string;
-    salary: string;
-    location: string;
-    deadline: string;
+    _id: string;
+    jobTitle: string;
+    companyName: string;
+    jobSalaryMin: number;
+    jobSalaryMax: number;
+    workingLocation: string[];
+    expireDate: string;
     isHot?: boolean;
-    isUrgent?: boolean;
     companyImageUrl?: string;
 }
 

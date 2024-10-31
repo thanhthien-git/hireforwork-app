@@ -58,7 +58,7 @@ const Banner = () => {
                         height: "50px",
                       }}
                     >
-                      <Link href="/home-search">Tìm Kiếm</Link>
+                      <Link href="/jobs/search">Tìm Kiếm</Link>
                     </Button>
                   )}
                 </Input.Group>
