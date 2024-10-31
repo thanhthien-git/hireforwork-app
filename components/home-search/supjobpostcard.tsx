@@ -5,13 +5,14 @@ import { IJobPostCard } from "@/interfaces/IJobPostCard";
 import styles from './style.module.scss';
 
 export default function SupJobPostCard({
-  title,
-  company,
-  salary,
-  location,
-  deadline,
+  _id,
+  jobTitle,
+  companyName,
+  jobSalaryMin,
+  jobSalaryMax,
+  workingLocation,
+  expireDate,
   isHot = false,
-  isUrgent = false,
   companyImageUrl = '/default-image.png',
 }: IJobPostCard) {
   return (
@@ -21,34 +22,44 @@ export default function SupJobPostCard({
           <Image
             src={companyImageUrl}
             alt="Company Logo"
-            width={60}
-            height={60}
+            width={50}
+            height={50}
             preview={false}
+            className={styles.image}
           />
         </Col>
-        <Col flex="auto">
+        <Col>
           <Typography.Title level={5} className={styles['job-title']}>
-            {title}
+            {jobTitle}
           </Typography.Title>
-          <Typography.Text className={styles['company-name']}>{company}</Typography.Text>
+          <Typography.Text className={styles['company-name']}>{companyName}</Typography.Text>
         </Col>
         <Col className={styles['tag-container']}>
           {isHot && <Tag color="red">HOT</Tag>}
-          {isUrgent && <Tag color="orange">Tuyển gấp</Tag>}
         </Col>
       </Row>
       <Row gutter={[16, 16]} className={styles['job-info']}>
         <Col className={styles['icon-text']}>
           <DollarOutlined />
-          <Typography.Text>{salary} triệu</Typography.Text>
+          <Typography.Text>{jobSalaryMin} triệu - {jobSalaryMax} triệu</Typography.Text>
         </Col>
         <Col className={styles['icon-text']}>
           <EnvironmentOutlined />
-          <Typography.Text>{location}</Typography.Text>
+          <Typography.Text>
+              {Array.isArray(workingLocation) && workingLocation.length > 0 ? (
+                workingLocation.map((location: string, index: number) => (
+                  <Tag key={index} className={styles.locationTag}>
+                    {location}
+                  </Tag>
+                ))
+              ) : (
+                <Typography.Text>Không có địa điểm</Typography.Text>
+              )}
+            </Typography.Text>
         </Col>
         <Col className={styles['icon-text']}>
           <CalendarOutlined />
-          <Typography.Text>{deadline}</Typography.Text>
+          <Typography.Text>{expireDate}</Typography.Text>
         </Col>
       </Row>
     </Card>

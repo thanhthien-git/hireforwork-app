@@ -1,7 +1,6 @@
 import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-import { fetchData } from "./api";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 
 export default class CompanyService {
@@ -138,9 +137,9 @@ export interface Company {
   description: string;
 }
 
-export const fetchCompanies = async () => {
-  return await fetchData("/companies");
-};
+// export const fetchCompanies = async () => {
+//   return await fetchData("/companies");
+// };
 
 export const fetchCompaniesByID = async (id: string) => {
   try {

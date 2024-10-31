@@ -1,9 +1,9 @@
 import LayoutClient from "@/layouts/layout-client";
 import JobPostSearch from "@/components/job-search";
 import { Col, Row } from "antd";
-import MainJobPostCard from "@/components/MainJobPostCard";
+import MainJobPostCard from "@/components/home-search/mainjobpost";
 import styles from "./style.module.scss";
-import SuggestedJobPostCard from "@/components/SuggestedJobPostCard";
+import SuggestedJobPostCard from "@/components/home-search/suggestedjob";
 import MuiImageCustom from "@/components/MuiImageCustom";
 
 export default function HomeSearch() {
