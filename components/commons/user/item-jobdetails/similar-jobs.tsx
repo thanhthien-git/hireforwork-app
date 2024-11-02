@@ -21,7 +21,6 @@ const SimilarJobs = () => {
       const data = await JobService.getNewJob();
       setSimilarJobs(data);
     } catch (error) {
-      console.error("Error fetching similar jobs:", error);
       setError((error as Error).message);
     } finally {
       setLoading(false);
@@ -30,7 +29,7 @@ const SimilarJobs = () => {
 
   useEffect(() => {
     fetchSimilarJobs();
-  }, [fetchSimilarJobs]);
+  }, []);
 
   return (
     <div className={styles.similarJobs}>
