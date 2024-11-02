@@ -3,6 +3,7 @@ import api from "./api";
 import { ICareer } from "@/interfaces/user";
 import { IUserFilter } from "@/interfaces/iUserFilter";
 import { IUserDetail } from "@/interfaces/IUserDetail";
+import { IApplyJob } from "@/interfaces/IApplyJob";
 
 export default class UserService {
   static async get(filter: IUserFilter) {
@@ -79,17 +80,18 @@ export default class UserService {
 
   static async getSavedJobs(careerID: string) {
     try {
-      const response = await api.get(`${endpoint.users.savedJobs}/${careerID}`);
+      const response = await api.get(
+        `${endpoint.users.base}/${careerID}/save-job`
+      );
       return response.data;
     } catch (err) {
-      console.error("Error fetching saved jobs:", err);
-      throw err;
+      throw new Error((err as Error).message);
     }
   }
 
   static async saveJob(careerID: string, jobID: string) {
     try {
-      const res = await api.post(endpoint.users.saveJob, {
+      const res = await api.post(`${endpoint.users.base}/${careerID}/save`, {
         careerID,
         jobID,
       });
@@ -100,10 +102,13 @@ export default class UserService {
     }
   }
 
-  static async removeSavedJob(careerID: string, jobID: string) {
+  static async removeSaveJob(careerID: string, jobID: string) {
     try {
-      const res = await api.delete(
-        `${endpoint.users.base}/${careerID}/saved-jobs/${jobID}`
+      const formData = new FormData();
+      formData.append("jobID", jobID);
+      const res = await api.post(
+        `${endpoint.users.base}/${careerID}/remove-save`,
+        formData
       );
       return res.data;
     } catch (err) {
@@ -164,6 +169,15 @@ export default class UserService {
     try {
       const res = await api.post(`${endpoint.users.base}/${id}/update`, data);
       return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async applyJob(data: IApplyJob) {
+    try {
+      const res = await api.post(endpoint.job.apply, data);
+      return res.data;
     } catch (err) {
       throw new Error((err as Error).message);
     }

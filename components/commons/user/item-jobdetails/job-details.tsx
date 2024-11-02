@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState, useMemo } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -26,7 +26,7 @@ const JobPage = () => {
   const { id } = router.query;
   const [loading, setLoading] = useState(true);
   const [jobDetail, setJobDetail] = useState<Job>();
-  const [companyDetail, setCompanyDetail] = useState<Company | null>(null);
+  const [companyDetail, setCompanyDetail] = useState<Company>();
   const [open, setOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
@@ -39,23 +39,7 @@ const JobPage = () => {
         const companyID = jobResponse?.doc?.companyID?.toString();
         const companyResponse = await CompanyService.getById(companyID);
         setCompanyDetail(companyResponse?.doc);
-        const careerID = localStorage?.getItem("id");
-        if (careerID) {
-          let savedJobsResponse = [];
-          try {
-            savedJobsResponse =
-              (await UserService.getSavedJobs(careerID)) ?? [];
-          } catch (error) {
-            console.warn("Người dùng chưa có công việc nào đã lưu.");
-            savedJobsResponse = [];
-          }
-
-          const isJobSaved = savedJobsResponse?.some(
-            (job) => job.jobID === jobResponse?.doc?._id && !job.isDeleted
-          );
-
-          setIsSaved(isJobSaved);
-        }
+        setIsSaved(jobResponse?.doc?.isSaved === true ? true : false);
       } catch (err) {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
@@ -64,11 +48,18 @@ const JobPage = () => {
         setLoading(false);
       }
     }
-  }, [id, setCompanyDetail, setIsSaved, setJobDetail, setLoading]);
+  }, [
+    id,
+    setCompanyDetail,
+    setIsSaved,
+    setJobDetail,
+    setLoading,
+    notification,
+  ]);
 
   useEffect(() => {
     fetchData();
-  }, [fetchData]);
+  }, []);
 
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id");
@@ -82,7 +73,7 @@ const JobPage = () => {
 
     try {
       if (isSaved) {
-        await UserService.removeSavedJob(careerID, jobDetail?._id as string);
+        await UserService.removeSaveJob(careerID, jobDetail?._id as string); 
         setIsSaved(false);
         notification.success({
           message: "Công việc đã được hủy lưu!",
@@ -112,9 +103,15 @@ const JobPage = () => {
   const handleOpenCompanyPage = useCallback(() => {
     router.push(`/company/${companyDetail?._id}`);
   }, [router]);
+
   return (
     <div className={styles.jobPage}>
-      <ModalApplyJob open={open} onClose={handleCloseModal} />
+      <ModalApplyJob
+        open={open}
+        onClose={handleCloseModal}
+        companyID={companyDetail?._id}
+        jobID={jobDetail?._id}
+      />
       <Spin spinning={loading}>
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>

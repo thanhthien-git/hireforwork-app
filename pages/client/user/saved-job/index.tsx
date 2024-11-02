@@ -7,7 +7,7 @@ import withAuthenticated from "@/hocs/withAuthenticated";
 
 function SavedJobs() {
   return (
-    <LayoutClient title="Saved Job">
+    <LayoutClient title="Công việc đã lưu">
       <LayoutManager menu={careerSider}>
         <SavedJob />
       </LayoutManager>
