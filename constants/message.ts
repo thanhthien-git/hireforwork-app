@@ -8,3 +8,4 @@ export const REQUIRED_RULE = [
 export const REQUIRED_MESSAGE = (field: string) => `${field} ☝️`;
 
 export const RETRY_LATER = "Đã có lỗi xảy ra, vui lòng thử lại sau!"
+export const LOGIN_REQUIRED = "Bạn cần đăng nhập để thực hiện chức năng này!"

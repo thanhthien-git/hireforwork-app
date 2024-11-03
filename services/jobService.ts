@@ -2,6 +2,8 @@ import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { Job } from "@/interfaces/IJobPostCard";
 import { IJob } from "@/interfaces/IJob";
+import { IJobFilter } from "@/interfaces/IJobFilter";
+import queryString from "query-string";
 
 export const fetchJobById = async (id: string): Promise<Job> => {
   try {
@@ -12,19 +14,11 @@ export const fetchJobById = async (id: string): Promise<Job> => {
     throw new Error(error.message);
   }
 };
-// export const fetchViewCount = async (id: string): Promise<number> => {
-//   try {
-//     const response = await api.get(`${endpoint.job.viewcount}/${id}`);
-//     return response.data.viewCount;
-//   } catch (err) {
-//     console.error("Error fetching view count:", err);
-//     throw err;
-//   }
-// };
 export default class JobService {
-  static async getJob() {
+  static async getJob(filter: IJobFilter) {
     try {
-      const response = await api.get(endpoint.job.base);
+      const query = queryString.stringify(filter);
+      const response = await api.get(`${endpoint.job.base}?${query}`);
       return response.data;
     } catch (err) {
       const error = err as Error;

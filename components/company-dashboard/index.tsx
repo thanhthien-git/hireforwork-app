@@ -5,7 +5,6 @@ import styles from "./styles.module.scss";
 import LineChart from "../dashboard/bar-chart";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
-import DoughnutChart from "../dashboard/doughnut-chart";
 
 export default function CompanyDashboardPage() {
   const { loading } = useSelector((state) => state.loading);

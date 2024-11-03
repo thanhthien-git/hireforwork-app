@@ -15,11 +15,8 @@ export default function DashboardPage() {
       <Col span={12}>
         <Row gutter={[16, 16]} className={styles["card-static-row"]}>
           <Col span={24}>
-            <Card
-              className={styles["card-statics"]}
-            >
-              <Title level={5}>New career</Title>
-
+            <Card className={styles["card-statics"]}>
+              <Title level={5}>Người dùng mới</Title>
               <CardNewestUser />
               <CardNewestUser />
               <CardNewestUser />
@@ -28,10 +25,8 @@ export default function DashboardPage() {
         </Row>
         <Row gutter={[16, 16]} className={styles["card-static-row"]}>
           <Col span={24} style={{ display: "flex", alignItems: "flex-end" }}>
-            <Card
-              className={styles["card-statics"]}
-            >
-              <Title level={5}>New job post</Title>
+            <Card className={styles["card-statics"]}>
+              <Title level={5}>Bài đăng mới</Title>
 
               <CardNewestUser />
               <CardNewestUser />

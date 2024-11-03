@@ -10,22 +10,26 @@ import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import JobService from "../../../../services/jobService";
 import { Job } from "@/interfaces/IJobPostCard";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
+import { Skeleton } from "antd";
 
 const SimilarJobs = () => {
   const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
 
   const fetchSimilarJobs = useCallback(async () => {
     try {
+      dispatch(setLoading(true));
       const data = await JobService.getNewJob();
       setSimilarJobs(data);
     } catch (error) {
-      setError((error as Error).message);
+      console.log(error);
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
-  }, []);
+  }, [dispatch, setSimilarJobs]);
 
   useEffect(() => {
     fetchSimilarJobs();
@@ -40,42 +44,40 @@ const SimilarJobs = () => {
         </Link>
       </div>
       <div className={styles.similarJobsList}>
-        {loading ? (
-          <p>Đang tải...</p>
-        ) : error ? (
-          <p>Lỗi: {error}</p>
-        ) : similarJobs.length > 0 ? (
-          similarJobs.map((job) => (
-            <Link key={job._id} href={`/jobs/${job._id}`}>
-              <div className={styles.similarJobItem}>
-                <Image
-                  src={job.companyImageUrl || logo}
-                  alt={`${job.companyID} Logo`}
-                  width={60}
-                  height={60}
-                />
-                <div className={styles.similarJobInfo}>
-                  <h4>{job.jobTitle}</h4>
-                  <p>{job.companyID}</p>
-                  <p>
-                    <DollarOutlined />
-                    {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
-                  </p>
-                  <p>
-                    <EnvironmentOutlined />
-                    {job.workingLocation.join(", ")}
-                  </p>
-                  <p>
-                    <CalendarOutlined />
-                    {new Date(job.createAt).toLocaleDateString()}
-                  </p>
+        <Skeleton loading={loading}>
+          {similarJobs?.length > 0 ? (
+            similarJobs?.map((job) => (
+              <Link key={job._id} href={`/jobs/${job._id}`}>
+                <div className={styles.similarJobItem}>
+                  <Image
+                    src={job?.companyImageUrl || logo}
+                    alt={`${job.companyID} Logo`}
+                    width={60}
+                    height={60}
+                  />
+                  <div className={styles.similarJobInfo}>
+                    <h4>{job.jobTitle}</h4>
+                    <p>{job.companyID}</p>
+                    <p>
+                      <DollarOutlined />
+                      {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
+                    </p>
+                    <p>
+                      <EnvironmentOutlined />
+                      {job.workingLocation?.join(", ")}
+                    </p>
+                    <p>
+                      <CalendarOutlined />
+                      {new Date(job.createAt).toLocaleDateString()}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <p>Không có công việc nào để hiển thị.</p>
-        )}
+              </Link>
+            ))
+          ) : (
+            <p>Không có công việc nào để hiển thị.</p>
+          )}
+        </Skeleton>
       </div>
     </div>
   );

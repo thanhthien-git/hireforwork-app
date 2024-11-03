@@ -15,43 +15,25 @@ const JobsList = () => {
   const fetchJob = useCallback(async () => {
     try {
       setLoading(true);
-      const response = await JobService.getJob(); // Gọi API để lấy dữ liệu
-      console.log("Data from API job:", response);
+      const response = await JobService.getJob({
+        page: 1,
+        pageSize: 10,
+        isHot: true,
+      });
 
-      if (response?.docs && Array.isArray(response.docs)) {
-        // Kiểm tra nếu response.docs là một mảng
-        // const filteredJobs = response.docs.filter((job: Job) => {
-        //   const differenceInDays =
-        //     (new Date(job.expireDate).getTime() - new Date(job.createAt).getTime()) /
-        //     (1000 * 3600 * 24);
-        //   return differenceInDays <= 7; // Kiểm tra nếu thời gian còn hạn trong vòng 7 ngày
-        // });
-        setJobList(response?.docs); // Cập nhật danh sách công việc
-      } else {
-        console.error(
-          "Expected an array in docs, but received:",
-          typeof response.docs,
-          response.docs
-        );
-        notification.error({
-          message: "Lỗi",
-          description: "Dữ liệu từ server không hợp lệ!",
-        });
-      }
+      setJobList(response?.docs);
     } catch (err) {
-      console.error("Error fetching jobs:", err);
       notification.error({
-        message: "Lỗi",
-        description: "Không thể tải danh sách công việc.",
+        message: "Đã có lỗi xảy ra",
       });
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [setLoading, setJobList, notification]);
 
   useEffect(() => {
     fetchJob();
-  }, [fetchJob]);
+  }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -129,7 +111,7 @@ const JobsList = () => {
                     {new Date(job.createAt).toLocaleDateString()} -{" "}
                     {new Date(job.expireDate).toLocaleDateString()}
                   </p>
-                  {job.isHot && <Tag color="red">HOT</Tag>}
+                  {job.isHot && <Tag color="red">Tuyển gấp</Tag>}
                 </Card>
               </Col>
             ))

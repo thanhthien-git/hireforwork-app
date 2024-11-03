@@ -3,4 +3,5 @@ export interface IApplyJob {
   careerID: string;
   companyID: string | undefined;
   careerCV: string;
+  careerEmail: string;
 }

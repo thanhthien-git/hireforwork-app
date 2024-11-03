@@ -114,7 +114,7 @@ export default function JobList({
                             <Text style={{ marginRight: 10 }}>
                               <EnvironmentOutlined />
                             </Text>
-                            {job.workingLocation.map((location) => (
+                            {job.workingLocation?.map((location) => (
                               <Text key={location} style={{ marginRight: 10 }}>
                                 {location}
                               </Text>
@@ -135,8 +135,9 @@ export default function JobList({
                               key={job.jobTitle}
                               className={styles.button}
                               block
+                              onClick={() => router.push(`/jobs/${job._id}`)}
                             >
-                              Ứng tuyển
+                              Xem chi tiết
                             </Button>
                           </Col>
                         </Row>

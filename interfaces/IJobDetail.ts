@@ -28,4 +28,15 @@ export interface Job {
   createAt: string;
   viewCount: number;
   companyID: string;
+  companyName: string;
+  employeeSize: string;
+  companyImage: {
+    imageURL: string;
+    coverURL: string;
+  };
+  contact: {
+    companyEmail: string;
+    companyPhone: string;
+    companyAddress: string;
+  };
 }

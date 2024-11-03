@@ -4,7 +4,7 @@ import LayoutAdmin from "@/layouts/layout-admin";
 
 function Dashboard() {
   return (
-    <LayoutAdmin title="Dashboard">
+    <LayoutAdmin title="Trang chủ">
        <DashboardPage/>
     </LayoutAdmin>
   );

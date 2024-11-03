@@ -41,7 +41,6 @@
   width: 100%;
   padding: 20px 0;
   border-top: 1px solid #e0e0e0b8;
-
 }
 
 .jobMeta {
@@ -70,28 +69,20 @@
   border-radius: 5px;
   transition: background-color 0.3s;
 }
-
-.applyBtn {
-  margin: 5px 10px 5px 0px;
-
-  background-color: #3c1990;
-  color: #fff;
-  border: none;
+.job-action {
+  margin-top: 20px;
 }
-
-.applyBtn:hover {
-  background-color: #5a00d4;
+.job-action-button {
+  min-height: 44px;
+  margin-right: 16px;
 }
-
 .saveBtn,
 .shareBtn {
   margin: 5px 10px;
   background-color: #fff;
   color: #3c1990;
   border: 1px solid #3c1990;
-
 }
-
 
 .saveBtn:hover,
 .shareBtn:hover {
@@ -166,7 +157,6 @@
 }
 
 @media (max-width: 768px) {
-
   /* Điều chỉnh khi màn hình nhỏ hơn 768px */
   .jobHeader {
     flex-direction: column;
@@ -232,7 +222,6 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   margin-right: 10px;
   transition: box-shadow 0.3s ease;
-
 }
 
 .similarJobItem:hover {
@@ -241,7 +230,7 @@
 .similarJobInfo {
   margin-left: 10px;
 }
-.description{
+.description {
   padding: 15px;
 }
 

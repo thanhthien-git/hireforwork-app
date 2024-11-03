@@ -1,6 +1,7 @@
 import AuthenticationService from "@/services/authentication";
 import {
   ClockCircleOutlined,
+  CodeOutlined,
   FileDoneOutlined,
   LogoutOutlined,
   PaperClipOutlined,
@@ -13,34 +14,39 @@ import { useRouter } from "next/router";
 const router = useRouter;
 export const menuItems = [
   {
-    name: "Dashboard",
+    name: "Tổng quan",
     path: "/admin",
     icon: <PieChartOutlined />,
   },
   {
-    name: "Users",
+    name: "Quản lý người dùng",
     path: "",
     icon: <UserOutlined />,
     subMenu: [
       {
-        name: "Careers",
+        name: "Người tìm việc",
         path: "/admin/user-manager",
       },
       {
-        name: "Companies",
+        name: "Nhà tuyển dụng",
         path: "/admin/companies-manager",
       },
     ],
   },
   {
-    name: "Job Post",
+    name: "Quản lý bài đăng",
     path: "/admin/jobs-manager",
     icon: <PaperClipOutlined />,
   },
   {
-    name: "Category",
+    name: "Quản lý danh mục",
     path: "",
     icon: <TagOutlined />,
+  },
+  {
+    name: "Quản lý kỹ năng",
+    path: "",
+    icon: <CodeOutlined />,
   },
 ];
 

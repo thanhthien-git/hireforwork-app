@@ -22,17 +22,16 @@ ChartJS.register(
   Legend
 );
 
-export default function LineChart({ data, xField, yField, options }: any) {
-  // Tạo dữ liệu cho biểu đồ
+export default function LineChart({ data = [], xField, yField, options }: any) {
   const chartData = {
-    labels: data.map((item: any) => item[xField]), // Nhãn trên trục x
+    labels: data.map((item: any) => item[xField]),
     datasets: [
       {
-        label: yField, // Nhãn cho dataset
-        data: data.map((item: any) => item[yField]), // Dữ liệu cho trục y
-        borderColor: "rgba(75, 192, 192, 1)", // Màu đường
-        backgroundColor: "rgba(75, 192, 192, 0.2)", // Màu nền (không dùng trong biểu đồ đường)
-        fill: true, // Bật chế độ lấp đầy vùng dưới đường
+        label: yField,
+        data: data.map((item: any) => item[yField]),
+        borderColor: "rgba(75, 192, 192, 1)",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
       },
     ],
   };

@@ -8,21 +8,20 @@ import { Job } from "@/interfaces/IJobPostCard";
 const JobsList = () => {
   const [jobList, setJobList] = useState<Job[]>([]);
   const [current, setCurrent] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true); // Thêm trạng thái loading
+  const [loading, setLoading] = useState<boolean>(true);
   const pageSize = 6;
   const router = useRouter();
   const fetchJobs = async () => {
     try {
-      setLoading(true); // Bắt đầu trạng thái loading
+      setLoading(true);
       const data = await JobService.getNewJob();
-      console.log("Data from API Newjob:", data);
 
       const filteredJobs = data.filter((job: Job) => {
         const createAt = new Date(job.createAt);
         const expireDate = new Date(job.expireDate);
         const differenceInTime = expireDate.getTime() - createAt.getTime();
         const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-        return differenceInDays > 0; 
+        return differenceInDays > 0;
       });
 
       setJobList(filteredJobs);
@@ -42,7 +41,7 @@ const JobsList = () => {
   };
 
   const handleJobClick = (id: string) => {
-    router.push(`/jobs/${id}`); 
+    router.push(`/jobs/${id}`);
   };
 
   const paginatedJobs = jobList.slice(
@@ -67,29 +66,12 @@ const JobsList = () => {
         />
         Việc làm mới nhất
       </h2>
-      {loading ? (
-        <Row gutter={[16, 16]}>
-          {Array.from({ length: pageSize }).map((_, index) => (
-            <Col key={index} xs={24} sm={12} md={8}>
-              <Card
-                loading={true}
-                style={{
-                  borderRadius: "8px",
-                  height: "300px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Skeleton active />
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      ) : (
-        <Row gutter={[16, 16]}>
-          {paginatedJobs.length > 0 ? (
-            paginatedJobs.map((job) => (
-              <Col key={job._id} xs={24} sm={12} md={8}>
+
+      <Row gutter={[16, 16]}>
+        {paginatedJobs.length > 0 ? (
+          paginatedJobs.map((job) => (
+            <Col key={job._id} xs={24} sm={12} md={8}>
+              <Skeleton active loading={loading}>
                 <Card
                   hoverable
                   style={{
@@ -109,17 +91,17 @@ const JobsList = () => {
                     {new Date(job.createAt).toLocaleDateString()} -{" "}
                     {new Date(job.expireDate).toLocaleDateString()}
                   </p>
-                  {job.isHot && <Tag color="red">HOT</Tag>}
+                  {job.isHot && <Tag color="red">Tuyển gấp</Tag>}
                 </Card>
-              </Col>
-            ))
-          ) : (
-            <Col span={24}>
-                <Skeleton active style={{ minWidth: 300 ,height:250}}></Skeleton>
+              </Skeleton>
             </Col>
-          )}
-        </Row>
-      )}
+          ))
+        ) : (
+          <Col span={24}>
+            <Skeleton active style={{ minWidth: 300, height: 250 }}></Skeleton>
+          </Col>
+        )}
+      </Row>
       <Pagination
         style={{ marginTop: "20px", textAlign: "center" }}
         current={current}

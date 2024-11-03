@@ -1,5 +1,5 @@
 export interface IJob {
-  _id?: string
+  _id?: string;
   jobTitle: string;
   jobSalaryMin: number;
   jobSalaryMax: number;

@@ -15,28 +15,34 @@ import { EyeOutlined } from "@ant-design/icons";
 import PreviewResume from "../../details/card-resume-info/preview-resume";
 import { RETRY_LATER } from "@/constants/message";
 import { IApplyJob } from "@/interfaces/IApplyJob";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 
 interface ModalApplyJobProps {
   open: boolean;
   onClose: () => void;
   companyID: string | undefined;
   jobID: string | undefined;
+  onApplied: () => void;
 }
 export default function ModalApplyJob({
   open,
   onClose,
   companyID,
   jobID,
+  onApplied,
 }: Readonly<ModalApplyJobProps>) {
   const id = localStorage?.getItem("id") as string;
-  const [loading, setLoading] = useState(false);
-
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
   const [resume, setResume] = useState([
     {
       id: 0,
       url: "",
     },
   ]);
+  const [email, setEmail] = useState("");
   const [selectedKey, setSelectedKey] = useState<string>("");
   const [previewVisible, setPreviewVisible] = useState(false);
   const [previewURL, setPreviewURL] = useState<string>("");
@@ -59,47 +65,57 @@ export default function ModalApplyJob({
   const fetchUserResume = useCallback(
     async (id: string) => {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
         const res = await UserService.getById(id);
         setResume(
-          res.doc?.profile?.userCV.map((item: string, index: number) => {
+          res?.doc?.profile?.userCV?.map((item: string, index: number) => {
             return {
               id: index + 1,
               url: item,
             };
           })
         );
+        setEmail(res?.doc?.careerEmail);
       } catch (err) {
         console.log(err);
       } finally {
-        setLoading(false);
+        dispatch(setLoading(true));
       }
     },
-    [setResume, setLoading]
+    [setResume, dispatch, setEmail]
   );
-  
 
   const handleApplyJob = useCallback(async () => {
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
       const applyForm: IApplyJob = {
         careerCV: selectedKey,
         careerID: id,
         companyID: companyID,
         jobID: jobID,
+        careerEmail: email,
       };
-      const res = await UserService.applyJob(applyForm);
-      console.log(applyForm);
 
+      const res = await UserService.applyJob(applyForm);
+      onApplied();
+      onClose();
       notification.success({ message: res.message });
     } catch (err) {
-      console.log(err);
-      
       notification.error({ message: RETRY_LATER });
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
-  }, [notification, setLoading]);
+  }, [
+    notification,
+    dispatch,
+    selectedKey,
+    id,
+    companyID,
+    jobID,
+    email,
+    onApplied,
+    onClose,
+  ]);
 
   useEffect(() => {
     if (id) {
@@ -115,7 +131,12 @@ export default function ModalApplyJob({
       open={open}
       onCancel={onClose}
       footer={
-        <Button type="primary" loading={loading} onClick={handleApplyJob}>
+        <Button
+          type="primary"
+          loading={loading}
+          onClick={handleApplyJob}
+          disabled
+        >
           Ứng tuyển
         </Button>
       }

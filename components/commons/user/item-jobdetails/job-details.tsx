@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback, useState, useMemo } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
@@ -9,57 +9,60 @@ import {
   ShareAltOutlined,
 } from "@ant-design/icons";
 import JobService from "../../../../services/jobService";
-import CompanyService from "../../../../services/companyService";
 import { Button, Card, Col, Row, Spin, notification } from "antd";
-import { Job, Company } from "../../../../interfaces/IJobDetail";
+import { Job } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
 import { JOB_LEVEL } from "@/enum/jobLevel";
-import { RETRY_LATER } from "@/constants/message";
+import { LOGIN_REQUIRED, RETRY_LATER } from "@/constants/message";
 import ModalApplyJob from "./modal-apply";
 import Link from "next/link";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 
 const JobPage = () => {
-  const [isSaved, setIsSaved] = useState(false);
+  const [jobState, setJobState] = useState({
+    isSaved: false,
+    isApplied: false,
+  });
   const router = useRouter();
   const { id } = router.query;
-  const [loading, setLoading] = useState(true);
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
   const [jobDetail, setJobDetail] = useState<Job>();
-  const [companyDetail, setCompanyDetail] = useState<Company>();
   const [open, setOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
-        setLoading(true);
+        dispatch(setLoading(true));
         const jobResponse = await JobService.getById(id);
         setJobDetail(jobResponse?.doc);
-
-        const companyID = jobResponse?.doc?.companyID?.toString();
-        const companyResponse = await CompanyService.getById(companyID);
-        setCompanyDetail(companyResponse?.doc);
-        setIsSaved(jobResponse?.doc?.isSaved === true ? true : false);
+        setJobState({
+          isSaved: Boolean(jobResponse?.doc?.isSaved),
+          isApplied: Boolean(jobResponse?.doc?.isApplied),
+        });
       } catch (err) {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
         });
       } finally {
-        setLoading(false);
+        dispatch(setLoading(false));
       }
     }
-  }, [
-    id,
-    setCompanyDetail,
-    setIsSaved,
-    setJobDetail,
-    setLoading,
-    notification,
-  ]);
+  }, [id, dispatch, setJobState, setJobDetail, notification]);
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  const handleSetApplied = useCallback(() => {
+    setJobState((prev) => ({
+      ...prev,
+      isApplied: true,
+    }));
+  }, [setJobState]);
 
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id");
@@ -72,15 +75,21 @@ const JobPage = () => {
     }
 
     try {
-      if (isSaved) {
-        await UserService.removeSaveJob(careerID, jobDetail?._id as string); 
-        setIsSaved(false);
+      if (jobState.isSaved) {
+        await UserService.removeSaveJob(careerID, jobDetail?._id as string);
+        setJobState((prev) => ({
+          ...prev,
+          isSaved: false,
+        }));
         notification.success({
           message: "Công việc đã được hủy lưu!",
         });
       } else {
         await UserService.saveJob(careerID, jobDetail?._id as string);
-        setIsSaved(true);
+        setJobState((prev) => ({
+          ...prev,
+          isSaved: true,
+        }));
         notification.success({
           message: "Công việc đã được lưu thành công!",
         });
@@ -93,6 +102,10 @@ const JobPage = () => {
   };
 
   const handleOpenModal = useCallback(() => {
+    if (!localStorage.getItem("id")) {
+      notification.error({ message: LOGIN_REQUIRED });
+      return;
+    }
     setOpen(true);
   }, [setOpen]);
 
@@ -100,23 +113,20 @@ const JobPage = () => {
     setOpen(false);
   }, [setOpen]);
 
-  const handleOpenCompanyPage = useCallback(() => {
-    router.push(`/company/${companyDetail?._id}`);
-  }, [router]);
-
   return (
     <div className={styles.jobPage}>
       <ModalApplyJob
         open={open}
         onClose={handleCloseModal}
-        companyID={companyDetail?._id}
+        companyID={jobDetail?.companyID}
         jobID={jobDetail?._id}
+        onApplied={handleSetApplied}
       />
       <Spin spinning={loading}>
         <div className={styles.jobHeader}>
           <div className={styles.companyInfo}>
             <Image
-              src={companyDetail?.companyImage?.imageURL ?? logo}
+              src={jobDetail?.companyImage?.imageURL ?? logo}
               alt="Company Logo"
               width={60}
               height={60}
@@ -125,16 +135,16 @@ const JobPage = () => {
             />
             <div>
               <h2>
-                <Link href={`/company/${companyDetail?._id}`}>
-                  {companyDetail?.companyName ?? "Chưa có tên"}
+                <Link href={`/company/${jobDetail?.companyID}`}>
+                  {jobDetail?.companyName ?? "Chưa có tên"}
                 </Link>
               </h2>
-              <p>{companyDetail?.employeeSize ?? 0} nhân viên</p>
+              <p>{jobDetail?.employeeSize ?? 0} nhân viên</p>
             </div>
           </div>
 
           <div className={styles.jobTitle}>
-            <h2>{jobDetail?.jobTitle ?? "Unknown Job Title"}</h2>
+            <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
             <div className={styles.jobMeta}>
               <span>
                 <ContainerOutlined />
@@ -155,22 +165,30 @@ const JobPage = () => {
                   : "N/A"}
               </span>
             </div>
-            <div className={styles.actionButtons}>
-              <button className={styles.applyBtn} onClick={handleOpenModal}>
-                Nộp hồ sơ
-              </button>
-              <button className={styles.saveBtn} onClick={handleSaveJob}>
-                {isSaved ? (
+            <div className={styles["job-action"]}>
+              <Button
+                type="primary"
+                className={styles["job-action-button"]}
+                onClick={handleOpenModal}
+                disabled={jobState.isApplied}
+              >
+                {jobState.isApplied ? "Bạn đã nộp hồ sơ" : "Nộp hồ sơ"}
+              </Button>
+              <Button
+                className={styles["job-action-button"]}
+                onClick={handleSaveJob}
+              >
+                {jobState.isApplied ? (
                   <span>Đã lưu</span>
                 ) : (
                   <span>
                     <HeartOutlined /> Lưu
                   </span>
                 )}
-              </button>
-              <button className={styles.shareBtn}>
+              </Button>
+              <Button className={styles["job-action-button"]}>
                 <ShareAltOutlined /> Chia sẻ
-              </button>
+              </Button>
             </div>
           </div>
         </div>
@@ -263,17 +281,17 @@ const JobPage = () => {
 
           <p>
             <strong>Email liên hệ:</strong>{" "}
-            {companyDetail?.contact?.companyEmail ?? "N/A"}
+            {jobDetail?.contact?.companyEmail ?? "N/A"}
           </p>
 
           <p>
             <strong>SDT liên hệ:</strong>{" "}
-            {companyDetail?.contact?.companyPhone ?? "N/A"}
+            {jobDetail?.contact?.companyPhone ?? "N/A"}
           </p>
 
           <p>
             <strong>Địa chỉ:</strong>{" "}
-            {companyDetail?.contact?.companyAddress ?? "N/A"}
+            {jobDetail?.contact?.companyAddress ?? "N/A"}
           </p>
         </div>
       </Spin>
