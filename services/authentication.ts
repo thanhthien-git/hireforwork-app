@@ -4,7 +4,6 @@ import endpoint from "@/constants/apiEndpoint";
 import { ROLE } from "@/constants/role";
 import { useDispatch } from "react-redux";
 import { IRegister } from "@/interfaces/IRegister";
-import { IRegisterCareer } from "@/interfaces/IRegisterCareer";
 import { IRegisterCompany } from "@/interfaces/IRegisterCompany";
 
 export default class AuthenticationService {
@@ -35,7 +34,7 @@ export default class AuthenticationService {
     localStorage.removeItem("userID");
   }
 
-  static async registerCareer(user: IRegisterCareer) {
+  static async registerCareer(user: IRegister) {
     try {
       const response = await api.post(endpoint.users.registerCareer, user);
       return response.data;

@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import JobService from "../../../../services/jobService";
 import { Button, Card, Col, Row, Spin, notification } from "antd";
-import { Job } from "../../../../interfaces/IJobDetail";
+import { IJobDetail } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
@@ -23,14 +23,14 @@ import { setLoading } from "@/redux/slices/loadingSlice";
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
-    isSaved: false,
-    isApplied: false,
+    isSaved: false,  
+    isApplied: false, 
   });
   const router = useRouter();
   const { id } = router.query;
   const { loading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
-  const [jobDetail, setJobDetail] = useState<Job>();
+  const [jobDetail, setJobDetail] = useState<IJobDetail>();
   const [open, setOpen] = useState<boolean>(false);
 
   const fetchData = useCallback(async () => {
@@ -39,6 +39,7 @@ const JobPage = () => {
         dispatch(setLoading(true));
         const jobResponse = await JobService.getById(id);
         setJobDetail(jobResponse?.doc);
+
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
@@ -51,18 +52,11 @@ const JobPage = () => {
         dispatch(setLoading(false));
       }
     }
-  }, [id, dispatch, setJobState, setJobDetail, notification]);
+  }, [id, dispatch]);
 
   useEffect(() => {
     fetchData();
-  }, []);
-
-  const handleSetApplied = useCallback(() => {
-    setJobState((prev) => ({
-      ...prev,
-      isApplied: true,
-    }));
-  }, [setJobState]);
+  }, [fetchData]);
 
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id");
@@ -101,17 +95,27 @@ const JobPage = () => {
     }
   };
 
+  // Hàm mở modal nộp hồ sơ
   const handleOpenModal = useCallback(() => {
     if (!localStorage.getItem("id")) {
       notification.error({ message: LOGIN_REQUIRED });
       return;
     }
     setOpen(true);
-  }, [setOpen]);
+  }, []);
 
+  // Hàm đóng modal nộp hồ sơ
   const handleCloseModal = useCallback(() => {
     setOpen(false);
-  }, [setOpen]);
+  }, []);
+
+  // Hàm xử lý khi người dùng đã nộp hồ sơ
+  const handleSetApplied = useCallback(() => {
+    setJobState((prev) => ({
+      ...prev,
+      isApplied: true,
+    }));
+  }, []);
 
   return (
     <div className={styles.jobPage}>
@@ -178,7 +182,7 @@ const JobPage = () => {
                 className={styles["job-action-button"]}
                 onClick={handleSaveJob}
               >
-                {jobState.isApplied ? (
+                {jobState.isSaved ? (
                   <span>Đã lưu</span>
                 ) : (
                   <span>
@@ -197,28 +201,23 @@ const JobPage = () => {
             <div className={styles.jobInfo}>
               <h3>Mức lương</h3>
               <p>
-                {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax}{" "}
-                triệu
+                {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax} triệu
               </p>
             </div>
             <div className={styles.jobInfo}>
               <h3>Cấp bậc</h3>
               <p>
-                {Object.entries(JOB_LEVEL)
-                  .filter(([key, value]) => key === jobDetail?.jobLevel)
-                  .map(([key, value]) => value) ?? "Không có cấp bậc."}{" "}
+                {JOB_LEVEL[jobDetail?.jobLevel] ?? "Không có cấp bậc."}
               </p>
             </div>
             <div className={styles.jobInfo}>
               <h3>Số lượng tuyển</h3>
-              <p>{Number(jobDetail?.quantity)}</p>
+              <p>{Number(jobDetail?.quantity) ?? 0}</p>
             </div>
           </div>
           <Card title="Thông tin">
             <Row gutter={16}>
-              {" "}
               <Col span={12}>
-                {" "}
                 <div className={styles.infoItem}>
                   <h4>Nghề nghiệp</h4>
                   <p>{jobDetail?.jobCategory ?? "N/A"}</p>
@@ -235,8 +234,6 @@ const JobPage = () => {
                 </div>
               </Col>
               <Col span={12}>
-                {" "}
-                {/* Match span with the first column for even distribution */}
                 <div className={styles.infoItem}>
                   <h4>Học vấn</h4>
                   <p>{jobDetail?.education ?? "Đại học"}</p>
@@ -258,7 +255,6 @@ const JobPage = () => {
             }}
           />
         </div>
-
         <div className={styles.jobDescription}>
           <h3>Yêu cầu kinh nghiệm</h3>
           <div className={styles["job-requirement-content"]}>
