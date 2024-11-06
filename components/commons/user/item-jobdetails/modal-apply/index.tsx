@@ -79,7 +79,7 @@ export default function ModalApplyJob({
       } catch (err) {
         console.log(err);
       } finally {
-        dispatch(setLoading(true));
+        dispatch(setLoading(false));
       }
     },
     [setResume, dispatch, setEmail]
@@ -135,7 +135,6 @@ export default function ModalApplyJob({
           type="primary"
           loading={loading}
           onClick={handleApplyJob}
-          disabled
         >
           Ứng tuyển
         </Button>

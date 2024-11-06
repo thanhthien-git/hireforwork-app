@@ -1,4 +1,4 @@
-import { Card, Input, Button, Select, Row, Col } from "antd";
+import { Card, Input, Button, Row, Col, Form, Typography } from "antd";
 import styles from "../style.module.scss";
 import { useState, useEffect, useCallback } from "react";
 import { SearchOutlined } from "@ant-design/icons";
@@ -7,8 +7,8 @@ import { CITY } from "@/constants/city";
 import { useRouter } from "next/router";
 import _ from "lodash"; // Import Lodash
 import queryString from "query-string";
-
-const { Option } = Select;
+import SelectComponent from "@/components/custom/select";
+import { useForm } from "react-hook-form";
 
 interface ISearchBoxProps {
   cateList: ICategory[];
@@ -17,9 +17,8 @@ interface ISearchBoxProps {
 export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
-  const [jobTitle, setJobTitle] = useState("");
-  const [category, setCategory] = useState("");
-  const [cities, setCities] = useState<string[]>([]);
+  const [querySearch, setQuerySearch] = useState("");
+  const { control, getValues } = useForm();
 
   useEffect(() => {
     const handleResize = () => {
@@ -33,23 +32,40 @@ export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
   }, []);
 
   const handleSearch = useCallback(() => {
-    const searchValues = {
-      jobTitle,
-      category,
-      cities,
+    const query = {
+      ...(querySearch && { query: querySearch }),
+      workingLocation: getValues("workingLocation"),
     };
 
-    const query = _.omitBy(searchValues, _.isEmpty);
     router.push(`/search?${queryString.stringify(query)}`);
-  }, [jobTitle, category, cities, router]);
+  }, [router, getValues]);
 
   return (
     <div className={styles.bannerContainer}>
       <Row justify="space-between" align="middle">
-        <Col xs={24} md={12}>
-          <Card className={styles.searchBox} bordered={false}>
+        <Card className={styles.searchBox} bordered={false}>
+          <Typography.Title level={2} style={{color: '#fff', marginBottom: 20}}>
+            200+ Việc làm IT cho bạn
+          </Typography.Title>
+          <Form>
             <Row gutter={16}>
-              <Col xs={24}>
+              <Col span={8}>
+                <SelectComponent
+                  item={CITY}
+                  defaultValue={CITY[0]}
+                  name="workingLocation"
+                  control={control}
+                  placeholder="Địa điểm làm việc"
+                  allowClear
+                  style={{
+                    minHeight: 50,
+                    padding: 0,
+                    width: "100%",
+                    borderRadius: "5px",
+                  }}
+                />
+              </Col>
+              <Col span={16}>
                 <Input
                   name="jobTitle"
                   placeholder="Tìm kiếm cơ hội việc làm"
@@ -63,7 +79,7 @@ export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
                           borderRadius: "0 5px 5px 0",
                           height: "50px",
                         }}
-                        onClick={handleSearch} // Add click handler for search button
+                        onClick={handleSearch}
                       >
                         Tìm Kiếm
                       </Button>
@@ -76,59 +92,36 @@ export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
                     width: "100%",
                     borderRadius: "5px",
                   }}
-                  onChange={(e) => setJobTitle(e.target.value)} // Update job title on input change
+                  onChange={(e) => setQuerySearch(e.target.value)}
                 />
               </Col>
             </Row>
-            <Row
-              justify="space-between"
-              gutter={[16, 16]}
-              style={{ marginTop: "10px", display: "flex" }}
-            >
-              <Col xs={24} md={12} style={{ flex: 1 }}>
-                <Select
-                  style={{ width: "100%", marginTop: "10px", height: "50px" }}
-                  showSearch
-                  optionFilterProp="children"
-                  placeholder="Ngành nghề"
-                  onChange={(value) => setCategory(value)} // Update category on change
+          </Form>
+          <Row
+            justify="space-between"
+            gutter={[16, 16]}
+            style={{ marginTop: "10px", display: "flex" }}
+          >
+            {isMobile && (
+              <Col
+                xs={24}
+                md={4}
+                style={{ textAlign: isMobile ? "center" : "right" }}
+              >
+                <Button
+                  type="primary"
+                  style={{
+                    marginTop: isMobile ? "10px" : "0",
+                    height: "50px",
+                  }}
+                  onClick={handleSearch}
                 >
-                  {cateList?.map((category) => (
-                    <Option key={category._id} value={category._id}>
-                      {category.categoryName}
-                    </Option>
-                  ))}
-                </Select>
+                  Tìm Kiếm
+                </Button>
               </Col>
-
-              {isMobile && (
-                <Col
-                  xs={24}
-                  md={4}
-                  style={{ textAlign: isMobile ? "center" : "right" }}
-                >
-                  <Button
-                    type="primary"
-                    style={{
-                      marginTop: isMobile ? "10px" : "0",
-                      height: "50px",
-                    }}
-                    onClick={handleSearch}
-                  >
-                    Tìm Kiếm
-                  </Button>
-                </Col>
-              )}
-            </Row>
-          </Card>
-        </Col>
-
-        <Col xs={0} md={12}>
-          <Card className={styles.reportCard} bordered={false}>
-            <h2>BÁO CÁO THỊ TRƯỜNG TUYỂN DỤNG {new Date().getFullYear()}</h2>
-            <p>75% người tìm việc đang dự định đổi việc trong 6 tháng tới</p>
-          </Card>
-        </Col>
+            )}
+          </Row>
+        </Card>
       </Row>
     </div>
   );

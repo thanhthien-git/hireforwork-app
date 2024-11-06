@@ -61,7 +61,7 @@ export default function TopCompany({ companyList }: Readonly<ITopCompanyProp>) {
                 cover={
                   <Image
                     alt="logo"
-                    src={company?.companyImage?.imageURL ?? logo}
+                    src={company?.companyImage?.imageURL || logo}
                     style={{
                       height: "150px",
                       objectFit: "contain",

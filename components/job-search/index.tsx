@@ -28,7 +28,7 @@ export default function SearchBox({ categoryData }: Readonly<SearchProps>) {
   const { getValues, control, handleSubmit } = useForm();
   const [isHot, setIsHot] = useState(Boolean(router.query.isHot));
   const [collapsed, setCollapsed] = useState(true);
-  const [salary, setSalary] = useState<number[]>([0, 100000000]);
+  const [salary, setSalary] = useState<number[]>([0, 100]);
 
   const handleSetSalary = useCallback((value: number[]) => {
     if (Array.isArray(value)) {
@@ -185,16 +185,16 @@ export default function SearchBox({ categoryData }: Readonly<SearchProps>) {
                     range
                     defaultValue={[
                       Number(router.query?.salaryFrom) ?? 0,
-                      Number(router.query?.salaryTo) ?? 100000000,
+                      Number(router.query?.salaryTo) ?? 100,
                     ]}
                     min={0}
-                    max={100000000}
-                    step={500000}
+                    max={100}
+                    step={5}
                     style={{ width: "100%" }}
                     tooltip={{
                       formatter: (value) => {
                         if (value === null || value === undefined) return "";
-                        return `${new Intl.NumberFormat().format(value)} VND`;
+                        return `${value} triệu VND`;
                       },
                     }}
                     onChange={handleSetSalary}
