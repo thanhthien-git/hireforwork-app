@@ -28,7 +28,7 @@ const JobPage = () => {
     isApplied: false,
     isViewed: false,
   });
-  const [shareModalVisible, setShareModalVisible] = useState(false);  // Trạng thái modal chia sẻ
+  const [shareModalVisible, setShareModalVisible] = useState(false);  
   const router = useRouter();
   const { id } = router.query;
   const { loading } = useSelector((state) => state.loading);
@@ -38,26 +38,33 @@ const JobPage = () => {
 
   const checkAndSaveViewedJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
-
+  
     if (!careerID) {
       return;
     }
-
+  
     try {
       const viewedJobs = await UserService.getViewedJobs(careerID);
-      const jobAlreadyViewed = viewedJobs?.some((job: any) => job.jobID === id);
-
-      if (!jobAlreadyViewed && id) {
-        await UserService.viewedJob(careerID, id as string);
+  
+      if (!viewedJobs || viewedJobs.length === 0 || !viewedJobs.some((job: any) => job.jobID === id)) {
+        await UserService.viewedJob(careerID, id as string); 
         setJobState((prev) => ({
           ...prev,
           isViewed: true,
+        }));
+      } else {
+        setJobState((prev) => ({
+          ...prev,
+          isViewed: true, 
         }));
       }
     } catch (err) {
       console.error("Error checking or saving viewed job:", err);
     }
   }, [id]);
+  
+  
+  
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {

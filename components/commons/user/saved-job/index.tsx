@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Col, Pagination, Row, Spin, Typography, notification } from "antd";
+import { Col, Pagination, Row, Spin, Typography } from "antd";
 import SupJobPostCard from "../item-jobsaved";
 import UserService from "@/services/userService";
 import { fetchJobById } from "@/services/jobService";
@@ -21,7 +21,6 @@ const SavedJobList: React.FC = () => {
       setLoading(true);
       const userId = localStorage.getItem("id");
       if (!userId) {
-        notification.error({ message: "User ID not found" });
         return;
       }
 
@@ -33,8 +32,8 @@ const SavedJobList: React.FC = () => {
       } else {
         setSavedJobs([]);
       }
-    } catch {
-      notification.error({ message: RETRY_LATER });
+    } catch(err) {
+            console.error("Error fetching saved jobs", err); 
     } finally {
       setLoading(false);
     }
