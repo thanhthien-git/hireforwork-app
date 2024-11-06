@@ -9,13 +9,13 @@ export interface IJobDetail {
   jobCategory?: string;
   quantity?: number;
   workingLocation?: string[];
-  education?: string;
+  workingType? : string[]
+  recruitmentCount?: number;
   expireDate?: string;
   createAt?: string;
   viewCount?: number;
   companyID?: string;
   companyName?: string;
-  employeeSize?: string;
   companyImage?: {
     imageURL: string;
     coverURL: string;
@@ -26,4 +26,5 @@ export interface IJobDetail {
     companyAddress: string;
   };
   isHot?: boolean;
+  workType?: string[];
 }

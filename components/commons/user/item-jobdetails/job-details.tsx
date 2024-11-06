@@ -10,7 +10,6 @@ import {
 } from "@ant-design/icons";
 import JobService from "../../../../services/jobService";
 import { Button, Card, Col, Row, Spin, notification } from "antd";
-import { Job } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
@@ -32,6 +31,7 @@ const JobPage = () => {
   const dispatch = useDispatch();
   const [jobDetail, setJobDetail] = useState<Job>();
   const [open, setOpen] = useState<boolean>(false);
+  console.log(loading);
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
@@ -51,7 +51,7 @@ const JobPage = () => {
         dispatch(setLoading(false));
       }
     }
-  }, [id, dispatch, setJobState, setJobDetail, notification]);
+  }, [dispatch, setJobState, setJobDetail, notification]);
 
   useEffect(() => {
     fetchData();

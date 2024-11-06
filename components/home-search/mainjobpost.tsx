@@ -21,12 +21,8 @@ export default function JobList({
   const handleChangePage = (page: number) => {
     setCurrentPage(page);
   };
-
   const router = useRouter();
 
-  const handleOpenJob = useCallback((id: string) => {
-    router.push(`/jobs/${id}`);
-  }, []);
 
   return (
     <div>
@@ -47,7 +43,6 @@ export default function JobList({
                 <Col
                   span={24}
                   key={job._id}
-                  onClick={() => handleOpenJob(String(job._id))}
                 >
                   <JobPostCard job={job} />
                 </Col>

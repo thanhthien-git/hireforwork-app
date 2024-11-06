@@ -9,7 +9,6 @@ import {
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import JobService from "../../../../services/jobService";
-import { Job } from "@/interfaces/IJobPostCard";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Skeleton } from "antd";

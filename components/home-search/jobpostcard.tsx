@@ -9,12 +9,22 @@ import dayjs from "dayjs";
 import styles from "./style.module.scss";
 import { IJobDetail } from "@/interfaces/IJobDetail";
 import { IS_HOT } from "@/constants/message";
+import { useRouter } from "next/router";
 
 interface IJobCardProp {
   job: IJobDetail;
 }
 
 export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
+  const router = useRouter();
+
+  const handleClickTag = useCallback((value: string) => {
+    router.push(`/search?query=${value}`);
+  }, []);
+
+  const handleOpenJob = useCallback((id: string) => {
+    router.push(`/jobs/${id}`);
+  }, []);
 
   return (
     <Card hoverable className={styles.card} key={job._id}>
@@ -37,7 +47,7 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
           className={styles["job-description"]}
         >
           <Row justify="space-between" align="middle">
-            <Col>
+            <Col onClick={() => handleOpenJob(job._id as string)}>
               <Typography.Title level={5} className={styles.title}>
                 {job?.jobTitle}
               </Typography.Title>
@@ -81,7 +91,7 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
 
           <Row>
             {job?.jobRequirement?.map((item) => (
-              <Tag key={item} color="#3c1990" style={{ marginTop: 10 }}>
+              <Tag key={item} color="#3c1990" style={{ marginTop: 10 }} onClick={() => handleClickTag(item)}>
                 {item}
               </Tag>
             ))}

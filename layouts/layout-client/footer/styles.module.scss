@@ -3,7 +3,12 @@
   flex-wrap: wrap; /* Cho phép các cột gập lại trên các màn hình nhỏ */
   justify-content: space-between; /* Căn giữa trên màn hình lớn */
   align-items: flex-start; /* Căn đầu cột theo chiều dọc */
-  background-color: #3C1990; /* Màu nền của footer */
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    139deg,
+    rgba(2, 0, 36, 1) 19%,
+    rgba(60, 25, 144, 0.6582282571231617) 100%
+  );
   color: white;
   padding: 20px 0;
 
@@ -12,7 +17,7 @@
     padding: 0 20px; /* Khoảng cách giữa các cột */
     min-width: 200px; /* Đảm bảo các cột không quá hẹp */
     text-align: left; /* Căn trái cho các mục trong cột */
-    
+
     h4 {
       margin-bottom: 10px; /* Khoảng cách giữa tiêu đề và danh sách */
       font-size: 14px; /* Kích thước chữ tiêu đề lớn hơn */
@@ -39,7 +44,7 @@
 
   @media (max-width: 768px) {
     justify-content: center; /* Căn giữa các cột khi màn hình nhỏ */
-    
+
     .column {
       flex: 1 1 100%; /* Các cột sẽ chiếm 100% chiều rộng */
       margin-bottom: 20px; /* Thêm khoảng cách giữa các cột khi xếp chồng */
@@ -47,4 +52,3 @@
     }
   }
 }
-

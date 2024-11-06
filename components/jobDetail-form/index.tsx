@@ -1,26 +1,27 @@
-import { Form, Button, Row, Col, notification, Spin } from "antd";
+import { Form, Button, Row, Col, notification, Spin, DatePicker } from "antd";
 import InputComponent from "../input";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
-import { IJob } from "@/interfaces/IJob";
 import RichTextEditor from "../quill";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 import styles from "./styles.module.scss";
 import { REQUIRED_MESSAGE } from "@/constants/message";
 import SelectComponent from "../custom/select";
 import JobService, { fetchJobById } from "@/services/jobService";
-import { MinusOutlined, PlusOutlined } from "@ant-design/icons";
-import Title from "antd/lib/typography/Title";
 import { TechService } from "@/services/techService";
+import { IJobDetail } from "@/interfaces/IJobDetail";
+import dayjs from "dayjs";
+import { WORK_TYPE } from "@/enum/workType";
+import { CITY } from "@/constants/city";
+import moment from "moment";
 
 export default function JobForm() {
   const [filteredSkills, setFilteredSkills] = useState([]);
-  const [maxIndex, setMaxIndex] = useState(1);
   const { control, handleSubmit, getValues, setValue } = useForm();
+  const [isHot, setIsHot] = useState(false)
   const router = useRouter();
   const { id } = router.query;
-  const [place, setPlace] = useState([{ id: 0, name: `workingLocation_0` }]);
   const [loading, setLoading] = useState(false);
 
   const fetchSkill = useCallback(async () => {
@@ -36,52 +37,23 @@ export default function JobForm() {
     }
   }, [setFilteredSkills, notification]);
 
-  const handleAddRow = useCallback(() => {
-    setMaxIndex((prev) => prev + 1);
-    setPlace((prev) => {
-      return [
-        ...prev,
-        {
-          id: maxIndex,
-          name: `workingLocation_${maxIndex}`,
-        },
-      ];
-    });
-  }, [setPlace, setMaxIndex, maxIndex]);
-
-  const handleDeletedRow = useCallback((id: number) => {
-    setPlace((prev) => prev.filter((item) => item.id !== id));
-  }, []);
-
-  const [data, setData] = useState<IJob>({
-    jobTitle: "",
-    jobSalaryMin: 0,
-    jobSalaryMax: 1,
-    jobDescription: "",
-    jobLevel: JOB_LEVEL.NO,
-    jobRequirement: [""],
-    workingLocation: [""],
-    companyID: "",
-  });
   const onSubmit = useCallback(async () => {
     try {
       setLoading(true);
-      const formData: IJob = {
+      const formData: IJobDetail = {
         jobTitle: getValues("jobTitle"),
         jobSalaryMin: Number(getValues("jobSalaryMin")),
         jobSalaryMax: Number(getValues("jobSalaryMax")),
         jobRequirement: getValues("jobRequirement"),
         jobDescription: getValues("jobDescription"),
         jobLevel: getValues("jobLevel"),
-        workingLocation: [],
+        expireDate: getValues("expireDate"),
+        workingType: getValues("workingType"),
+        recruitmentCount: Number(getValues("recruitmentCount")),
+        workingLocation: getValues("workingLocation"),
+        isHot: isHot,
         companyID: localStorage.getItem("id") as string,
       };
-
-      if (place.length > 0) {
-        place.forEach((item) => {
-          return formData.workingLocation?.push(getValues(`${item.name}`));
-        });
-      }
 
       if (id) {
         Object.assign(formData, {
@@ -98,7 +70,7 @@ export default function JobForm() {
     } finally {
       setLoading(false);
     }
-  }, [setLoading, getValues, notification, place]);
+  }, [setLoading, getValues, notification, isHot]);
 
   const fetchJobDetail = useCallback(
     async (id: string) => {
@@ -114,19 +86,10 @@ export default function JobForm() {
           setValue("workingLocation", res.doc.workingLocation);
           setValue("jobRequirement", res.doc.jobRequirement);
           setValue("jobDescription", res.doc.jobDescription);
-
-          const workingLocations = res.doc.workingLocation || [];
-          setMaxIndex(workingLocations.length);
-          setPlace(
-            workingLocations.map((item, index) => ({
-              id: index,
-              name: `workingLocation_${index}`,
-            }))
-          );
-
-          workingLocations.forEach((item, index) => {
-            setValue(`workingLocation_${index}`, item);
-          });
+          setValue("workingType", res.doc.workingType);
+          setValue("recruitmentCount", res.doc.recruitmentCount);
+          setValue("expireDate", dayjs(res.doc.expireDate));
+          setIsHot(res.doc.isHot)
         }
       } catch (err) {
         notification.error({ message: (err as Error).message });
@@ -134,7 +97,7 @@ export default function JobForm() {
         setLoading(false);
       }
     },
-    [setValue, notification, setLoading]
+    [setIsHot, setValue, notification, setLoading]
   );
 
   useEffect(() => {
@@ -180,7 +143,56 @@ export default function JobForm() {
               className={styles["input-custom"]}
             />
           </Col>
-          <Col xs={24} sm={24}>
+          <Col span={12}>
+            <InputComponent
+              label="Số lượng tuyển"
+              control={control}
+              name="recruitmentCount"
+              placeholder="Số lượng tuyển"
+              type="number"
+              rules={{
+                required: REQUIRED_MESSAGE("Số lượng tuyển"),
+                min: {
+                  value: 1,
+                  message: "Số lượng tuyển phải lớn hơn hoặc bằng 1",
+                },
+              }}
+              className={styles["input-custom"]}
+            />
+          </Col>
+          <Col span={12}>
+            <Form.Item label="Ngày hết hạn">
+              <Controller
+                name="expireDate"
+                control={control}
+                render={({ field }) => (
+                  <DatePicker
+                    {...field}
+                    className={styles["input-custom"]}
+                    placeholder="Ngày hết hạn"
+                    disabledDate={(current) =>
+                      current && current < dayjs().startOf("day")
+                    }
+                    onChange={(date) => field.onChange(date)}
+                  />
+                )}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={24}>
+            <SelectComponent
+              label="Hình thức làm việc"
+              control={control}
+              className={styles["input-custom"]}
+              item={WORK_TYPE}
+              name="workingType"
+              placeholder="Hình thức làm việc"
+              allowClear
+              mode="multiple"
+              rules={{ required: REQUIRED_MESSAGE("Hình thức làm việc") }}
+            />
+          </Col>
+          <Col xs={24} sm={24} style={{ width: "100%", marginTop: 24 }}>
             <SelectComponent
               label="Kinh nghiệm"
               item={JOB_LEVEL}
@@ -193,37 +205,17 @@ export default function JobForm() {
           </Col>
 
           <Col style={{ width: "100%", marginTop: 24 }}>
-            <span>Địa điểm làm việc</span>
-            {place.map((item, index) => (
-              <Row gutter={[16, 16]} key={item.id}>
-                <Col xs={20} sm={20} style={{ margin: 0 }}>
-                  <InputComponent
-                    className={styles["input-custom"]}
-                    name={item.name}
-                    control={control}
-                    placeholder={`Địa điểm làm việc`}
-                  ></InputComponent>
-                </Col>
-
-                <Col xs={3} sm={3}>
-                  {index === place.length - 1 ? (
-                    <Button
-                      icon={<PlusOutlined />}
-                      type="primary"
-                      style={{ padding: "20px", marginTop: "6px" }}
-                      onClick={handleAddRow}
-                    />
-                  ) : (
-                    <Button
-                      icon={<MinusOutlined />}
-                      type="primary"
-                      style={{ padding: "20px", marginTop: "6px" }}
-                      onClick={() => handleDeletedRow(item.id)}
-                    />
-                  )}
-                </Col>
-              </Row>
-            ))}
+            <SelectComponent
+              control={control}
+              item={CITY}
+              name="workingLocation"
+              placeholder="Địa điểm làm việc"
+              label="Địa điểm làm việc"
+              allowClear
+              rules={{ required: REQUIRED_MESSAGE("Địa điểm làm việc") }}
+              className={styles["input-custom"]}
+              mode="multiple"
+            />
           </Col>
           <Col xs={24}>
             <SelectComponent
@@ -232,6 +224,7 @@ export default function JobForm() {
               name="jobRequirement"
               control={control}
               placeholder="Kĩ năng"
+              className={styles["input-custom"]}
               rules={{ required: REQUIRED_MESSAGE("Yêu cầu") }}
               mode="multiple"
             />
