@@ -36,5 +36,8 @@ const endpoint = {
   field: {
     base: "/company-field",
   },
+  category : {
+    base: "/category"
+  }
 };
 export default endpoint;

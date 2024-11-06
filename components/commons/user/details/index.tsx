@@ -1,4 +1,4 @@
-import { Button, Card, Col, message, notification, Row } from "antd";
+import { Button, Card, Col, notification, Row } from "antd";
 import UserDetailImage from "./card-image";
 import UserDetailInfo from "./card-basic-info";
 import styles from "./style.module.scss";
@@ -24,7 +24,7 @@ export default function UserDetailPage() {
       const res = await UserService.getById(id);
       setUserData(res.doc);
       setValue("skills", res?.doc?.profile?.skills);
-      setValue("languages", res?.doc?.languages)
+      setValue("languages", res?.doc?.languages);
     } catch (err) {
       notification.error({ message: (err as Error).message });
     } finally {
@@ -73,7 +73,7 @@ export default function UserDetailPage() {
   );
 
   const checkChangedSelect = useCallback(
-    (selectedValues: string[], field: keyof IUserDetail["profile"]  ) => {
+    (selectedValues: string[], field: keyof IUserDetail["profile"]) => {
       if (
         JSON.stringify(selectedValues) !==
         JSON.stringify(userData?.profile?.[field])
@@ -86,7 +86,6 @@ export default function UserDetailPage() {
     },
     [setIsChanged, userData, setValue]
   );
-
 
   return (
     <Row gutter={[16, 16]}>

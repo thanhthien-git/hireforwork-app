@@ -1,39 +1,19 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { Card, Col, Row, Pagination, Tag, Skeleton, notification } from "antd";
+import React, { useState } from "react";
+import { Card, Col, Row, Pagination, Tag, Skeleton } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
-import JobService from "@/services/jobService";
-import { Job } from "@/interfaces/IJobPostCard";
+import styles from "../style.module.scss";
+import { useSelector } from "react-redux";
+import { Job } from "@/interfaces/IJobDetail";
 
-const JobsList = () => {
-  const [jobList, setJobList] = useState<Job[]>([]);
+interface IHottestJobProp {
+  jobList: Job[];
+}
+export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
+  const { loading } = useSelector((state) => state.loading);
   const [current, setCurrent] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
   const pageSize = 6;
   const router = useRouter();
-
-  const fetchJob = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await JobService.getJob({
-        page: 1,
-        pageSize: 10,
-        isHot: true,
-      });
-
-      setJobList(response?.docs);
-    } catch (err) {
-      notification.error({
-        message: "Đã có lỗi xảy ra",
-      });
-    } finally {
-      setLoading(false);
-    }
-  }, [setLoading, setJobList, notification]);
-
-  useEffect(() => {
-    fetchJob();
-  }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -49,7 +29,7 @@ const JobsList = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles["item-home-page"]}>
       <h2
         style={{
           color: "#fff",
@@ -70,26 +50,9 @@ const JobsList = () => {
         />
         Việc làm tuyển gấp
       </h2>
-      {loading ? (
-        <Row gutter={[16, 16]}>
-          {Array.from({ length: pageSize }).map((_, index) => (
-            <Col key={index} xs={24} sm={12} md={8}>
-              <Card
-                loading={true}
-                style={{
-                  borderRadius: "8px",
-                  height: "300px",
-                  display: "flex",
-                  flexDirection: "column",
-                }}
-              >
-                <Skeleton active />
-              </Card>
-            </Col>
-          ))}
-        </Row>
-      ) : (
-        <Row gutter={[16, 16]}>
+      <Row gutter={[16, 16]}>
+        <Skeleton loading={loading}>
+          {" "}
           {paginatedJobs.length > 0 ? (
             paginatedJobs.map((job) => (
               <Col key={job._id} xs={24} sm={12} md={8}>
@@ -120,8 +83,9 @@ const JobsList = () => {
               <Skeleton active style={{ minWidth: 300, height: 250 }} />
             </Col>
           )}
-        </Row>
-      )}
+        </Skeleton>
+      </Row>
+
       <Pagination
         style={{ marginTop: "20px", textAlign: "center" }}
         current={current}
@@ -131,6 +95,4 @@ const JobsList = () => {
       />
     </div>
   );
-};
-
-export default JobsList;
+}

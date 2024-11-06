@@ -1,7 +1,6 @@
 import React from 'react';
 import { Card, Row, Col, Typography, Tag, Image } from 'antd';
 import { DollarOutlined, EnvironmentOutlined, CalendarOutlined } from '@ant-design/icons';
-import { IJobPostCard } from "@/interfaces/IJobPostCard";
 import styles from './style.module.scss';
 
 export default function SupJobPostCard({

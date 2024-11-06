@@ -16,6 +16,7 @@
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.2",
+    "@next/font": "^14.2.15",
     "@reduxjs/toolkit": "^2.2.8",
     "@types/react-redux": "^7.1.34",
     "antd": "^5.21.2",

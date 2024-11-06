@@ -7,10 +7,12 @@ export interface IJobFilter extends IBaseFilter {
   dateCreateTo?: string;
   endDateFrom?: string;
   endDateTo?: string;
-  salaryFrom?: string;
-  salaryTo?: string;
+  salaryFrom?: number;
+  salaryTo?: number;
   workingLocation?: string[];
   jobRequirement?: string[];
   jobLevel?: string;
   isHot?: boolean;
+  jobCategory?: string;
+  query?: string;
 }

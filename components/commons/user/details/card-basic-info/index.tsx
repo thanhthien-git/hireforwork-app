@@ -2,13 +2,7 @@ import InputComponent from "@/components/input";
 import { Col, Form, Row, Skeleton } from "antd";
 import { Control, UseFormSetValue } from "react-hook-form";
 import styles from "./style.module.scss";
-import {
-  ChangeEvent,
-  Dispatch,
-  SetStateAction,
-  useCallback,
-  useEffect,
-} from "react";
+import { ChangeEvent, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { IUserDetail } from "@/interfaces/IUserDetail";
 interface IProps {

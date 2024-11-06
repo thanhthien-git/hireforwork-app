@@ -147,7 +147,7 @@ export default function JobForm() {
   return (
     <Form layout="vertical" onFinish={handleSubmit(onSubmit)}>
       <Spin spinning={loading}>
-        <Row gutter={16}>
+        <Row gutter={[16, 0]}>
           <Col span={24}>
             <InputComponent
               label="Tiêu đề"
@@ -192,8 +192,8 @@ export default function JobForm() {
             />
           </Col>
 
-          <Col style={{ width: "100%" }}>
-            <Title level={5}>Địa điểm làm việc</Title>
+          <Col style={{ width: "100%", marginTop: 24 }}>
+            <span>Địa điểm làm việc</span>
             {place.map((item, index) => (
               <Row gutter={[16, 16]} key={item.id}>
                 <Col xs={20} sm={20} style={{ margin: 0 }}>
@@ -236,7 +236,7 @@ export default function JobForm() {
               mode="multiple"
             />
           </Col>
-          <Col xs={24}>
+          <Col xs={24} style={{ marginTop: 24 }}>
             <Form.Item
               label="Mô tả"
               rules={{ required: REQUIRED_MESSAGE("Mô tả") }}

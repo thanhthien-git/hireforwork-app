@@ -1,40 +1,19 @@
-import React, { useState, useEffect } from "react";
-import { Card, Col, Row, Pagination, Tag, Skeleton, message } from "antd";
+import React, { useState } from "react";
+import { Card, Col, Row, Pagination, Tag, Skeleton } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import JobService from "@/services/jobService";
 import { useRouter } from "next/router";
-import { Job } from "@/interfaces/IJobPostCard";
+import styles from "../style.module.scss";
+import { useSelector } from "react-redux";
+import { Job } from "@/interfaces/IJobDetail";
 
-const JobsList = () => {
-  const [jobList, setJobList] = useState<Job[]>([]);
+interface INewestJobProp {
+  newestJobList: Job[];
+}
+export default function NewestJob({ newestJobList }: Readonly<INewestJobProp>) {
   const [current, setCurrent] = useState<number>(1);
-  const [loading, setLoading] = useState<boolean>(true);
+  const { loading } = useSelector((state) => state.loading);
   const pageSize = 6;
   const router = useRouter();
-  const fetchJobs = async () => {
-    try {
-      setLoading(true);
-      const data = await JobService.getNewJob();
-
-      const filteredJobs = data.filter((job: Job) => {
-        const createAt = new Date(job.createAt);
-        const expireDate = new Date(job.expireDate);
-        const differenceInTime = expireDate.getTime() - createAt.getTime();
-        const differenceInDays = differenceInTime / (1000 * 3600 * 24);
-        return differenceInDays > 0;
-      });
-
-      setJobList(filteredJobs);
-    } catch (error) {
-      console.error("Error fetching jobs:", error);
-      message.error("Lỗi khi lấy dữ liệu công việc!");
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    fetchJobs();
-  }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -44,13 +23,13 @@ const JobsList = () => {
     router.push(`/jobs/${id}`);
   };
 
-  const paginatedJobs = jobList.slice(
+  const paginatedJobs = newestJobList.slice(
     (current - 1) * pageSize,
     current * pageSize
   );
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles["item-home-page"]}>
       <h2
         style={{
           color: "#fff",
@@ -105,12 +84,10 @@ const JobsList = () => {
       <Pagination
         style={{ marginTop: "20px", textAlign: "center" }}
         current={current}
-        total={jobList.length}
+        total={newestJobList.length}
         pageSize={pageSize}
         onChange={handlePaginationChange}
       />
     </div>
   );
-};
-
-export default JobsList;
+}

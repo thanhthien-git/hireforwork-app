@@ -21,13 +21,7 @@ import Link from "next/link";
 
 const { Text } = Typography;
 
-export default function JobList({
-  companyName,
-  companyImage,
-}: {
-  companyName: string;
-  companyImage: string;
-}) {
+export default function JobList() {
   const router = useRouter();
   const [jobList, setJobList] = useState<IJob[]>([]);
   const [filteredJobList, setFilteredJobList] = useState<IJob[]>([]);

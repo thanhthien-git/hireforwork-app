@@ -2,21 +2,14 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #3c1990;
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    139deg,
+    rgba(2, 0, 36, 1) 19%,
+    rgba(60, 25, 144, 0.6582282571231617) 100%
+  );
   color: white;
-
-  .logoContainer {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    .logo {
-      height: 25px;
-      margin-right: 5px;
-    }
-  }
-
+  min-height: 100px;
   .nav {
     ul {
       display: flex;
