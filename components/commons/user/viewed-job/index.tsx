@@ -93,7 +93,7 @@ const ViewedJobsList: React.FC = () => {
                                         id={job._id}
                                         title={job.jobTitle}
                                         company={job.companyID}
-                                        salary={`${job.jobSalaryMin} - ${job.jobSalaryMax}`}
+                                        salary={`${job.jobSalaryMin} triệu - ${job.jobSalaryMax}`}
                                         location={job.workingLocation}
                                         deadline={new Date(job.expireDate).toLocaleDateString()}
                                         companyImageUrl={job.companyImageUrl}

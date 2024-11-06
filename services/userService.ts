@@ -56,7 +56,7 @@ export default class UserService {
   static async getViewedJobs(careerID: string) {
     try {
       const response = await api.get(
-        `${endpoint.users.viewedJobs}/${careerID}`
+        `${endpoint.users.getViewedJobs}/${careerID}`
       );
       return response.data;
     } catch (err) {
@@ -67,7 +67,7 @@ export default class UserService {
 
   static async viewedJob(careerID: string, jobID: string) {
     try {
-      const res = await api.post(endpoint.users.viewedJobs, {
+      const res = await api.post(endpoint.users.viewedJob, {
         careerID,
         jobID,
       });

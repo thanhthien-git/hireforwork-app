@@ -23,8 +23,9 @@ import { setLoading } from "@/redux/slices/loadingSlice";
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
-    isSaved: false,  
-    isApplied: false, 
+    isSaved: false,
+    isApplied: false,
+    isViewed: false,  // Thêm trạng thái "đã xem"
   });
   const router = useRouter();
   const { id } = router.query;
@@ -32,6 +33,32 @@ const JobPage = () => {
   const dispatch = useDispatch();
   const [jobDetail, setJobDetail] = useState<IJobDetail>();
   const [open, setOpen] = useState<boolean>(false);
+
+  // Hàm kiểm tra và lưu thông tin "đã xem" công việc
+  const checkAndSaveViewedJob = useCallback(async () => {
+    const careerID = localStorage.getItem("id"); // Kiểm tra xem người dùng đã đăng nhập chưa
+
+    if (!careerID) {
+      return; // Nếu chưa đăng nhập, không thực hiện lưu "đã xem"
+    }
+
+    try {
+      // Kiểm tra xem công việc đã được xem chưa
+      const viewedJobs = await UserService.getViewedJobs(careerID);
+      const jobAlreadyViewed = viewedJobs?.some((job: any) => job.jobID === id);
+
+      if (!jobAlreadyViewed && id) {
+        // Nếu chưa xem, gọi API lưu thông tin "đã xem"
+        await UserService.viewedJob(careerID, id as string);
+        setJobState((prev) => ({
+          ...prev,
+          isViewed: true,
+        }));
+      }
+    } catch (err) {
+      console.error("Error checking or saving viewed job:", err);
+    }
+  }, [id]);
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
@@ -43,7 +70,11 @@ const JobPage = () => {
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
+          isViewed: false, // Reset lại trạng thái "đã xem" khi tải dữ liệu mới
         });
+
+        // Kiểm tra và lưu thông tin "đã xem"
+        checkAndSaveViewedJob();
       } catch (err) {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
@@ -52,7 +83,7 @@ const JobPage = () => {
         dispatch(setLoading(false));
       }
     }
-  }, [id, dispatch]);
+  }, [id, dispatch, checkAndSaveViewedJob]);
 
   useEffect(() => {
     fetchData();
@@ -143,7 +174,7 @@ const JobPage = () => {
                   {jobDetail?.companyName ?? "Chưa có tên"}
                 </Link>
               </h2>
-              <p>{jobDetail?.employeeSize ?? 0} nhân viên</p>
+              <p>{jobDetail?.employeeSize != null ? jobDetail.employeeSize : "0"} nhân viên</p>
             </div>
           </div>
 
@@ -159,7 +190,7 @@ const JobPage = () => {
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: {0}
+                Lượt xem: {jobState.isViewed ? 1 : 0} {/* Hiển thị trạng thái đã xem */}
               </span>
               <span>
                 <ClockCircleOutlined />
@@ -201,7 +232,9 @@ const JobPage = () => {
             <div className={styles.jobInfo}>
               <h3>Mức lương</h3>
               <p>
-                {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax} triệu
+                {jobDetail?.jobSalaryMin != null && jobDetail?.jobSalaryMax != null
+                  ? `${jobDetail.jobSalaryMin} triệu - ${jobDetail.jobSalaryMax} triệu`
+                  : "Không có thông tin mức lương"}
               </p>
             </div>
             <div className={styles.jobInfo}>
@@ -226,10 +259,10 @@ const JobPage = () => {
                   <h4>Nơi làm việc</h4>
                   {jobDetail?.workingLocation
                     ? jobDetail?.workingLocation.map(
-                        (item: string, index: number) => (
-                          <p key={index}>{item}</p>
-                        )
+                      (item: string, index: number) => (
+                        <p key={index}>{item}</p>
                       )
+                    )
                     : "Chưa có thông tin"}
                 </div>
               </Col>
@@ -240,7 +273,7 @@ const JobPage = () => {
                 </div>
                 <div className={styles.infoItem}>
                   <h4>Số lượng tuyển</h4>
-                  <p>{jobDetail?.quantity ?? 0}</p>
+                  <p>{jobDetail?.quantity != null ? jobDetail.quantity : 0}</p>
                 </div>
               </Col>
             </Row>
@@ -258,16 +291,12 @@ const JobPage = () => {
         <div className={styles.jobDescription}>
           <h3>Yêu cầu kinh nghiệm</h3>
           <div className={styles["job-requirement-content"]}>
-            {jobDetail?.jobRequirement
-              ? jobDetail?.jobRequirement.map((item: string) => (
-                  <Button
-                    key={item}
-                    type="primary"
-                    style={{ marginRight: "10px", marginTop: "10px" }}
-                  >
-                    {item}
-                  </Button>
-                ))
+            {Array.isArray(jobDetail?.jobRequirement) && jobDetail.jobRequirement.length > 0
+              ? jobDetail.jobRequirement.map((item) => (
+                <Button key={item} type="primary" style={{ marginRight: "10px", marginTop: "10px" }}>
+                  {item}
+                </Button>
+              ))
               : "Chưa có thông tin"}
           </div>
         </div>
