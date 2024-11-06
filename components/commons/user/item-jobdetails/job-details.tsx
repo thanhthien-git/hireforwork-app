@@ -20,13 +20,15 @@ import ModalApplyJob from "./modal-apply";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
+import ShareModal from "./modal-share";
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
     isSaved: false,
     isApplied: false,
-    isViewed: false,  // Thêm trạng thái "đã xem"
+    isViewed: false,
   });
+  const [shareModalVisible, setShareModalVisible] = useState(false);  // Trạng thái modal chia sẻ
   const router = useRouter();
   const { id } = router.query;
   const { loading } = useSelector((state) => state.loading);
@@ -34,21 +36,18 @@ const JobPage = () => {
   const [jobDetail, setJobDetail] = useState<IJobDetail>();
   const [open, setOpen] = useState<boolean>(false);
 
-  // Hàm kiểm tra và lưu thông tin "đã xem" công việc
   const checkAndSaveViewedJob = useCallback(async () => {
-    const careerID = localStorage.getItem("id"); // Kiểm tra xem người dùng đã đăng nhập chưa
+    const careerID = localStorage.getItem("id");
 
     if (!careerID) {
-      return; // Nếu chưa đăng nhập, không thực hiện lưu "đã xem"
+      return;
     }
 
     try {
-      // Kiểm tra xem công việc đã được xem chưa
       const viewedJobs = await UserService.getViewedJobs(careerID);
       const jobAlreadyViewed = viewedJobs?.some((job: any) => job.jobID === id);
 
       if (!jobAlreadyViewed && id) {
-        // Nếu chưa xem, gọi API lưu thông tin "đã xem"
         await UserService.viewedJob(careerID, id as string);
         setJobState((prev) => ({
           ...prev,
@@ -70,10 +69,9 @@ const JobPage = () => {
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
-          isViewed: false, // Reset lại trạng thái "đã xem" khi tải dữ liệu mới
+          isViewed: false,
         });
 
-        // Kiểm tra và lưu thông tin "đã xem"
         checkAndSaveViewedJob();
       } catch (err) {
         notification.error({
@@ -126,7 +124,6 @@ const JobPage = () => {
     }
   };
 
-  // Hàm mở modal nộp hồ sơ
   const handleOpenModal = useCallback(() => {
     if (!localStorage.getItem("id")) {
       notification.error({ message: LOGIN_REQUIRED });
@@ -135,17 +132,25 @@ const JobPage = () => {
     setOpen(true);
   }, []);
 
-  // Hàm đóng modal nộp hồ sơ
   const handleCloseModal = useCallback(() => {
     setOpen(false);
   }, []);
 
-  // Hàm xử lý khi người dùng đã nộp hồ sơ
   const handleSetApplied = useCallback(() => {
     setJobState((prev) => ({
       ...prev,
       isApplied: true,
     }));
+  }, []);
+
+  // Mở modal chia sẻ
+  const handleShareJob = useCallback(() => {
+    setShareModalVisible(true);
+  }, []);
+
+  // Đóng modal chia sẻ
+  const handleCloseShareModal = useCallback(() => {
+    setShareModalVisible(false);
   }, []);
 
   return (
@@ -190,7 +195,7 @@ const JobPage = () => {
               </span>
               <span>
                 <EyeOutlined />
-                Lượt xem: {jobState.isViewed ? 1 : 0} {/* Hiển thị trạng thái đã xem */}
+                Lượt xem: {jobState.isViewed ? 1 : 0}
               </span>
               <span>
                 <ClockCircleOutlined />
@@ -221,12 +226,19 @@ const JobPage = () => {
                   </span>
                 )}
               </Button>
-              <Button className={styles["job-action-button"]}>
+              <Button className={styles["job-action-button"]} onClick={handleShareJob}>
                 <ShareAltOutlined /> Chia sẻ
               </Button>
             </div>
           </div>
         </div>
+
+        {/* Sử dụng modal chia sẻ */}
+        <ShareModal
+          visible={shareModalVisible}
+          onClose={handleCloseShareModal}
+          shareUrl={typeof window !== "undefined" ? window.location.href : ""}
+        />
         <div className={styles.jobInformation}>
           <div className={styles.jobDetails}>
             <div className={styles.jobInfo}>
