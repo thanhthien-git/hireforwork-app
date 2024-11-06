@@ -40,6 +40,7 @@ export default function SelectComponent({
       rules={rules}
       render={({ field, fieldState }) => (
         <FormItem
+          style={{ margin: 0 }}
           label={label}
           help={fieldState.error?.message}
           validateStatus={fieldState.invalid ? "error" : "success"}

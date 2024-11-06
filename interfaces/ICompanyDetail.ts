@@ -1,4 +1,5 @@
 export interface ICompanyDetail {
+  _id?: string,
   companyName: string;
   companyImage?: {
     imageURL: string;

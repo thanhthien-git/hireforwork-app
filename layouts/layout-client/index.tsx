@@ -16,15 +16,12 @@ export default function LayoutClient({ title, children }: Readonly<IProps>) {
     <Layout className={styles["layout"]}>
       <Head>
         <title>{`${title} | Job Sonar `}</title>
-        <meta
-          name="viewport"
-          content="initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width, user-scalable=no"
-        />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
       <LayoutClientHeader />
 
-      <Content className={styles["content"]}><div style={{maxWidth:1500,margin:"auto"}} >{children}</div></Content>
+      <Content className={styles["content"]}>{children}</Content>
 
       <LayoutClientFooter />
     </Layout>

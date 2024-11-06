@@ -1,35 +1,23 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState } from "react";
 import { Card, Row, Col, Pagination, Skeleton } from "antd";
-import CompanyService from "@/services/companyService";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import logo from "@/public/assets/logo.svg";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { BankOutlined } from "@ant-design/icons";
+import styles from "../style.module.scss";
+import { useSelector } from "react-redux";
 
-const CompaniesList = () => {
+interface ITopCompanyProp {
+  companyList: ICompanyDetail[];
+}
+
+export default function TopCompany({ companyList }: Readonly<ITopCompanyProp>) {
+  const { loading } = useSelector((state) => state.loading);
   const [current, setCurrent] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [companyList, setCompanyList] = useState<ICompanyDetail[]>([]);
   const pageSize = 5;
 
-  const fetchCompanies = useCallback(async () => {
-    try {
-      setLoading(true);
-      const response = await CompanyService.getCompany();
-      setCompanyList(response.docs);
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }, [setLoading, setCompanyList]);
-
   const router = useRouter();
-
-  useEffect(() => {
-    fetchCompanies();
-  }, []);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -48,7 +36,7 @@ const CompaniesList = () => {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div className={styles["item-home-page"]}>
       <h2
         style={{
           color: "#fff",
@@ -62,7 +50,7 @@ const CompaniesList = () => {
         <BankOutlined
           style={{ marginRight: "10px", fontSize: "20px", color: "#fff" }}
         />
-        Việc làm mới nhất
+        Công ty nổi bật
       </h2>
       <Row gutter={[16, 16]} justify="center">
         {paginatedCompanies.map((company) => (
@@ -73,7 +61,7 @@ const CompaniesList = () => {
                 cover={
                   <Image
                     alt="logo"
-                    src={company?.companyImage?.imageURL || logo}
+                    src={company?.companyImage?.imageURL ?? logo}
                     style={{
                       height: "150px",
                       objectFit: "contain",
@@ -110,6 +98,4 @@ const CompaniesList = () => {
       />
     </div>
   );
-};
-
-export default CompaniesList;
+}

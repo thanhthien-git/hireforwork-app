@@ -45,9 +45,8 @@
 }
 
 .content-wrapper {
-  height: calc(100vh - 100px); 
+  height: 78%; 
 }
-
 @media (min-width: 769px) {
   .content-wrapper {
     overflow-y: auto; 
@@ -58,8 +57,12 @@
   }
 
   .ant-layout-content {
-    -ms-overflow-style: none; /* Internet Explorer and Edge */
-    scrollbar-width: none; /* Firefox */
-    overflow: hidden; /* Prevent horizontal overflow */
+    -ms-overflow-style: none; 
+    scrollbar-width: none; 
+    overflow: hidden;
   }
+}
+
+.layout-right{
+  padding: 10px 20px 0px 20px
 }

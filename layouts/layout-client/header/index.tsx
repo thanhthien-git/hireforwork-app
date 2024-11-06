@@ -3,7 +3,7 @@ import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import Image from "next/image";
 import { Header } from "antd/lib/layout/layout";
-import { Button, Dropdown, Menu, Drawer } from "antd";
+import { Button, Dropdown, Drawer } from "antd";
 import type { MenuProps } from "antd";
 import { useCallback, useEffect, useState } from "react";
 import { MenuOutlined } from "@ant-design/icons";
@@ -87,7 +87,7 @@ export default function LayoutClientHeader() {
     },
   ];
   const handleLogout = useCallback(async () => {
-    dispatch(logout())
+    dispatch(logout());
     router.push("/");
   }, [router]);
 
@@ -115,7 +115,7 @@ export default function LayoutClientHeader() {
   return (
     <Header className={styles["header"]}>
       <Link href="/">
-        <Image src={logo} alt="Logo" className={styles["logo"]} />
+        <Image src={logo} alt="Logo" style={{display:'flex', alignItems:'center'}} width={100} height={100} />
       </Link>
 
       <nav className={styles.nav}>

@@ -73,7 +73,7 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
   ];
 
   return (
-    <Layout style={{ minHeight: "100vh" }}>
+    <Layout style={{ minHeight: "100vh" }} hasSider>
       {screens.md ? (
         <Sider
           width={250}
@@ -135,13 +135,14 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
           ))}
         </Menu>
       )}
-      <Layout>
+      <Layout className={styles["layout-right"]}>
         {isCompany && (
           <Header
             style={{
+              height: "10%",
               background: "#fff",
               padding: 0,
-              margin: "10px",
+              marginBottom: "10px",
               borderRadius: "5px",
               boxShadow: "0 2px 8px rgba(0, 21, 41, 0.1)",
             }}
@@ -161,20 +162,9 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
             </div>
           </Header>
         )}
-        <div className={styles["content-wrapper"]}>
-          <Card className={styles["content-card"]}>
-            <Content
-              style={{
-                padding: "10px",
-                margin: 0,
-                minHeight: "calc(100vh - 64px)",
-                width: "100%",
-              }}
-            >
-              {children}
-            </Content>
-          </Card>
-        </div>
+        <Card className={styles["content-wrapper"]}>
+          <Content className={styles["content"]}>{children}</Content>
+        </Card>
       </Layout>
     </Layout>
   );
