@@ -64,7 +64,7 @@ const SimilarJobs = () => {
                   </p>
                   <p>
                     <EnvironmentOutlined />
-                    {job.workingLocation.join(", ")}
+                    {job.workingLocation ? job.workingLocation.join(", ") : "N/A"}
                   </p>
                   <p>
                     <CalendarOutlined />
