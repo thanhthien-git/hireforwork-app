@@ -28,7 +28,7 @@ const JobPage = () => {
     isApplied: false,
     isViewed: false,
   });
-  const [shareModalVisible, setShareModalVisible] = useState(false);  
+  const [shareModalVisible, setShareModalVisible] = useState(false);  // Trạng thái modal chia sẻ
   const router = useRouter();
   const { id } = router.query;
   const { loading } = useSelector((state) => state.loading);
@@ -39,31 +39,21 @@ const JobPage = () => {
   const checkAndSaveViewedJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
   
-    if (!careerID) {
+    if (!careerID || !id) {
       return;
     }
   
     try {
-      const viewedJobs = await UserService.getViewedJobs(careerID);
-  
-      if (!viewedJobs || viewedJobs.length === 0 || !viewedJobs.some((job: any) => job.jobID === id)) {
-        await UserService.viewedJob(careerID, id as string); 
-        setJobState((prev) => ({
-          ...prev,
-          isViewed: true,
-        }));
-      } else {
-        setJobState((prev) => ({
-          ...prev,
-          isViewed: true, 
-        }));
-      }
+      // Always call viewedJob if the user is logged in
+      await UserService.viewedJob(careerID, id as string);
+      setJobState((prev) => ({
+        ...prev,
+        isViewed: true,
+      }));
     } catch (err) {
-      console.error("Error checking or saving viewed job:", err);
+      console.error("Error saving viewed job:", err);
     }
   }, [id]);
-  
-  
   
 
   const fetchData = useCallback(async () => {
@@ -72,13 +62,14 @@ const JobPage = () => {
         dispatch(setLoading(true));
         const jobResponse = await JobService.getById(id);
         setJobDetail(jobResponse?.doc);
-
+  
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
           isViewed: false,
         });
-
+  
+        // Always call viewedJob if the user is logged in
         checkAndSaveViewedJob();
       } catch (err) {
         notification.error({
@@ -89,6 +80,7 @@ const JobPage = () => {
       }
     }
   }, [id, dispatch, checkAndSaveViewedJob]);
+  
 
   useEffect(() => {
     fetchData();

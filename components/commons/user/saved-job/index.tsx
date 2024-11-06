@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { Col, Pagination, Row, Spin, Typography } from "antd";
+import { Col, Pagination, Row, Spin, Typography, notification } from "antd";
 import SupJobPostCard from "../item-jobsaved";
 import UserService from "@/services/userService";
 import { fetchJobById } from "@/services/jobService";
