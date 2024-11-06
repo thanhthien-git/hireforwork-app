@@ -4,10 +4,10 @@ import { ClockCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import styles from "../style.module.scss";
 import { useSelector } from "react-redux";
-import { Job } from "@/interfaces/IJobDetail";
+import { IJobDetail } from "@/interfaces/IJobDetail";
 
 interface IHottestJobProp {
-  jobList: Job[];
+  jobList: IJobDetail[];
 }
 export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
   const { loading } = useSelector((state) => state.loading);
