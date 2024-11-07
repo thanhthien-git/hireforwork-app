@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Carousel } from "antd/lib";
+
 import ShareModal from "./modal-share";
 import { IJobDetail } from "../../../../interfaces/IJobDetail";
 
@@ -191,7 +192,7 @@ const JobPage = () => {
       <Spin spinning={loading}>
       <Row gutter={24}>
       <Col xs={24} md={16}>
-        <div className={styles.jobHeader}>
+      <div className={styles.jobHeader}>
           <div className={styles.jobTitle}>
             <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
             <div className={styles.jobMeta}>
@@ -351,7 +352,6 @@ const JobPage = () => {
                   </Link>
                 </h2>
               </div>
-
               <div className={styles.contactInfocompany}>
                 <h4>Thông tin liên hệ</h4>
                 <p>
