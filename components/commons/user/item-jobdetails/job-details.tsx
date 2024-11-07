@@ -20,7 +20,6 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Carousel } from "antd/lib";
-
 import ShareModal from "./modal-share";
 import { IJobDetail } from "../../../../interfaces/IJobDetail";
 
