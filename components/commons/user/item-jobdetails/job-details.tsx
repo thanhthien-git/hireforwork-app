@@ -19,6 +19,7 @@ import ModalApplyJob from "./modal-apply";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
+import { Carousel } from "antd/lib";
 import ShareModal from "./modal-share";
 import { IJobDetail } from "../../../../interfaces/IJobDetail";
 
@@ -36,6 +37,24 @@ const JobPage = () => {
   const [jobDetail, setJobDetail] = useState<IJobDetail>();
   const [open, setOpen] = useState<boolean>(false);
 
+  const carouselImages = [
+    {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ4RuGVZl1-y9LRD9J82X7o0XKywcolQGoHoA&s",
+      alt: "Advertisement 1",
+    },
+    {
+      src: "https://photo.znews.vn/w660/Uploaded/mdf_eioxrd/2021_07_06/2.jpg",
+      alt: "Advertisement 2",
+    },
+    {
+      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTnI1VPlKyFrCh35t98X5tJC1vm6U7Ami-Muw&s",
+      alt: "Advertisement 3",
+    },
+    {
+      src: "https://hoanghamobile.com/tin-tuc/wp-content/uploads/2023/07/hinh-dep.jpg",
+      alt: "Advertisement 4",
+    },
+  ];
   const checkAndSaveViewedJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
 
@@ -170,26 +189,9 @@ const JobPage = () => {
         onApplied={handleSetApplied}
       />
       <Spin spinning={loading}>
+      <Row gutter={24}>
+      <Col xs={24} md={16}>
         <div className={styles.jobHeader}>
-          <div className={styles.companyInfo}>
-            <Image
-              src={jobDetail?.companyImage?.imageURL ?? logo}
-              alt="Company Logo"
-              width={60}
-              height={60}
-              unoptimized
-              className={styles.imgCompany}
-            />
-            <div>
-              <h2>
-                <Link href={`/company/${jobDetail?.companyID}`}>
-                  {jobDetail?.companyName ?? "Chưa có tên"}
-                </Link>
-              </h2>
-              <p>{jobDetail?.employeeSize != null ? jobDetail.employeeSize : "0"} nhân viên</p>
-            </div>
-          </div>
-
           <div className={styles.jobTitle}>
             <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
             <div className={styles.jobMeta}>
@@ -319,6 +321,36 @@ const JobPage = () => {
               : "Chưa có thông tin"}
           </div>
         </div>
+        </Col>
+        <Col xs={24} md={8}>
+            <Card className={styles.cardContainer} bodyStyle={{ padding: 18 }}>
+              <div className={styles.backgroundImage}>
+                <Image
+                  src={jobDetail?.companyImage?.coverURL ?? logo}
+                  alt="Background"
+                  layout="fill"
+                  objectFit="cover"
+                  className={styles.backgroundImageis}
+                />
+              </div>
+
+              <div className={styles.logoContainer}>
+                <Image
+                  src={jobDetail?.companyImage?.imageURL ?? logo}
+                  alt="Company Logo"
+                  width={80}
+                  height={80}
+                  className={styles.companyLogo}
+                />
+              </div>
+              
+              <div className={styles.companyName}>
+                <h2>
+                  <Link href={`/company/${jobDetail?._id}`}>
+                    {jobDetail?.companyName ?? "Chưa có tên"}
+                  </Link>
+                </h2>
+              </div>
 
         <div className={styles.contactInfo}>
           <h3>Thông tin liên hệ</h3>
@@ -338,6 +370,24 @@ const JobPage = () => {
             {jobDetail?.contact?.companyAddress ?? "N/A"}
           </p>
         </div>
+        </Card>
+            <Card className={styles.cardContainerimg} bodyStyle={{ padding: 18 }}>
+              <Carousel autoplay dots={false} autoplaySpeed={2500}>
+                {carouselImages.map((image, index) => (
+                  <div key={index}>
+                    <Image
+                      src={image.src}
+                      alt={image.alt}
+                      width={300}
+                      height={100}
+                      layout="responsive"
+                    />
+                  </div>
+                ))}
+              </Carousel>
+            </Card>
+          </Col>
+          </Row>
       </Spin>
     </div>
   );
