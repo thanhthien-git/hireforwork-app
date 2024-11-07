@@ -334,6 +334,7 @@ const JobPage = () => {
                   className={styles.backgroundImageis}
                 />
               </div>
+
               <div className={styles.logoContainer}>
                 <Image
                   src={jobDetail?.companyImage?.imageURL ?? logo}
@@ -346,7 +347,7 @@ const JobPage = () => {
               
               <div className={styles.companyName}>
                 <h2>
-                  <Link href={`/company/${jobDetail?.companyID}`}>
+                  <Link href={`/company/${jobDetail?._id}`}>
                     {jobDetail?.companyName ?? "Chưa có tên"}
                   </Link>
                 </h2>
