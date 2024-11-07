@@ -78,7 +78,7 @@ const JobPage = () => {
       try {
         dispatch(setLoading(true)); // Bắt đầu quá trình loading
         const jobResponse = await JobService.getById(id);
-        
+
         if (!jobResponse?.doc) {
           notification.error({
             message: "Công việc không tồn tại hoặc đã bị xóa.",
@@ -189,141 +189,141 @@ const JobPage = () => {
         onApplied={handleSetApplied}
       />
       <Spin spinning={loading}>
-      <Row gutter={24}>
+        <Row gutter={24}>
           <Col xs={24} md={16}>
-        <div className={styles.jobHeader}>
-          <div className={styles.jobTitle}>
-            <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
-            <div className={styles.jobMeta}>
-              <span>
-                <ContainerOutlined />
-                Hạn nộp hồ sơ:{" "}
-                {jobDetail?.expireDate
-                  ? new Date(jobDetail.expireDate).toLocaleDateString()
-                  : "N/A"}
-              </span>
-              <span>
-                <EyeOutlined />
-                Lượt xem: {jobState.isViewed ? 1 : 0}
-              </span>
-              <span>
-                <ClockCircleOutlined />
-                Đăng ngày:{" "}
-                {jobDetail?.createAt
-                  ? new Date(jobDetail.createAt).toLocaleDateString()
-                  : "N/A"}
-              </span>
-            </div>
-            <div className={styles["job-action"]}>
-              <Button
-                type="primary"
-                className={styles["job-action-button"]}
-                onClick={handleOpenModal}
-                disabled={jobState.isApplied}
-              >
-                {jobState.isApplied ? "Bạn đã nộp hồ sơ" : "Nộp hồ sơ"}
-              </Button>
-              <Button
-                className={styles["job-action-button"]}
-                onClick={handleSaveJob}
-              >
-                {jobState.isSaved ? (
-                  <span>Đã lưu</span>
-                ) : (
+            <div className={styles.jobHeader}>
+              <div className={styles.jobTitle}>
+                <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
+                <div className={styles.jobMeta}>
                   <span>
-                    <HeartOutlined /> Lưu
+                    <ContainerOutlined />
+                    Hạn nộp hồ sơ:{" "}
+                    {jobDetail?.expireDate
+                      ? new Date(jobDetail.expireDate).toLocaleDateString()
+                      : "N/A"}
                   </span>
-                )}
-              </Button>
-              <Button className={styles["job-action-button"]} onClick={handleShareJob}>
-                <ShareAltOutlined /> Chia sẻ
-              </Button>
+                  <span>
+                    <EyeOutlined />
+                    Lượt xem: {jobState.isViewed ? 1 : 0}
+                  </span>
+                  <span>
+                    <ClockCircleOutlined />
+                    Đăng ngày:{" "}
+                    {jobDetail?.createAt
+                      ? new Date(jobDetail.createAt).toLocaleDateString()
+                      : "N/A"}
+                  </span>
+                </div>
+                <div className={styles["job-action"]}>
+                  <Button
+                    type="primary"
+                    className={styles["job-action-button"]}
+                    onClick={handleOpenModal}
+                    disabled={jobState.isApplied}
+                  >
+                    {jobState.isApplied ? "Bạn đã nộp hồ sơ" : "Nộp hồ sơ"}
+                  </Button>
+                  <Button
+                    className={styles["job-action-button"]}
+                    onClick={handleSaveJob}
+                  >
+                    {jobState.isSaved ? (
+                      <span>Đã lưu</span>
+                    ) : (
+                      <span>
+                        <HeartOutlined /> Lưu
+                      </span>
+                    )}
+                  </Button>
+                  <Button className={styles["job-action-button"]} onClick={handleShareJob}>
+                    <ShareAltOutlined /> Chia sẻ
+                  </Button>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
 
-        {/* Sử dụng modal chia sẻ */}
-        <ShareModal
-          visible={shareModalVisible}
-          onClose={handleCloseShareModal}
-          shareUrl={typeof window !== "undefined" ? window.location.href : ""}
-        />
-        <div className={styles.jobInformation}>
-          <div className={styles.jobDetails}>
-            <div className={styles.jobInfo}>
-              <h3>Mức lương</h3>
-              <p>
-                {jobDetail?.jobSalaryMin != null && jobDetail?.jobSalaryMax != null
-                  ? `${jobDetail.jobSalaryMin} triệu - ${jobDetail.jobSalaryMax} triệu`
-                  : "Không có thông tin mức lương"}
-              </p>
+            {/* Sử dụng modal chia sẻ */}
+            <ShareModal
+              visible={shareModalVisible}
+              onClose={handleCloseShareModal}
+              shareUrl={typeof window !== "undefined" ? window.location.href : ""}
+            />
+            <div className={styles.jobInformation}>
+              <div className={styles.jobDetails}>
+                <div className={styles.jobInfo}>
+                  <h3>Mức lương</h3>
+                  <p>
+                    {jobDetail?.jobSalaryMin != null && jobDetail?.jobSalaryMax != null
+                      ? `${jobDetail.jobSalaryMin} triệu - ${jobDetail.jobSalaryMax} triệu`
+                      : "Không có thông tin mức lương"}
+                  </p>
+                </div>
+                <div className={styles.jobInfo}>
+                  <h3>Cấp bậc</h3>
+                  <p>
+                    {JOB_LEVEL[jobDetail?.jobLevel] ?? "Không có cấp bậc."}
+                  </p>
+                </div>
+                <div className={styles.jobInfo}>
+                  <h3>Số lượng tuyển</h3>
+                  <p>{Number(jobDetail?.quantity) ?? 0}</p>
+                </div>
+              </div>
+              <Card title="Thông tin">
+                <Row gutter={16}>
+                  <Col span={12}>
+                    <div className={styles.infoItem}>
+                      <h4>Nghề nghiệp</h4>
+                      <p>{jobDetail?.jobCategory ?? "N/A"}</p>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <h4>Nơi làm việc</h4>
+                      {jobDetail?.workingLocation
+                        ? jobDetail?.workingLocation.map(
+                          (item: string, index: number) => (
+                            <p key={index}>{item}</p>
+                          )
+                        )
+                        : "Chưa có thông tin"}
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    <div className={styles.infoItem}>
+                      <h4>Học vấn</h4>
+                      <p>{jobDetail?.education ?? "Đại học"}</p>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <h4>Số lượng tuyển</h4>
+                      <p>{jobDetail?.quantity != null ? jobDetail.quantity : 0}</p>
+                    </div>
+                  </Col>
+                </Row>
+              </Card>
             </div>
-            <div className={styles.jobInfo}>
-              <h3>Cấp bậc</h3>
-              <p>
-                {JOB_LEVEL[jobDetail?.jobLevel] ?? "Không có cấp bậc."}
-              </p>
+            <div className={styles.jobDescription}>
+              <h3>Mô tả công việc</h3>
+              <p
+                className={styles.description}
+                dangerouslySetInnerHTML={{
+                  __html: jobDetail?.jobDescription ?? "Không có mô tả.",
+                }}
+              />
             </div>
-            <div className={styles.jobInfo}>
-              <h3>Số lượng tuyển</h3>
-              <p>{Number(jobDetail?.quantity) ?? 0}</p>
+            <div className={styles.jobDescription}>
+              <h3>Yêu cầu kinh nghiệm</h3>
+              <div className={styles["job-requirement-content"]}>
+                {Array.isArray(jobDetail?.jobRequirement) && jobDetail.jobRequirement.length > 0
+                  ? jobDetail.jobRequirement.map((item) => (
+                    <Button key={item} type="primary" style={{ marginRight: "10px", marginTop: "10px" }}>
+                      {item}
+                    </Button>
+                  ))
+                  : "Chưa có thông tin"}
+              </div>
             </div>
-          </div>
-          <Card title="Thông tin">
-            <Row gutter={16}>
-              <Col span={12}>
-                <div className={styles.infoItem}>
-                  <h4>Nghề nghiệp</h4>
-                  <p>{jobDetail?.jobCategory ?? "N/A"}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <h4>Nơi làm việc</h4>
-                  {jobDetail?.workingLocation
-                    ? jobDetail?.workingLocation.map(
-                      (item: string, index: number) => (
-                        <p key={index}>{item}</p>
-                      )
-                    )
-                    : "Chưa có thông tin"}
-                </div>
-              </Col>
-              <Col span={12}>
-                <div className={styles.infoItem}>
-                  <h4>Học vấn</h4>
-                  <p>{jobDetail?.education ?? "Đại học"}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <h4>Số lượng tuyển</h4>
-                  <p>{jobDetail?.quantity != null ? jobDetail.quantity : 0}</p>
-                </div>
-              </Col>
-            </Row>
-          </Card>
-        </div>
-        <div className={styles.jobDescription}>
-          <h3>Mô tả công việc</h3>
-          <p
-            className={styles.description}
-            dangerouslySetInnerHTML={{
-              __html: jobDetail?.jobDescription ?? "Không có mô tả.",
-            }}
-          />
-        </div>
-        <div className={styles.jobDescription}>
-          <h3>Yêu cầu kinh nghiệm</h3>
-          <div className={styles["job-requirement-content"]}>
-            {Array.isArray(jobDetail?.jobRequirement) && jobDetail.jobRequirement.length > 0
-              ? jobDetail.jobRequirement.map((item) => (
-                <Button key={item} type="primary" style={{ marginRight: "10px", marginTop: "10px" }}>
-                  {item}
-                </Button>
-              ))
-              : "Chưa có thông tin"}
-          </div>
-        </div>
-        </Col>
+          </Col>
 
-        <Col xs={24} md={8}>
+          <Col xs={24} md={8}>
             <Card className={styles.cardContainer} bodyStyle={{ padding: 18 }}>
               <div className={styles.backgroundImage}>
                 <Image
@@ -344,7 +344,7 @@ const JobPage = () => {
                   className={styles.companyLogo}
                 />
               </div>
-              
+
               <div className={styles.companyName}>
                 <h2>
                   <Link href={`/company/${jobDetail?.companyID}`}>
@@ -352,6 +352,7 @@ const JobPage = () => {
                   </Link>
                 </h2>
               </div>
+
 
               <div className={styles.contactInfocompany}>
                 <h4>Thông tin liên hệ</h4>
@@ -382,7 +383,7 @@ const JobPage = () => {
               </Carousel>
             </Card>
           </Col>
-          </Row>
+        </Row>
       </Spin>
     </div>
   );
