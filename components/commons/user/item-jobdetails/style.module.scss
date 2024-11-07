@@ -209,33 +209,29 @@
   overflow-x: auto;
   padding: 10px 0;
   white-space: nowrap;
+  gap: 20px;
 }
 
-.similarJobItem {
-  display: inline-flex;
-  align-items: center;
-  min-width: 200px;
-  padding: 15px;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-right: 10px;
-  transition: box-shadow 0.3s ease;
+.similarJobsList::-webkit-scrollbar {
+  width: 5px;
 }
 
-.similarJobItem:hover {
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+.similarJobsList::-webkit-scrollbar-thumb {
+  background: rgb(2, 0, 36);
+  background: linear-gradient(
+    139deg,
+    rgba(2, 0, 36, 1) 19%,
+    rgba(60, 25, 144, 0.6582282571231617) 100%
+  );
+  border-radius: 6px;
 }
-.similarJobInfo {
-  margin-left: 10px;
+
+.similarJobsList::-webkit-scrollbar-track {
+  background: transparent;
 }
+
 .description {
   padding: 15px;
-}
-
-@media (max-width: 768px) {
-  .similarJobItem {
-    min-width: 150px;
-  }
 }
 
 .cardContainer {
@@ -305,7 +301,7 @@
   text-align: left;
   padding: 0 20px;
   color: #333;
-  
+
   h4 {
     font-weight: bold;
     font-size: 16px;

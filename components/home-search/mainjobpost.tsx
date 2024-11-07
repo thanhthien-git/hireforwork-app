@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useState } from "react";
 import { Row, Col, Typography, Pagination, Spin, Skeleton } from "antd";
 import JobPostCard from "./jobpostcard";
 import styles from "./style.module.scss";

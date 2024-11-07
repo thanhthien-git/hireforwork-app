@@ -1,20 +1,15 @@
 import React, { useEffect, useState, useCallback } from "react";
-import Image from "next/image";
 import Link from "next/link";
-import {
-  DollarOutlined,
-  EnvironmentOutlined,
-  CalendarOutlined,
-} from "@ant-design/icons";
 import styles from "./style.module.scss";
-import logo from "@/public/assets/logo.svg";
 import JobService from "../../../../services/jobService";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Skeleton } from "antd";
+import SmallJobCard from "@/components/job-card";
+import { IJobDetail } from "@/interfaces/IJobDetail";
 
 const SimilarJobs = () => {
-  const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
+  const [similarJobs, setSimilarJobs] = useState<IJobDetail[]>([]);
   const { loading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
 
@@ -34,6 +29,7 @@ const SimilarJobs = () => {
     fetchSimilarJobs();
   }, []);
 
+  
   return (
     <div className={styles.similarJobs}>
       <div className={styles.similarJobsHeader}>
@@ -45,34 +41,7 @@ const SimilarJobs = () => {
       <div className={styles.similarJobsList}>
         <Skeleton loading={loading}>
           {similarJobs?.length > 0 ? (
-            similarJobs?.map((job) => (
-              <Link key={job._id} href={`/jobs/${job._id}`}>
-                <div className={styles.similarJobItem}>
-                  <Image
-                    src={job?.companyImageUrl || logo}
-                    alt={`${job.companyID} Logo`}
-                    width={60}
-                    height={60}
-                  />
-                  <div className={styles.similarJobInfo}>
-                    <h4>{job.jobTitle}</h4>
-                    <p>{job.companyID}</p>
-                    <p>
-                      <DollarOutlined />
-                      {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
-                    </p>
-                    <p>
-                      <EnvironmentOutlined />
-                      {job.workingLocation?.join(", ")}
-                    </p>
-                    <p>
-                      <CalendarOutlined />
-                      {new Date(job.createAt).toLocaleDateString()}
-                    </p>
-                  </div>
-                </div>
-              </Link>
-            ))
+            similarJobs?.map((job) => <SmallJobCard job={job} />)
           ) : (
             <p>Không có công việc nào để hiển thị.</p>
           )}
