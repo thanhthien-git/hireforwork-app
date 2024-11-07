@@ -334,7 +334,6 @@ const JobPage = () => {
                   className={styles.backgroundImageis}
                 />
               </div>
-
               <div className={styles.logoContainer}>
                 <Image
                   src={jobDetail?.companyImage?.imageURL ?? logo}
