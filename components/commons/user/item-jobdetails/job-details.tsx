@@ -16,12 +16,13 @@ import UserService from "@/services/userService";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 import { LOGIN_REQUIRED, RETRY_LATER } from "@/constants/message";
 import ModalApplyJob from "./modal-apply";
+import ShareModal from "./modal-share";
+import { IJobDetail } from "../../../../interfaces/IJobDetail";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Carousel } from "antd/lib";
-import ShareModal from "./modal-share";
-import { IJobDetail } from "../../../../interfaces/IJobDetail";
+
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
@@ -334,8 +335,8 @@ const JobPage = () => {
                   className={styles.backgroundImageis}
                 />
               </div>
-              
-              <div className={styles.logoContainer}>
+
+               <div className={styles.logoContainer}>
                 <Image
                   src={jobDetail?.companyImage?.imageURL ?? logo}
                   alt="Company Logo"
@@ -347,7 +348,7 @@ const JobPage = () => {
               
               <div className={styles.companyName}>
                 <h2>
-                  <Link href={`/company/${jobDetail?.companyID}`}>
+                  <Link href={`/company/${jobDetail?._id}`}>
                     {jobDetail?.companyName ?? "Chưa có tên"}
                   </Link>
                 </h2>
