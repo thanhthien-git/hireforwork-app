@@ -346,31 +346,25 @@ const JobPage = () => {
               
               <div className={styles.companyName}>
                 <h2>
-                  <Link href={`/company/${jobDetail?._id}`}>
+                  <Link href={`/company/${jobDetail?.companyID}`}>
                     {jobDetail?.companyName ?? "Chưa có tên"}
                   </Link>
                 </h2>
               </div>
 
-        <div className={styles.contactInfo}>
-          <h3>Thông tin liên hệ</h3>
-
-          <p>
-            <strong>Email liên hệ:</strong>{" "}
-            {jobDetail?.contact?.companyEmail ?? "N/A"}
-          </p>
-
-          <p>
-            <strong>SDT liên hệ:</strong>{" "}
-            {jobDetail?.contact?.companyPhone ?? "N/A"}
-          </p>
-
-          <p>
-            <strong>Địa chỉ:</strong>{" "}
-            {jobDetail?.contact?.companyAddress ?? "N/A"}
-          </p>
-        </div>
-        </Card>
+              <div className={styles.contactInfocompany}>
+                <h4>Thông tin liên hệ</h4>
+                <p>
+                  <strong>Email:</strong> {jobDetail?.contact?.companyEmail ?? "N/A"}
+                </p>
+                <p>
+                  <strong>Điện thoại:</strong> {jobDetail?.contact?.companyPhone ?? "N/A"}
+                </p>
+                <p>
+                  <strong>Địa chỉ:</strong> {jobDetail?.contact?.companyAddress ?? "N/A"}
+                </p>
+              </div>
+            </Card>
             <Card className={styles.cardContainerimg} bodyStyle={{ padding: 18 }}>
               <Carousel autoplay dots={false} autoplaySpeed={2500}>
                 {carouselImages.map((image, index) => (
