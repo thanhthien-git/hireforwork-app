@@ -4,6 +4,7 @@ import { ICareer } from "@/interfaces/user";
 import { IUserFilter } from "@/interfaces/iUserFilter";
 import { IUserDetail } from "@/interfaces/IUserDetail";
 import { IApplyJob } from "@/interfaces/IApplyJob";
+import { IRequestResetPassword, IResetPassword } from "@/interfaces/IResetPassword";
 
 export default class UserService {
   static async get(filter: IUserFilter) {
@@ -179,6 +180,22 @@ export default class UserService {
       const res = await api.post(endpoint.job.apply, data);
       return res.data;
     } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+  static async requestPasswordReset(data:IRequestResetPassword){
+    try{
+      const res = await api.post(endpoint.users.RequestResetPassword,data)
+      return res.data;
+    }  catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+  static async resetPassword(data:IResetPassword){
+    try{
+      const res = await api.post(endpoint.users.ResetPassword,data)
+      return res.data;
+    }  catch (err) {
       throw new Error((err as Error).message);
     }
   }

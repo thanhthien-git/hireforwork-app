@@ -26,7 +26,9 @@ import { setAuthState } from "@/redux/slices/authSlice";
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const handleResetPassword = () => {
+    router.push('/reset-password');
+  };
   const dispatch = useDispatch();
   const handleLogin = useCallback(async () => {
     try {
@@ -93,7 +95,7 @@ export default function LoginForm() {
                 </Form.Item>
               </Col>
               <Col span={12}>
-                <Button type="link" className={styles["option-forgot"]}>
+                <Button type="link" className={styles["option-forgot"]} onClick={handleResetPassword}>
                   Quên mật khẩu?
                 </Button>
               </Col>
