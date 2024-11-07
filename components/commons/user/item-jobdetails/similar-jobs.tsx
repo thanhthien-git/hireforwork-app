@@ -6,8 +6,10 @@ import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import JobService from "../../../../services/jobService";
 import CompanyService from "../../../../services/companyService";
-import { Job } from "@/interfaces/IJobPostCard";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 import { Button, Skeleton } from "antd";
+import { Job } from "@/interfaces/IJobPostCard";
 
 const SimilarJobs = () => {
   const [similarJobs, setSimilarJobs] = useState<Job[]>([]);

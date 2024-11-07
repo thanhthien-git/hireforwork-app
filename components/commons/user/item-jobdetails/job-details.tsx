@@ -10,7 +10,6 @@ import {
 } from "@ant-design/icons";
 import JobService from "../../../../services/jobService";
 import { Button, Card, Col, Row, Spin, notification } from "antd";
-import { IJobDetail } from "../../../../interfaces/IJobDetail";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
@@ -21,6 +20,7 @@ import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import ShareModal from "./modal-share";
+import { IJobDetail } from "../../../../interfaces/IJobDetail";
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
@@ -44,7 +44,6 @@ const JobPage = () => {
     }
   
     try {
-      // Always call viewedJob if the user is logged in
       await UserService.viewedJob(careerID, id as string);
       setJobState((prev) => ({
         ...prev,
