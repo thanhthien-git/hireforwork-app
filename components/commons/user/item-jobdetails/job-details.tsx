@@ -68,7 +68,6 @@ const JobPage = () => {
           isViewed: false,
         });
   
-        // Always call viewedJob if the user is logged in
         checkAndSaveViewedJob();
       } catch (err) {
         notification.error({
@@ -78,7 +77,7 @@ const JobPage = () => {
         dispatch(setLoading(false));
       }
     }
-  }, [id, dispatch, checkAndSaveViewedJob]);
+  }, [dispatch, setJobState, setJobDetail, notification]);
   
 
   useEffect(() => {

@@ -5,11 +5,12 @@ import { DollarOutlined, EnvironmentOutlined, CalendarOutlined, DownOutlined, Up
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import JobService from "../../../../services/jobService";
-import CompanyService from "../../../../services/companyService";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Button, Skeleton } from "antd";
 import { Job } from "@/interfaces/IJobPostCard";
+import CompanyService from "../../../../services/companyService";
+
 
 const SimilarJobs = () => {
   const [similarJobs, setSimilarJobs] = useState<Job[]>([]);
