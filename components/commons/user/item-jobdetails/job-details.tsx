@@ -86,7 +86,7 @@ const JobPage = () => {
         dispatch(setLoading(false)); // Dừng trạng thái loading
       }
     }
-  }, [id, dispatch, checkAndSaveViewedJob]);
+  }, [dispatch, setJobState, setJobDetail, notification]);
 
   useEffect(() => {
     if (id) {
