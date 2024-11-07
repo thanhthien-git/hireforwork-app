@@ -23,7 +23,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Carousel } from "antd/lib";
 
-
 const JobPage = () => {
   const [jobState, setJobState] = useState({
     isSaved: false,
@@ -191,8 +190,8 @@ const JobPage = () => {
       />
       <Spin spinning={loading}>
       <Row gutter={24}>
-      <Col xs={24} md={16}>
-      <div className={styles.jobHeader}>
+          <Col xs={24} md={16}>
+        <div className={styles.jobHeader}>
           <div className={styles.jobTitle}>
             <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
             <div className={styles.jobMeta}>
