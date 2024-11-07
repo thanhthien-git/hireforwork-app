@@ -29,7 +29,6 @@ const SimilarJobs = () => {
     fetchSimilarJobs();
   }, []);
 
-  
   return (
     <div className={styles.similarJobs}>
       <div className={styles.similarJobsHeader}>
