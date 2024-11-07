@@ -38,11 +38,11 @@ const JobPage = () => {
 
   const checkAndSaveViewedJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
-  
+
     if (!careerID || !id) {
       return;
     }
-  
+
     try {
       await UserService.viewedJob(careerID, id as string);
       setJobState((prev) => ({
@@ -53,35 +53,46 @@ const JobPage = () => {
       console.error("Error saving viewed job:", err);
     }
   }, [id]);
-  
 
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
-        dispatch(setLoading(true));
+        dispatch(setLoading(true)); // Bắt đầu quá trình loading
         const jobResponse = await JobService.getById(id);
+        
+        if (!jobResponse?.doc) {
+          notification.error({
+            message: "Công việc không tồn tại hoặc đã bị xóa.",
+          });
+          dispatch(setLoading(false));
+          return;
+        }
+
         setJobDetail(jobResponse?.doc);
-  
+
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
           isViewed: false,
         });
-  
-        checkAndSaveViewedJob();
+
+        await checkAndSaveViewedJob(); // Đánh dấu công việc đã được xem
       } catch (err) {
+        console.error(err);
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
         });
       } finally {
-        dispatch(setLoading(false));
+        dispatch(setLoading(false)); // Dừng trạng thái loading
       }
     }
-  }, [dispatch, setJobState, setJobDetail, notification]);
+  }, [id, dispatch, checkAndSaveViewedJob]);
 
   useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+    if (id) {
+      fetchData(); // Gọi fetchData khi id đã có giá trị
+    }
+  }, [id, fetchData]);
 
   const handleSaveJob = async () => {
     const careerID = localStorage.getItem("id");
