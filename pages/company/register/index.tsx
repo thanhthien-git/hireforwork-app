@@ -3,9 +3,9 @@ import { Card, Typography } from 'antd';
 import { LockOutlined } from '@ant-design/icons';
 import styles from './style.module.scss';
 import LayoutClient from '@/layouts/layout-client';
-import RegisterSteps from '@/components/login-company/RegisterSteps';
-import RegisterFormStepOne from '@/components/login-company/RegisterFormStepOne.';
-import RegisterFormStepTwo from '@/components/login-company/RegisterFormStepTwo';
+import RegisterSteps from '@/components/register-company/RegisterSteps';
+import RegisterFormStepOne from '@/components/register-company/RegisterFormStepOne.';
+import RegisterFormStepTwo from '@/components/register-company/RegisterFormStepTwo';
 
 
 const { Title, Text } = Typography;
