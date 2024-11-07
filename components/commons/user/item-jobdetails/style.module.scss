@@ -8,6 +8,7 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   overflow: auto;
 }
+
 .jobHeader {
   display: flex;
   flex-direction: column;
@@ -15,9 +16,7 @@
   align-items: flex-start;
   padding: 20px;
   background-color: #fff;
-  /* Màu nền trắng */
   border-radius: 8px;
-  /* Bo tròn */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
 }
@@ -31,6 +30,7 @@
 .companyInfo div {
   margin-left: 20px;
 }
+
 .imgCompany {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
 }
@@ -67,13 +67,16 @@
   border-radius: 5px;
   transition: background-color 0.3s;
 }
+
 .job-action {
   margin-top: 20px;
 }
+
 .job-action-button {
   min-height: 44px;
   margin-right: 16px;
 }
+
 .saveBtn,
 .shareBtn {
   margin: 5px 10px;
@@ -90,11 +93,9 @@
 .jobDetails {
   display: flex;
   justify-content: space-between;
-  /* Hiển thị các mục ngang */
   flex-wrap: wrap;
   padding: 20px;
   background-color: #fff;
-  /* Màu nền trắng */
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   margin-bottom: 20px;
@@ -102,11 +103,9 @@
 
 .jobInfo {
   flex: 1 1 25%;
-  /* Chia đều không gian cho 4 mục */
   margin-top: 10px;
   margin-bottom: 10px;
   text-align: center;
-  /* Căn giữa văn bản */
 }
 
 .additionalInfo {
@@ -117,7 +116,6 @@
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  /* Chia thành 2 cột */
   gap: 20px;
 }
 
@@ -155,7 +153,6 @@
 }
 
 @media (max-width: 768px) {
-  /* Điều chỉnh khi màn hình nhỏ hơn 768px */
   .jobHeader {
     flex-direction: column;
   }
@@ -181,7 +178,6 @@
   }
 }
 
-
 .similarJobs {
   margin-top: 30px;
   padding: 20px;
@@ -204,7 +200,6 @@
   font-size: medium;
   cursor: pointer;
 }
-
 
 .similarJobsList {
   display: grid;
@@ -242,7 +237,7 @@
 .similarJobInfo h4,
 .similarJobInfo p {
   margin: 4px 0;
-  text-align: left; 
+  text-align: left;
 }
 
 @media (max-width: 768px) {
@@ -250,13 +245,13 @@
     grid-template-columns: 1fr;
     overflow-x: auto;
     gap: 6px;
-    scroll-snap-type: x mandatory; 
+    scroll-snap-type: x mandatory;
   }
 
   .similarJobItem {
-    flex-direction: row; 
+    flex-direction: row;
     min-width: 95%;
-    scroll-snap-align: center; 
+    scroll-snap-align: center;
   }
 }
 
@@ -272,18 +267,19 @@
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   max-height: 300px;
-  .ant-carousel {
-    max-width: 100%;
-    max-height: 100%;
-  }
+}
 
-  img {
-    object-fit: cover;
-    width: 100%;
-    height: auto;
-    max-height: 150px;
-    border-radius: 8px;
-  }
+.cardContainerimg .ant-carousel {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.cardContainerimg img {
+  object-fit: cover;
+  width: 100%;
+  height: auto;
+  max-height: 150px;
+  border-radius: 8px;
 }
 
 .backgroundImage {
@@ -327,17 +323,17 @@
   text-align: left;
   padding: 0 20px;
   color: #333;
-  
-  h4 {
-    font-weight: bold;
-    font-size: 16px;
-    margin-bottom: 8px;
-  }
+}
 
-  p {
-    font-size: 14px;
-    margin-bottom: 4px;
-  }
+.contactInfocompany h4 {
+  font-weight: bold;
+  font-size: 16px;
+  margin-bottom: 8px;
+}
+
+.contactInfocompany p {
+  font-size: 14px;
+  margin-bottom: 4px;
 }
 
 .loadMoreContainer {
@@ -345,32 +341,34 @@
   justify-content: center;
   margin-top: 10px;
 }
+
 .skeletonContainer {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 10px; 
+  gap: 10px;
   margin-top: 16px;
 }
 
 .skeletonItem {
-  height: 140px; 
+  height: 140px;
   width: 365px;
   border-radius: 5px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  background-color: #f0f0f0; 
+  background-color: #f0f0f0;
 }
 
 .similarJobImage {
-  width: 82px; 
-  height: 65px; 
+  width: 82px;
+  height: 65px;
   border-radius: 4px;
-  background-color: #ffffffdd; 
+  background-color: #ffffffdd;
   border: 2px solid #e4e1e1b4;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-right: 10px;
 }
+
 .description {
   padding: 15px;
 }
