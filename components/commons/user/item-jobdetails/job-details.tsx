@@ -322,6 +322,7 @@ const JobPage = () => {
           </div>
         </div>
         </Col>
+
         <Col xs={24} md={8}>
             <Card className={styles.cardContainer} bodyStyle={{ padding: 18 }}>
               <div className={styles.backgroundImage}>
@@ -333,7 +334,7 @@ const JobPage = () => {
                   className={styles.backgroundImageis}
                 />
               </div>
-
+              
               <div className={styles.logoContainer}>
                 <Image
                   src={jobDetail?.companyImage?.imageURL ?? logo}
@@ -351,6 +352,7 @@ const JobPage = () => {
                   </Link>
                 </h2>
               </div>
+
               <div className={styles.contactInfocompany}>
                 <h4>Thông tin liên hệ</h4>
                 <p>
