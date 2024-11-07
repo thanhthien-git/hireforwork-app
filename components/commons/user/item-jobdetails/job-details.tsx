@@ -78,7 +78,6 @@ const JobPage = () => {
       }
     }
   }, [dispatch, setJobState, setJobDetail, notification]);
-  
 
   useEffect(() => {
     fetchData();
