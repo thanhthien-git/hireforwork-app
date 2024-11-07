@@ -51,8 +51,8 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
   }, []);
 
   const handleLogout = useCallback(async () => {
-    await dispatch(logout());
     router.push("/");
+    dispatch(logout());
   }, [router, dispatch]);
 
   const toggleCollapsed = () => {

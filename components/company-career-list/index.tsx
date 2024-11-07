@@ -11,15 +11,14 @@ import CompanyService from "@/services/companyService";
 import { notification } from "antd";
 
 export default function CareerListTable() {
-  
-  const [career, setCareer] = useState([])
+  const [career, setCareer] = useState([]);
 
   const fetchCareerList = useCallback(async () => {
     try {
       const res = await CompanyService.getCareerList(
         localStorage.getItem("id") as string
       );
-      setCareer(res)
+      setCareer(res);
     } catch (err) {
       notification.error({ message: (err as Error).message });
     }
@@ -94,6 +93,7 @@ export default function CareerListTable() {
         width: "12rem",
         dataIndex: "status",
         key: "status",
+        render: (item) => <>{RESUME_STATUS[RESUME_STATUS.item]}</>,
       },
       {
         title: <div className={styles["text-header"]}>Hồ sơ ứng tuyển</div>,
@@ -104,5 +104,11 @@ export default function CareerListTable() {
     ],
     []
   );
-  return <TableCustom scroll={{ x: "max-content" }} columns={columns} dataSource={career}/>;
+  return (
+    <TableCustom
+      scroll={{ x: "max-content" }}
+      columns={columns}
+      dataSource={career}
+    />
+  );
 }

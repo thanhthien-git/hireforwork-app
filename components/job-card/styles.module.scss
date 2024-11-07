@@ -1,0 +1,18 @@
+.similarJobItem {
+  min-width: 320px;
+  transition: box-shadow 0.3s ease;
+  border-radius: 8px;
+  margin: 0 auto;
+
+}
+
+.similarJobInfo {
+  margin-left: 12px;
+}
+
+@media (max-width: 768px) {
+  .similarJobItem {
+    width: 100%;
+    max-width: 200px;
+  }
+}
