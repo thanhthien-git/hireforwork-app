@@ -10,7 +10,6 @@ const JobDetail: React.FC = () => {
     <LayoutClient title="Job Detail">
       <div className={styles.container}>
         <JobPage/>
-        <SimilarJobs />
       </div>
     </LayoutClient>
   );

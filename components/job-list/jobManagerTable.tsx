@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import TableCustom from "../tableCustom";
+import JobService from "@/services/jobService"; 
 
 export default function JobManagerTable() {
-  const [jobDocs, setJobDocs] = useState();
+  const [jobDocs, setJobDocs] = useState([]);
 
   const columns = useMemo(
     () => [
@@ -30,17 +31,15 @@ export default function JobManagerTable() {
             />
           </>
         ),
-        dataIndex: "companyID",
-        key: "companyID",
+        dataIndex: "companyName",
+        key: "companyName",
       },
-
       {
         title: "Create At",
         dataIndex: "createAt",
         key: "createAt",
         render: (item) => <span>{new Date(item).toLocaleString()}</span>,
       },
-
       {
         title: "Expire At",
         dataIndex: "expireDate",
@@ -51,6 +50,12 @@ export default function JobManagerTable() {
         title: "Job Requirement",
         dataIndex: "jobRequirement",
         key: "jobRequirement",
+        render: (requirements) => {
+          if (Array.isArray(requirements)) {
+            return requirements.join(", "); 
+          }
+          return requirements; 
+        },
       },
       {
         title: "Job Salary Min",
@@ -66,18 +71,18 @@ export default function JobManagerTable() {
     []
   );
 
-  // const fetchJob = useCallback(async () => {
-  //   try {
-  //     const res = await JobService.get(1, 10);
-  //     setJobDocs(res.data.docs);
-  //   } catch (err) {
-  //     console.log(err);
-  //   }
-  // }, []);
+  const fetchJob = useCallback(async () => {
+    try {
+      const res = await JobService.get(1, 10); 
+      setJobDocs(res.data.docs);
+    } catch (err) {
+      console.error("Error fetching jobs:", err);
+    }
+  }, []);
 
-  // useEffect(() => {
-  //   fetchJob();
-  // }, [fetchJob]);
+  useEffect(() => {
+    fetchJob();
+  }, [fetchJob]);
 
   return <TableCustom columns={columns} dataSource={jobDocs} />;
 }

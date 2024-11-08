@@ -40,7 +40,10 @@ const SimilarJobs = () => {
       <div className={styles.similarJobsList}>
         <Skeleton loading={loading}>
           {similarJobs?.length > 0 ? (
-            similarJobs?.map((job) => <SmallJobCard job={job} />)
+            
+            similarJobs?.map((job) => <Link key={job._id} href={`/jobs/${job._id}`}>
+            <SmallJobCard job={job} />
+          </Link>)
           ) : (
             <p>Không có công việc nào để hiển thị.</p>
           )}

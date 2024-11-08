@@ -9,7 +9,8 @@ const endpoint = {
   users: {
     base: "/careers",
     createUser: "/careers/create",
-    viewedJobs: "/careers/viewedjobs",
+    getViewedJobs: "/careers/viewedjobs",
+    viewedJob: "/careers/viewedjob",
     uploadImage: "/career/{id}/upload-image",
     registerCareer: "careers/register",
     ResetPassword:"/reset-password",

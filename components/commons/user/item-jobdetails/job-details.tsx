@@ -42,6 +42,7 @@ const JobPage = () => {
   const [jobState, setJobState] = useState({
     isSaved: false,
     isApplied: false,
+    isViewed: false,
   });
   const router = useRouter();
   const { id } = router.query;
@@ -69,6 +70,24 @@ const JobPage = () => {
     },
   ];
 
+  const checkAndSaveViewedJob = useCallback(async () => {
+    const careerID = localStorage.getItem("id");
+
+    if (!careerID || !id) {
+      return;
+    }
+
+    try {
+      await UserService.viewedJob(careerID, id as string);
+      setJobState((prev) => ({
+        ...prev,
+        isViewed: true,
+      }));
+    } catch (err) {
+      console.error("Error saving viewed job:", err);
+    }
+  }, [id]);
+
   const fetchData = useCallback(async () => {
     if (id && typeof id === "string") {
       try {
@@ -78,7 +97,9 @@ const JobPage = () => {
         setJobState({
           isSaved: Boolean(jobResponse?.doc?.isSaved),
           isApplied: Boolean(jobResponse?.doc?.isApplied),
+          isViewed: false,
         });
+        await checkAndSaveViewedJob();
       } catch (err) {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",

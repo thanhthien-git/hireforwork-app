@@ -101,8 +101,6 @@ export default function LoginForm() {
               allowClear
             />
             <Row className={styles["option"]}>
-              <Col>
-                <Button type="link" className={styles["option-forgot"]}>
               <Col span={12}>
                 <Form.Item className={styles["option-checkbox"]}>
                   <Checkbox>Lưu đăng nhập</Checkbox>

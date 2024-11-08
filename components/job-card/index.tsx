@@ -33,11 +33,11 @@ export default function SmallJobCard({ job }: Readonly<IProps>) {
             </Typography.Title>
             <p>{job.companyName}</p>
             <p>
-              <DollarOutlined />
+            <span><DollarOutlined /></span>
               {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
             </p>
             <p>
-              <EnvironmentOutlined />
+            <span><EnvironmentOutlined /></span>
               {job.workingLocation
                 ?.map((value) => {
                   return CITY[value];
@@ -45,7 +45,7 @@ export default function SmallJobCard({ job }: Readonly<IProps>) {
                 .join(" - ")}
             </p>
             <p>
-              <CalendarOutlined />
+              <span><CalendarOutlined /></span>
               {job?.expireDate
                 ? new Date(job.expireDate).toLocaleDateString()
                 : "N/A"}
