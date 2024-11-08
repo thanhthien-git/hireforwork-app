@@ -20,6 +20,7 @@ const endpoint = {
     getCareerList: "/companies/get-applier",
     getStatic: "/companies/get-static",
     registerCompany: "/companies/register",
+    random : "/companies/random"
   },
   job: {
     base: "/jobs",

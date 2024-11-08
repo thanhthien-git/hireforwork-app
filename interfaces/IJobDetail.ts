@@ -12,7 +12,7 @@ export interface IJobDetail {
   workingType? : string[]
   recruitmentCount?: number;
   expireDate?: Date;
-  createAt?: string;
+  createAt?: Date;
   viewCount?: number;
   companyID?: string;
   companyName?: string;

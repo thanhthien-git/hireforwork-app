@@ -126,26 +126,13 @@ export default class CompanyService {
       throw new Error((err as Error).message);
     }
   }
-}
 
-export interface Company {
-  _id: string;
-  companyImage: {
-    imageURL: string;
-  };
-  companyName: string;
-  description: string;
-}
-
-// export const fetchCompanies = async () => {
-//   return await fetchData("/companies");
-// };
-
-export const fetchCompaniesByID = async (id: string) => {
-  try {
-    const response = await api.get(`/companies/${id}`);
-    return response.data;
-  } catch (err) {
-    throw new Error(`Error fetching company by ID: ${err}`);
+  static async random() {
+    try {
+      const res = await api.get(`${endpoint.company.random}`);
+      return res.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
   }
-};
+}
