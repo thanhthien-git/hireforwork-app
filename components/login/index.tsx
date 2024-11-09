@@ -31,7 +31,7 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
   const handleResetPassword = () => {
-    router.push('/reset-password');
+    router.push("/reset-password");
   };
   const dispatch = useDispatch();
   const handleLogin = useCallback(async () => {
@@ -101,18 +101,13 @@ export default function LoginForm() {
               allowClear
             />
             <Row className={styles["option"]}>
-              <Col>
-                <Button type="link" className={styles["option-forgot"]}>
-              <Col span={12}>
-                <Form.Item className={styles["option-checkbox"]}>
-                  <Checkbox>Lưu đăng nhập</Checkbox>
-                </Form.Item>
-              </Col>
-              <Col span={12}>
-                <Button type="link" className={styles["option-forgot"]} onClick={handleResetPassword}>
-                  Quên mật khẩu?
-                </Button>
-              </Col>
+              <Button
+                type="link"
+                className={styles["option-forgot"]}
+                onClick={handleResetPassword}
+              >
+                Quên mật khẩu?
+              </Button>
             </Row>
             <Row align={"middle"} justify={"center"}>
               <Form.Item>
