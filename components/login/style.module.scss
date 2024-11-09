@@ -4,18 +4,15 @@
 }
 
 .form-card {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 80%;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-  min-height: 500px;
 }
 
 .form-body {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  
 }
 
 .form-input{
@@ -24,7 +21,7 @@
 
 .option{
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
 }
 
 .option-forgot{
@@ -43,3 +40,4 @@
     margin: 0;
   }
 }
+

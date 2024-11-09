@@ -2,24 +2,41 @@ import React, { useEffect, useCallback, useState } from "react";
 import { useRouter } from "next/router";
 import Image from "next/image";
 import {
-  ContainerOutlined,
-  EyeOutlined,
   ClockCircleOutlined,
   HeartOutlined,
-  ShareAltOutlined,
+  DollarCircleOutlined,
+  HeartFilled,
+  EnvironmentOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  CheckSquareOutlined,
 } from "@ant-design/icons";
 import JobService from "../../../../services/jobService";
-import { Button, Card, Col, Row, Spin, notification } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Spin,
+  Tag,
+  Typography,
+  notification,
+} from "antd";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo.svg";
 import UserService from "@/services/userService";
-import { JOB_LEVEL } from "@/enum/jobLevel";
 import { LOGIN_REQUIRED, RETRY_LATER } from "@/constants/message";
 import ModalApplyJob from "./modal-apply";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { Carousel } from "antd/lib";
+import { IJobDetail } from "@/interfaces/IJobDetail";
+import SimilarJobs from "./similar-jobs";
+import { JOB_LEVEL } from "@/enum/jobLevel";
+import { WORK_TYPE } from "@/enum/workType";
+
+const { Text } = Typography;
 
 const JobPage = () => {
   const [jobState, setJobState] = useState({
@@ -30,9 +47,8 @@ const JobPage = () => {
   const { id } = router.query;
   const { loading } = useSelector((state) => state.loading);
   const dispatch = useDispatch();
-  const [jobDetail, setJobDetail] = useState<Job>();
+  const [jobDetail, setJobDetail] = useState<IJobDetail>();
   const [open, setOpen] = useState<boolean>(false);
-  console.log(loading);
 
   const carouselImages = [
     {
@@ -82,9 +98,13 @@ const JobPage = () => {
       ...prev,
       isApplied: true,
     }));
-  }, [setJobState]);
+  }, []);
 
-  const handleSaveJob = async () => {
+  const handleOpenTag = useCallback((value: string) => {
+    router.push(`/search?q=${value}`);
+  }, []);
+
+  const handleSaveJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
 
     if (!careerID) {
@@ -97,29 +117,29 @@ const JobPage = () => {
     try {
       if (jobState.isSaved) {
         await UserService.removeSaveJob(careerID, jobDetail?._id as string);
+        notification.success({
+          message: "Công việc đã được hủy lưu!",
+        });
         setJobState((prev) => ({
           ...prev,
           isSaved: false,
         }));
-        notification.success({
-          message: "Công việc đã được hủy lưu!",
-        });
       } else {
         await UserService.saveJob(careerID, jobDetail?._id as string);
+        notification.success({
+          message: "Công việc đã được lưu thành công!",
+        });
         setJobState((prev) => ({
           ...prev,
           isSaved: true,
         }));
-        notification.success({
-          message: "Công việc đã được lưu thành công!",
-        });
       }
-    } catch {
+    } catch (error) {
       notification.error({
         message: RETRY_LATER,
       });
     }
-  };
+  }, [jobState, jobDetail, notification]);
 
   const handleOpenModal = useCallback(() => {
     if (!localStorage.getItem("id")) {
@@ -133,6 +153,8 @@ const JobPage = () => {
     setOpen(false);
   }, [setOpen]);
 
+  console.log(jobState);
+
   return (
     <div className={styles.jobPage}>
       <ModalApplyJob
@@ -143,145 +165,176 @@ const JobPage = () => {
         onApplied={handleSetApplied}
       />
       <Spin spinning={loading}>
-      <Row gutter={24}>
+        <Row gutter={[16, 16]}>
           <Col xs={24} md={16}>
-        <div className={styles.jobHeader}>
-          <div className={styles.jobTitle}>
-            <h2>{jobDetail?.jobTitle ?? "N/A"}</h2>
-            <div className={styles.jobMeta}>
-              <span>
-                <ContainerOutlined />
-                Hạn nộp hồ sơ:{" "}
-                {jobDetail?.expireDate
-                  ? new Date(jobDetail.expireDate).toLocaleDateString()
-                  : "N/A"}
-              </span>
-              <span>
-                <EyeOutlined />
-                Lượt xem: {0}
-              </span>
-              <span>
-                <ClockCircleOutlined />
-                Đăng ngày:{" "}
-                {jobDetail?.createAt
-                  ? new Date(jobDetail.createAt).toLocaleDateString()
-                  : "N/A"}
-              </span>
-            </div>
-            <div className={styles["job-action"]}>
-              <Button
-                type="primary"
-                className={styles["job-action-button"]}
-                onClick={handleOpenModal}
-                disabled={jobState.isApplied}
-              >
-                {jobState.isApplied ? "Bạn đã nộp hồ sơ" : "Nộp hồ sơ"}
-              </Button>
-              <Button
-                className={styles["job-action-button"]}
-                onClick={handleSaveJob}
-              >
-                {jobState.isApplied ? (
-                  <span>Đã lưu</span>
-                ) : (
+            <div className={styles.jobHeader}>
+              <Row className={styles["job-description"]}>
+                <Typography.Title level={3}>
+                  {jobDetail?.jobTitle ?? "N/A"}
+                </Typography.Title>
+              </Row>
+              <Row className={styles["job-description"]}>
+                <Typography.Title level={5} style={{ color: "gray" }}>
+                  {jobDetail?.companyName}
+                </Typography.Title>
+              </Row>
+              <Row className={styles["job-description"]}>
+                <Typography.Title level={5} style={{ color: "green" }}>
+                  <DollarCircleOutlined />{" "}
                   <span>
-                    <HeartOutlined /> Lưu
+                    {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax}{" "}
+                    triệu
                   </span>
-                )}
-              </Button>
-              <Button className={styles["job-action-button"]}>
-                <ShareAltOutlined /> Chia sẻ
-              </Button>
+                </Typography.Title>
+              </Row>
+              <Row
+                className={styles["job-description"]}
+                style={{ marginBottom: 8 }}
+              >
+                <Typography.Text>
+                  <EnvironmentOutlined style={{ color: "gray" }} />{" "}
+                  <span>{jobDetail?.contact?.companyAddress}</span>
+                </Typography.Text>
+              </Row>
+              <Row className={styles["job-description"]}>
+                <Typography.Text>
+                  <ClockCircleOutlined style={{ color: "gray" }} />{" "}
+                  <span>
+                    Hạn nộp hồ sơ:{" "}
+                    {jobDetail?.expireDate
+                      ? new Date(jobDetail.expireDate).toLocaleDateString()
+                      : "N/A"}
+                  </span>
+                </Typography.Text>
+              </Row>
+              {JOB_LEVEL[jobDetail?.jobLevel as keyof typeof JOB_LEVEL] ===
+                JOB_LEVEL.NO && (
+                <Row
+                  className={styles["job-description"]}
+                  style={{ marginTop: 10 }}
+                >
+                  <Typography.Text>
+                    <CheckSquareOutlined style={{ color: "gray" }} />{" "}
+                    <span>Chấp nhận không kinh nghiệm</span>
+                  </Typography.Text>
+                </Row>
+              )}
+              <Row
+                className={styles["job-description"]}
+                style={{ marginTop: 10 }}
+              >
+                <Col span={22}>
+                  <Button
+                    type="primary"
+                    className={styles["job-action-button"]}
+                    onClick={handleOpenModal}
+                    disabled={jobState.isApplied}
+                  >
+                    {jobState.isApplied ? "Bạn đã ứng tuyển" : "Ứng tuyển"}
+                  </Button>
+                </Col>
+                <Col span={2}>
+                  <Button
+                    className={styles["job-action-button"]}
+                    onClick={handleSaveJob}
+                    type="link"
+                    style={{ color: "red" }}
+                  >
+                    {jobState.isSaved ? (
+                      <span>
+                        <HeartFilled className={styles["like-button"]} />
+                      </span>
+                    ) : (
+                      <span>
+                        <HeartOutlined className={styles["like-button"]} />
+                      </span>
+                    )}
+                  </Button>
+                </Col>
+              </Row>
             </div>
-          </div>
-        </div>
-        <div className={styles.jobInformation}>
-          <div className={styles.jobDetails}>
-            <div className={styles.jobInfo}>
-              <h3>Mức lương</h3>
-              <p>
-                {jobDetail?.jobSalaryMin} triệu - {jobDetail?.jobSalaryMax}{" "}
-                triệu
-              </p>
+
+            <div className={styles.jobInformation}>
+              <div className={styles.jobDescription}>
+                <Typography.Title level={5}>Thông tin</Typography.Title>
+
+                <Row gutter={16}>
+                  {" "}
+                  <Col span={12}>
+                    {" "}
+                    <div className={styles.infoItem}>
+                      <h4>Danh mục</h4>
+                      <p>{jobDetail?.jobCategory ?? "N/A"}</p>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <h4>Kinh nghiệm</h4>
+                      <p>
+                        {
+                          JOB_LEVEL[
+                            jobDetail?.jobLevel as keyof typeof JOB_LEVEL
+                          ]
+                        }
+                      </p>
+                    </div>
+                  </Col>
+                  <Col span={12}>
+                    {" "}
+                    <div className={styles.infoItem}>
+                      <h4>Số lượng tuyển</h4>
+                      <p>{jobDetail?.recruitmentCount ?? 0}</p>
+                    </div>
+                    <div className={styles.infoItem}>
+                      <h4>Phương thức làm việc</h4>
+                      <p>
+                        {jobDetail?.workingType
+                          ?.map((type) => {
+                            return WORK_TYPE[type as keyof typeof WORK_TYPE];
+                          }).join(", ")}
+                      </p>
+                    </div>
+                  </Col>
+                </Row>
+              </div>
             </div>
-            <div className={styles.jobInfo}>
-              <h3>Cấp bậc</h3>
-              <p>
-                {Object.entries(JOB_LEVEL)
-                  .filter(([key, value]) => key === jobDetail?.jobLevel)
-                  .map(([key, value]) => value) ?? "Không có cấp bậc."}{" "}
-              </p>
+            <div className={styles.jobDescription}>
+              <h3>Mô tả công việc</h3>
+              <p
+                className={styles.description}
+                dangerouslySetInnerHTML={{
+                  __html: jobDetail?.jobDescription ?? "Không có mô tả.",
+                }}
+              />
             </div>
-            <div className={styles.jobInfo}>
-              <h3>Số lượng tuyển</h3>
-              <p>{Number(jobDetail?.quantity)}</p>
-            </div>
-          </div>
-          <Card title="Thông tin">
-            <Row gutter={16}>
-              {" "}
-              <Col span={12}>
-                {" "}
-                <div className={styles.infoItem}>
-                  <h4>Nghề nghiệp</h4>
-                  <p>{jobDetail?.jobCategory ?? "N/A"}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <h4>Nơi làm việc</h4>
-                  {jobDetail?.workingLocation
-                    ? jobDetail?.workingLocation.map(
-                        (item: string, index: number) => (
-                          <p key={index}>{item}</p>
-                        )
-                      )
+
+            <Row className={styles["tags"]}>
+              <Col span={3}>
+                <Text italic strong underline>
+                  Từ khóa :
+                </Text>
+              </Col>
+              <Col span={18}>
+                <div className={styles["tagsContainer"]}>
+                  {jobDetail?.jobRequirement
+                    ? jobDetail?.jobRequirement.map((item: string) => (
+                        <Tag
+                          key={item}
+                          color={"green"}
+                          onClick={() => handleOpenTag(item)}
+                          className={styles["tag"]}
+                        >
+                          {item}
+                        </Tag>
+                      ))
                     : "Chưa có thông tin"}
                 </div>
               </Col>
-              <Col span={12}>
-                {" "}
-                {/* Match span with the first column for even distribution */}
-                <div className={styles.infoItem}>
-                  <h4>Học vấn</h4>
-                  <p>{jobDetail?.education ?? "Đại học"}</p>
-                </div>
-                <div className={styles.infoItem}>
-                  <h4>Số lượng tuyển</h4>
-                  <p>{jobDetail?.quantity ?? 0}</p>
-                </div>
-              </Col>
             </Row>
-          </Card>
-        </div>
-        <div className={styles.jobDescription}>
-          <h3>Mô tả công việc</h3>
-          <p
-            className={styles.description}
-            dangerouslySetInnerHTML={{
-              __html: jobDetail?.jobDescription ?? "Không có mô tả.",
-            }}
-          />
-        </div>
 
-        <div className={styles.jobDescription}>
-          <h3>Yêu cầu kinh nghiệm</h3>
-          <div className={styles["job-requirement-content"]}>
-            {jobDetail?.jobRequirement
-              ? jobDetail?.jobRequirement.map((item: string) => (
-                  <Button
-                    key={item}
-                    type="primary"
-                    style={{ marginRight: "10px", marginTop: "10px" }}
-                  >
-                    {item}
-                  </Button>
-                ))
-              : "Chưa có thông tin"}
-          </div>
-        </div>
-        </Col>
+            <SimilarJobs />
+          </Col>
 
-        <Col xs={24} md={8}>
-            <Card className={styles.cardContainer} bodyStyle={{ padding: 18 }}>
+          <Col xs={24} md={8}>
+            <Card className={styles.cardContainer}>
               <div className={styles.backgroundImage}>
                 <Image
                   src={jobDetail?.companyImage?.coverURL ?? logo}
@@ -301,29 +354,31 @@ const JobPage = () => {
                   className={styles.companyLogo}
                 />
               </div>
-              
+
               <div className={styles.companyName}>
                 <h2>
-                  <Link href={`/company/${jobDetail?._id}`}>
+                  <Link href={`/company/${jobDetail?.companyID}`}>
                     {jobDetail?.companyName ?? "Chưa có tên"}
                   </Link>
                 </h2>
               </div>
 
               <div className={styles.contactInfocompany}>
-                <h4>Thông tin liên hệ</h4>
                 <p>
-                  <strong>Email:</strong> {jobDetail?.contact?.companyEmail ?? "N/A"}
+                  <Text strong>
+                    <MailOutlined />
+                  </Text>{" "}
+                  {jobDetail?.contact?.companyEmail ?? "N/A"}
                 </p>
                 <p>
-                  <strong>Điện thoại:</strong> {jobDetail?.contact?.companyPhone ?? "N/A"}
-                </p>
-                <p>
-                  <strong>Địa chỉ:</strong> {jobDetail?.contact?.companyAddress ?? "N/A"}
+                  <Text strong>
+                    <PhoneOutlined />
+                  </Text>{" "}
+                  {jobDetail?.contact?.companyPhone ?? "N/A"}
                 </p>
               </div>
             </Card>
-            <Card className={styles.cardContainerimg} bodyStyle={{ padding: 18 }}>
+            <Card className={styles.cardContainerimg}>
               <Carousel autoplay dots={false} autoplaySpeed={2500}>
                 {carouselImages.map((image, index) => (
                   <div key={index}>
@@ -339,7 +394,7 @@ const JobPage = () => {
               </Carousel>
             </Card>
           </Col>
-          </Row>
+        </Row>
       </Spin>
     </div>
   );

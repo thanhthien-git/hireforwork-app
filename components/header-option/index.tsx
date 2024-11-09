@@ -11,11 +11,11 @@ export default function HeaderSearchOption({
   props,
 }: Readonly<HeaderSearchOptionProps>) {
   return (
-    <Select {...props} style={{ width: "100%"}} allowClear>
+    <Select {...props} style={{ width: "100%" }} allowClear>
       {item &&
         Object.entries(item).map(([key, value]) => (
           <Select.Option key={key} value={key}>
-            {value}
+            {key}
           </Select.Option>
         ))}
     </Select>
