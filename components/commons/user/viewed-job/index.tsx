@@ -23,7 +23,6 @@ const ViewedJobsList: React.FC = () => {
             if (!userId) {
                 return;
             }
-
             const viewedJobsResponse = await UserService.getViewedJobs(userId);
             if (viewedJobsResponse && Array.isArray(viewedJobsResponse) && viewedJobsResponse.length > 0) {
                 const jobDetails = await Promise.all(viewedJobsResponse.map(fetchJobDetails));
@@ -41,9 +40,6 @@ const ViewedJobsList: React.FC = () => {
     const fetchJobDetails = useCallback(async (job) => {
         const jobDetail = await fetchJobById(job.jobID);
         const fetchedJob = jobDetail.doc;
-
-        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
-        const companyDetail = companyResponse.doc;
         const workingLocation = fetchedJob.workingLocation
         ?.map((locationCode) => CITY[locationCode])
         .join(" - ") || "Chưa có địa điểm";
@@ -55,8 +51,8 @@ const ViewedJobsList: React.FC = () => {
             jobSalaryMax: fetchedJob.jobSalaryMax,
             workingLocation,
             expireDate: fetchedJob.expireDate,
-            companyID: companyDetail.companyName || "Chưa có tên",
-            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
+            companyID: fetchedJob.companyName || "Chưa có tên",
+            companyImageUrl: fetchedJob.companyImage?.imageURL || '/logo.png',
             isHot: fetchedJob.isHot || false,
             isUrgent: fetchedJob.isUrgent || false,
         };

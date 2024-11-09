@@ -3,7 +3,6 @@ import { Col, Pagination, Row, Spin, Typography, notification, Button } from "an
 import SupJobPostCard from "../item-jobsaved";
 import UserService from "@/services/userService";
 import { fetchJobById } from "@/services/jobService";
-import { fetchCompaniesByID } from "@/services/companyService";
 import { Job } from "@/interfaces/IJobPostCard";
 import { useRouter } from "next/router";
 import styles from "./style.module.scss";
@@ -43,10 +42,7 @@ const SavedJobList: React.FC = () => {
   const fetchJobDetails = useCallback(async (job) => {
     const jobDetail = await fetchJobById(job._id); 
     const fetchedJob = jobDetail.doc;
-  
-    const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
-    const companyDetail = companyResponse.doc;
-    const workingLocation = fetchedJob.workingLocation
+      const workingLocation = fetchedJob.workingLocation
     ?.map((locationCode) => CITY[locationCode])
     .join(" - ") || "Chưa có địa điểm";
   
@@ -57,8 +53,8 @@ const SavedJobList: React.FC = () => {
       jobSalaryMax: fetchedJob.jobSalaryMax,
       workingLocation,
       expireDate: fetchedJob.expireDate,
-      companyID: companyDetail.companyName || "Chưa có tên",
-      companyImageUrl: companyDetail.companyImage?.imageURL || "/default-image.png", 
+      companyID: fetchedJob.companyName || "Chưa có tên",
+      companyImageUrl: fetchedJob.companyImage?.imageURL || "/default-image.png", 
     };
   }, []);
 

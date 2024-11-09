@@ -70,7 +70,7 @@ const JobPage = () => {
     },
   ];
 
-  const checkAndSaveViewedJob = useCallback(async () => {
+  const checkAndViewedJob = useCallback(async () => {
     const careerID = localStorage.getItem("id");
 
     if (!careerID || !id) {
@@ -84,7 +84,7 @@ const JobPage = () => {
         isViewed: true,
       }));
     } catch (err) {
-      console.error("Error saving viewed job:", err);
+      console.error("Error viewed job:", err);
     }
   }, [id]);
 
@@ -99,7 +99,7 @@ const JobPage = () => {
           isApplied: Boolean(jobResponse?.doc?.isApplied),
           isViewed: false,
         });
-        await checkAndSaveViewedJob();
+        await checkAndViewedJob();
       } catch (err) {
         notification.error({
           message: "Lỗi khi lấy dữ liệu từ ID công việc.",
