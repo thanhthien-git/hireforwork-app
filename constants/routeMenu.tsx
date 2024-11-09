@@ -40,12 +40,12 @@ export const menuItems = [
   },
   {
     name: "Quản lý danh mục",
-    path: "/admin/categories-manager",
+    path: "/admin/category-manager",
     icon: <TagOutlined />,
   },
   {
     name: "Quản lý kỹ năng",
-    path: "/admin/technologies-manager",
+    path: "/admin/tech-manager",
     icon: <CodeOutlined />,
   },
 ];
