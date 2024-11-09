@@ -10,6 +10,7 @@ import { ArrowLeftOutlined } from "@ant-design/icons";
 import { useCallback, useEffect, useState } from "react";
 import { ICategoryDetail } from "@/interfaces/ICategoryDetail";
 import RichTextEditor from "../quill";
+import { CategoryService } from "@/services/category";
 
 export default function CategoryDetailForm() {
   const router = useRouter();
@@ -18,9 +19,39 @@ export default function CategoryDetailForm() {
   const [categoryDetail, setCategoryDetail] = useState<ICategoryDetail>({
     categoryName: "",
   });
+  
+  const handleUpdate = useCallback(() => {
+    const formData: ICategoryDetail = {
+      categoryName: getValues("categoryName"),
+    };
+       console.log(formData);
+  }, [getValues, categoryDetail]);
 
+
+  const fetchCategoryDetail = useCallback(
+    async (value: string) => {
+      try {
+        setLoading(true);
+        const res = await CategoryService.getById(value);
+        setCategoryDetail({
+          categoryName: res.doc.categoryName || "",
+        });
+       setValue("categoryName", res.doc.categoryName || "");
+      } catch(error) { 
+        notification.error({ message: "There some error when fetching data" });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setValue, setLoading, setCategoryDetail, notification]
+  );
+  
+  useEffect(() => {
+    console.log("ID from router.query:", router.query.id); 
+    fetchCategoryDetail(router.query.id as string);
+  }, [router.query.id]);
   return (
-    <Form layout="vertical" >
+    <Form layout="vertical"  onFinish={handleSubmit(handleUpdate)} >
       <Row>
         <Button
           icon={<ArrowLeftOutlined />}
@@ -33,16 +64,7 @@ export default function CategoryDetailForm() {
       </Row>
       <Card className={styles["form-container"]}>
         <Row gutter={[24, 24]} >
-          <Col xs={24} sm={24} md={12} lg={8} xl={6}>
-            <Image
-              alt="Category Logo"
-              className={styles["category-avatar"]}
-              src={logo}
-              width={200}
-              height={200}
-            />
-          </Col>
-          <Col xs={24} sm={24} md={12} lg={8} xl={6}>
+          <Col xs={24} sm={24} md={12} lg={8} xl={12}>
             <InputComponent
               className={styles["input-component"]}
               control={control}

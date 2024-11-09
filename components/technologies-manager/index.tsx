@@ -1,5 +1,6 @@
 import { ITechnologyFilter } from "@/interfaces/ITechnologiesFilter";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import TechnologyService from "@/services/techService"
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import styles from './styles.module.scss'
 import { Button, notification, Popconfirm } from "antd";
@@ -11,6 +12,7 @@ import {
 import TableCustom from "../tableCustom";
 import { debounce } from "@mui/material";
 import { useRouter } from "next/router";
+import TechService from "@/services/techService";
 
     export default function TechnologiesManagerTable() {
         const [loading, setLoading] = useState(false);
@@ -33,6 +35,20 @@ import { useRouter } from "next/router";
           pageSize: 8,
         });
       
+        
+  const fetchTechnology = useCallback(async () => {
+    try {
+      setLoading(true);
+      const res = await TechnologyService.get(filter);
+      setTechnologyData(res.data.docs);
+      setTotalDocs(res.data.totalDocs);
+    } catch (err) {
+      notification.error({ message: err.message });
+    } finally {
+      setLoading(false);
+    }
+  }, [filter, notification.error]);
+
         const columns = useMemo(
           () => [
             {
@@ -41,12 +57,12 @@ import { useRouter } from "next/router";
                   <div>Tên kĩ năng </div>
                   <HeaderSearchComponent
                     placeholder="Tên kỹ năng"
-                    onChange={(e) => handleInputSearch("", e.target.value)}
+                    onChange={(e) => handleInputSearch("technologyName", e.target.value)}
                   />
                 </>
               ),
-              dataIndex: "",
-              key: "",
+              dataIndex: "technology",
+              key: "technology",
             },
             {
               title: "Hành động",
@@ -56,16 +72,16 @@ import { useRouter } from "next/router";
                   <Popconfirm
                     title="Delete"
                     description="Bạn có chắc chắn xóa kỹ năng?"
-                    onConfirm={() => ""}
+                    onConfirm={() =>handleDelete (record._id)}
                     okText="Có"
                     cancelText="Không"
                   >
                     <Button icon={<DeleteOutlined />}></Button>
-                  </Popconfirm>{" "}
+                  </Popconfirm>
                   <Button
                     type="link"
                     icon={<InfoCircleOutlined />}
-                    href={`/admin/technologies-manager/{id}`}
+                    href={`/admin/technologies-manager/${record._id}`}
                   />
                 </>
               ),
@@ -101,6 +117,26 @@ import { useRouter } from "next/router";
           },
           [setFilter]
         );
+        
+  const handleDelete = useCallback(
+    async (value: string) => {
+      try {
+        setLoading(true);
+        await TechService.delete(value);
+        fetchTechnology();
+        notification.success({ message: "Xóa kỹ năng thành công!" });
+      } catch {
+        notification.error({ message: "Xóa kỹ năng thất bại!" });
+      } finally {
+        setLoading(false);
+      }
+    },
+    [setLoading, notification, fetchTechnology]
+  );
+          
+        useEffect(() => {
+          fetchTechnology();
+        }, [filter]);
       
         return (
           <div className={styles["table-user"]}>

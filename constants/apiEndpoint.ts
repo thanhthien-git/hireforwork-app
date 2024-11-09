@@ -32,12 +32,14 @@ const endpoint = {
   },
   tech: {
     base: "/tech",
+    create:"/tech/create",
   },
   field: {
     base: "/company-field",
   },
   category : {
-    base: "/category"
+    base: "/category",
+    create:"/category/create",
   }
 };
 export default endpoint;
