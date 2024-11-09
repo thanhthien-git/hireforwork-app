@@ -2,6 +2,7 @@ import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
+import { RESUME_STATUS } from "@/enum/sending";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -130,6 +131,21 @@ export default class CompanyService {
   static async random() {
     try {
       const res = await api.get(`${endpoint.company.random}`);
+      return res.data;
+    } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+
+  static async changeApplicationStatus(
+    id: string,
+    status: keyof typeof RESUME_STATUS
+  ) {
+    try {
+      const res = await api.post(endpoint.company.changeApplication, {
+        _id: id,
+        status: status,
+      });
       return res.data;
     } catch (err) {
       throw new Error((err as Error).message);
