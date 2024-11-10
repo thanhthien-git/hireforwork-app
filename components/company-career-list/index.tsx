@@ -203,7 +203,7 @@ export default function CareerListTable() {
               className={styles["select-status"]}
               style={{ width: "100%" }}
               onSelect={(value) => handleSelectStatus(value, record._id)}
-              disabled={record.isChange ? true : false}
+              disabled={record.isChange}
             >
               {Object.keys(RESUME_STATUS).map((key) => (
                 <Select.Option key={key} value={key}>
