@@ -1,0 +1,40 @@
+.btn-back {
+  margin-bottom: 1rem;
+}
+.btn-save {
+  height: 7vh;
+  width: 8vw;
+  font-size: 16px;
+}
+.quill {
+  width: 100%;
+}
+.input-component {
+  height: 8vh;
+}
+
+.form-container {
+  box-shadow: 3px 3px 11px 1px rgba(0, 0, 0, 0.292);
+  border-radius: 10px;
+  padding-bottom: 40px;
+}
+.header-title-heading {
+  padding-bottom: 5px;
+  border-radius: 30px;
+  margin-bottom: 8px;
+  padding: 5px 22px;
+  background: linear-gradient(
+    90deg,
+    #5422c9 16.14%,
+    rgba(198, 235, 212, 0) 69.23%
+  );
+  color: #ffffff;
+}
+.custom-form-item {
+  margin-bottom: 8px;
+}
+.input-custom {
+  height: 52px;
+  width: 100%;
+  min-width: 0;
+}

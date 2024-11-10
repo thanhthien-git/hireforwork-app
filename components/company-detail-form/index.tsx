@@ -58,6 +58,7 @@ export default function CompanyDetailForm() {
       try {
         setLoading(true);
         const res = await CompanyService.getById(value);
+        console.log(res)
         setCompanyDetail({
           companyName: res.doc.companyName || "",
           companyImage: {
