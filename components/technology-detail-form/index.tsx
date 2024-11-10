@@ -80,6 +80,7 @@ return (
             type="primary"
             className={styles["btn-save"]}
             htmlType="submit"
+            loading={loading}
           >
             Lưu
           </Button>

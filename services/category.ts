@@ -1,8 +1,9 @@
 import endpoint from "@/constants/apiEndpoint";
 import api from "./api";
 import { ICategoryFilter } from "@/interfaces/ICategoryFilter";
+import { ICategoryDTO } from "@/interfaces/category";
 
-export class CategoryService {
+export default class CategoryService {
   static async get(filter:ICategoryFilter) {
     try {
       const { categoryName,page, pageSize } = filter;
@@ -26,9 +27,9 @@ export class CategoryService {
     }
   }
   
-  static async create() {
+  static async create(category:ICategoryDTO) {
     try {
-      const response = await api.post(endpoint.category.create);
+      const response = await api.post(endpoint.category.create,{...category});
       return response.data;
     } catch (err) {
       const error = err as Error;
@@ -44,6 +45,15 @@ export class CategoryService {
     } catch (err) {
       const error = err as Error;
       throw new Error(error.message);
+    }
+  }
+  
+  static async update(id: string, data: ICategoryDTO) {
+    try {
+      const res = await api.post(`${endpoint.category.base}/${id}/update`, data);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
     }
   }
 }

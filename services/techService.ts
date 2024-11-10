@@ -1,5 +1,6 @@
 import endpoint from "@/constants/apiEndpoint";
 import api from "./api";
+import { ITechDTO } from "@/interfaces/tech";
 import { ITechnologyFilter } from "@/interfaces/ITechnologiesFilter";
 
 export default class TechService {
@@ -26,9 +27,9 @@ export default class TechService {
     }
   }
   
-  static async create() {
+  static async create(tech:ITechDTO) {
     try {
-      const response = await api.post(endpoint.tech.create);
+      const response = await api.post(endpoint.tech.create,{...tech});
       return response.data;
     } catch (err) {
       const error = err as Error;
@@ -44,6 +45,15 @@ export default class TechService {
     } catch (err) {
       const error = err as Error;
       throw new Error(error.message);
+    }
+  }
+  
+  static async updateByID(id: string, data: ITechDTO) {
+    try {
+      const res = await api.post(`${endpoint.tech.base}/${id}/update`, data);
+      return res;
+    } catch (err) {
+      throw new Error((err as Error).message);
     }
   }
 }

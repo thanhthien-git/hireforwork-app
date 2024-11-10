@@ -44,7 +44,7 @@ export const menuItems = [
     icon: <TagOutlined />,
   },
   {
-    name: "Quản lý kỹ năng",
+    name: "Quản lý công nghệ",
     path: "/admin/technologies-manager",
     icon: <CodeOutlined />,
   },
