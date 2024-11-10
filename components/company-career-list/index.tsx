@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TableCustom from "../tableCustom";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
-import HeaderDateRange from "../date-range";
 import HeaderSearchOption from "../header-option";
 import { JOB_LEVEL } from "@/enum/jobLevel";
 import { EyeFilled } from "@ant-design/icons";
@@ -10,6 +9,7 @@ import styles from "./styles.module.scss";
 import CompanyService from "@/services/companyService";
 import {
   Button,
+  DatePicker,
   Modal,
   notification,
   Popconfirm,
@@ -18,8 +18,16 @@ import {
 } from "antd";
 import { IApplyJob } from "@/interfaces/IApplyJob";
 import PreviewResume from "../commons/user/details/card-resume-info/preview-resume";
+import { ColumnsType } from "antd/lib/table";
+import { ICompanyApplication } from "@/interfaces/ICompanyFilter";
+import { debounce } from "lodash";
+import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 
 export default function CareerListTable() {
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
   const [career, setCareer] = useState<IApplyJob[]>([]);
   const [visible, setVisible] = useState(false);
   const [visiblePop, setVisiblePop] = useState<[string, boolean]>(["", false]);
@@ -27,6 +35,44 @@ export default function CareerListTable() {
     Record<string, keyof typeof RESUME_STATUS>
   >({});
   const [url, setUrl] = useState("");
+
+  const [filter, setFilter] = useState<ICompanyApplication>({
+    page: 1,
+    pageSize: 10,
+    careerEmail: "",
+    createFrom: undefined,
+    createTo: undefined,
+    jobLevel: undefined,
+    status: undefined,
+  });
+
+  const debounceFunction = useCallback(
+    (field: keyof ICompanyApplication, value: string) => {
+      setFilter((prev) => ({
+        ...prev,
+        [field]: value,
+      }));
+    },
+    []
+  );
+
+  const handleInputSearch = useCallback(
+    debounce((field, value) => {
+      debounceFunction(field, value);
+    }, 400),
+    []
+  );
+
+  const handleInputDate = useCallback(
+    debounce((date: any, dateStrings: [string, string]) => {
+      setFilter((prev) => ({
+        ...prev,
+        createFrom: dateStrings[0],
+        createTo: dateStrings[1],
+      }));
+    }, 400),
+    []
+  );
 
   const handleOpenPreview = useCallback((url: string) => {
     setVisible(true);
@@ -40,14 +86,19 @@ export default function CareerListTable() {
 
   const fetchCareerList = useCallback(async () => {
     try {
+      dispatch(setLoading(true));
       const res = await CompanyService.getCareerList(
-        localStorage.getItem("id") as string
+        localStorage.getItem("id") as string,
+        filter
       );
-      setCareer(res);
+
+      setCareer(res?.docs);
     } catch (err) {
       notification.error({ message: (err as Error).message });
+    } finally {
+      dispatch(setLoading(false));
     }
-  }, [notification]);
+  }, [notification, filter, dispatch]);
 
   const tagStatus = (item: keyof typeof RESUME_STATUS) => {
     switch (item) {
@@ -120,7 +171,7 @@ export default function CareerListTable() {
     fetchCareerList();
   }, [fetchCareerList]);
 
-  const columns = useMemo(
+  const columns: ColumnsType = useMemo(
     () => [
       {
         title: (
@@ -128,7 +179,8 @@ export default function CareerListTable() {
             <div>Email</div>
             <HeaderSearchComponent
               placeholder="Email"
-              onChange={(e) => console.log(e.target.value)}
+              name="careerEmail"
+              onChange={(e) => handleInputSearch("careerEmail", e.target.value)}
               allowClear
             />
           </>
@@ -143,7 +195,7 @@ export default function CareerListTable() {
             <div>Bài đăng</div>
             <HeaderSearchComponent
               placeholder="Nội dung"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch("jobTitle", e.target.value)}
               allowClear
             />
           </>
@@ -156,7 +208,12 @@ export default function CareerListTable() {
         title: (
           <>
             <div>Ngày ứng tuyển</div>
-            <HeaderDateRange />
+            <DatePicker.RangePicker
+              placeholder={["S", "E"]}
+              onChange={(dates, dateStrings) => {
+                handleInputDate(dates, dateStrings);
+              }}
+            />
           </>
         ),
         dataIndex: "createAt",
@@ -168,19 +225,32 @@ export default function CareerListTable() {
         title: (
           <>
             <div>Kinh nghiệm</div>
-            <HeaderSearchOption item={JOB_LEVEL} />
+            <HeaderSearchOption
+              item={JOB_LEVEL}
+              allowClear
+              placeholder="Kinh nghiệm"
+              onChange={(value) => handleInputSearch("jobLevel", value)}
+            />
           </>
         ),
         width: "12rem",
         dataIndex: "jobLevel",
         key: "jobLevel",
         align: "center",
+        render: (item: keyof typeof JOB_LEVEL) => (
+          <span>{JOB_LEVEL[item]}</span>
+        ),
       },
       {
         title: (
           <>
             <div>Trạng thái</div>
-            <HeaderSearchOption item={RESUME_STATUS} />
+            <HeaderSearchOption
+              item={RESUME_STATUS}
+              allowClear
+              placeholder="Trạng thái "
+              onChange={(value) => handleInputSearch("status", value)}
+            />
           </>
         ),
         width: "12rem",
@@ -237,6 +307,7 @@ export default function CareerListTable() {
         <PreviewResume link={url} />
       </Modal>
       <TableCustom
+        loading={loading}
         scroll={{ x: "max-content" }}
         columns={columns}
         dataSource={career}
