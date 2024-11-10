@@ -22,6 +22,8 @@ const endpoint = {
     getCareerList: "/companies/get-applier",
     getStatic: "/companies/get-static",
     registerCompany: "/companies/register",
+    random: "/companies/random",
+    changeApplication: "companies/change-application-status",
   },
   job: {
     base: "/jobs",

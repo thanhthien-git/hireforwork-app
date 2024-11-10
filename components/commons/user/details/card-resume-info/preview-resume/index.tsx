@@ -1,5 +1,5 @@
 import { Spin } from "antd";
-import styles from './styles.module.scss'
+import styles from "./styles.module.scss";
 import { useCallback, useState } from "react";
 
 interface ResumeProp {
@@ -16,7 +16,7 @@ export default function PreviewResume({ link }: Readonly<ResumeProp>) {
 
   return (
     <div className={styles["preview-resume"]}>
-      <Spin spinning={loading} style={{height: '100%'}}>
+      <Spin spinning={loading} style={{ height: "100%" }}>
         {link?.endsWith(".pdf") ? (
           <embed
             src={link}

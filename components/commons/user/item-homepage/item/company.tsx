@@ -88,7 +88,7 @@ export default function TopCompany({ companyList }: Readonly<ITopCompanyProp>) {
         ))}
       </Row>
       <Pagination
-        style={{ marginTop: "20px", textAlign: "center" }}
+        className={styles["homepage-pagination"]}
         current={current}
         total={companyList.length}
         pageSize={pageSize}

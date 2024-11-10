@@ -1,13 +1,14 @@
 import React, { useState } from "react";
-import { Card, Col, Row, Pagination, Tag, Skeleton } from "antd";
+import { Col, Row, Pagination, Skeleton } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import { useRouter } from "next/router";
 import styles from "../style.module.scss";
 import { useSelector } from "react-redux";
-import { Job } from "@/interfaces/IJobDetail";
+import JobCard from "../job-card";
+import { IJobDetail } from "@/interfaces/IJobDetail";
 
 interface IHottestJobProp {
-  jobList: Job[];
+  jobList: IJobDetail[];
 }
 export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
   const { loading } = useSelector((state) => state.loading);
@@ -23,10 +24,6 @@ export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
     (current - 1) * pageSize,
     current * pageSize
   );
-
-  const handleJobClick = (jobId: string) => {
-    router.push(`/jobs/${jobId}`);
-  };
 
   return (
     <div className={styles["item-home-page"]}>
@@ -51,43 +48,18 @@ export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
         Việc làm tuyển gấp
       </h2>
       <Row gutter={[16, 16]}>
-        <Skeleton loading={loading}>
-          {" "}
-          {paginatedJobs.length > 0 ? (
+        <Skeleton loading={loading} active>
+          {paginatedJobs.length > 0 &&
             paginatedJobs.map((job) => (
-              <Col key={job._id} xs={24} sm={12} md={8}>
-                <Card
-                  hoverable
-                  onClick={() => handleJobClick(job._id)}
-                  style={{
-                    borderRadius: "8px",
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                  }}
-                >
-                  <h3>{job.jobTitle}</h3>
-                  <p>
-                    {job.jobSalaryMin} triệu - {job.jobSalaryMax} triệu
-                  </p>
-                  <p>
-                    {new Date(job.createAt).toLocaleDateString()} -{" "}
-                    {new Date(job.expireDate).toLocaleDateString()}
-                  </p>
-                  {job.isHot && <Tag color="red">Tuyển gấp</Tag>}
-                </Card>
+              <Col xs={24} sm={12} md={8} lg={6} key={job._id}>
+                <JobCard job={job} />
               </Col>
-            ))
-          ) : (
-            <Col span={24}>
-              <Skeleton active style={{ minWidth: 300, height: 250 }} />
-            </Col>
-          )}
+            ))}
         </Skeleton>
       </Row>
 
       <Pagination
-        style={{ marginTop: "20px", textAlign: "center" }}
+        className={styles["homepage-pagination"]}
         current={current}
         total={jobList.length}
         pageSize={pageSize}

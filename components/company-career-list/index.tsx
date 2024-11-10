@@ -8,10 +8,35 @@ import { EyeFilled } from "@ant-design/icons";
 import { RESUME_STATUS } from "@/enum/sending";
 import styles from "./styles.module.scss";
 import CompanyService from "@/services/companyService";
-import { notification } from "antd";
+import {
+  Button,
+  Modal,
+  notification,
+  Popconfirm,
+  Select,
+  Typography,
+} from "antd";
+import { IApplyJob } from "@/interfaces/IApplyJob";
+import PreviewResume from "../commons/user/details/card-resume-info/preview-resume";
 
 export default function CareerListTable() {
-  const [career, setCareer] = useState([]);
+  const [career, setCareer] = useState<IApplyJob[]>([]);
+  const [visible, setVisible] = useState(false);
+  const [visiblePop, setVisiblePop] = useState<[string, boolean]>(["", false]);
+  const [selectedStatuses, setSelectedStatuses] = useState<
+    Record<string, keyof typeof RESUME_STATUS>
+  >({});
+  const [url, setUrl] = useState("");
+
+  const handleOpenPreview = useCallback((url: string) => {
+    setVisible(true);
+    setUrl(url);
+  }, []);
+
+  const handleClosePreview = useCallback(() => {
+    setVisible(false);
+    setUrl("");
+  }, []);
 
   const fetchCareerList = useCallback(async () => {
     try {
@@ -23,6 +48,73 @@ export default function CareerListTable() {
       notification.error({ message: (err as Error).message });
     }
   }, [notification]);
+
+  const tagStatus = (item: keyof typeof RESUME_STATUS) => {
+    switch (item) {
+      case "PENDING":
+        return (
+          <Typography.Text style={{ color: "yellowgreen" }}>
+            {RESUME_STATUS.PENDING}
+          </Typography.Text>
+        );
+      case "ACCEPTED":
+        return (
+          <Typography.Text style={{ color: "green" }}>
+            {RESUME_STATUS.ACCEPTED}
+          </Typography.Text>
+        );
+      case "REJECTED":
+        return (
+          <Typography.Text style={{ color: "red" }}>
+            {RESUME_STATUS.REJECTED}
+          </Typography.Text>
+        );
+      default:
+        return null;
+    }
+  };
+
+  const handleSelectStatus = useCallback(
+    (selectedValue: keyof typeof RESUME_STATUS, rowKey: string) => {
+      setSelectedStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [rowKey]: selectedValue,
+      }));
+      setVisiblePop([rowKey, true]);
+    },
+    []
+  );
+
+  const handleChangeStatus = useCallback(
+    async (selectedValue: keyof typeof RESUME_STATUS, rowKey: string) => {
+      try {
+        console.log(
+          `You are now changing ${rowKey} with status: "${selectedValue}"`
+        );
+        const res = await CompanyService.changeApplicationStatus(
+          rowKey,
+          selectedValue
+        );
+        fetchCareerList();
+        notification.success({ message: res });
+      } catch {
+      } finally {
+        setVisiblePop(["", false]);
+      }
+    },
+    [notification]
+  );
+
+  const handleCancelChangeStatus = useCallback(
+    (rowKey: string, originalStatus: keyof typeof RESUME_STATUS) => {
+      setSelectedStatuses((prevStatuses) => ({
+        ...prevStatuses,
+        [rowKey]: originalStatus,
+      }));
+      setVisiblePop(["", false]);
+    },
+    []
+  );
 
   useEffect(() => {
     fetchCareerList();
@@ -82,6 +174,7 @@ export default function CareerListTable() {
         width: "12rem",
         dataIndex: "jobLevel",
         key: "jobLevel",
+        align: "center",
       },
       {
         title: (
@@ -93,22 +186,62 @@ export default function CareerListTable() {
         width: "12rem",
         dataIndex: "status",
         key: "status",
-        render: (item) => <>{RESUME_STATUS[RESUME_STATUS.item]}</>,
+        align: "center",
+        render: (item: keyof typeof RESUME_STATUS, record: any) => (
+          <Popconfirm
+            title="Hành động này không thể hoàn tác, bạn chắc chắn?"
+            open={visiblePop[0] === record._id}
+            onConfirm={() =>
+              handleChangeStatus(selectedStatuses[record._id], record._id)
+            }
+            onCancel={() => handleCancelChangeStatus(record._id, item)}
+            okText="Có"
+            cancelText="Không"
+          >
+            <Select
+              value={selectedStatuses[record._id] || item}
+              className={styles["select-status"]}
+              style={{ width: "100%" }}
+              onSelect={(value) => handleSelectStatus(value, record._id)}
+              disabled={record.isChange}
+            >
+              {Object.keys(RESUME_STATUS).map((key) => (
+                <Select.Option key={key} value={key}>
+                  {tagStatus(key as keyof typeof RESUME_STATUS)}
+                </Select.Option>
+              ))}
+            </Select>
+          </Popconfirm>
+        ),
       },
       {
         title: <div className={styles["text-header"]}>Hồ sơ ứng tuyển</div>,
-        dataIndex: "jobRequirement",
-        key: "jobRequirement",
-        render: () => <EyeFilled />,
+        dataIndex: "careerCV",
+        key: "careerCV",
+        align: "center",
+        render: (item: string) => (
+          <Button
+            type="primary"
+            icon={<EyeFilled />}
+            onClick={() => handleOpenPreview(item)}
+          />
+        ),
       },
     ],
-    []
+    [visiblePop, selectedStatuses]
   );
+
   return (
-    <TableCustom
-      scroll={{ x: "max-content" }}
-      columns={columns}
-      dataSource={career}
-    />
+    <>
+      <Modal open={visible} onCancel={handleClosePreview} footer={null}>
+        <PreviewResume link={url} />
+      </Modal>
+      <TableCustom
+        scroll={{ x: "max-content" }}
+        columns={columns}
+        dataSource={career}
+        rowKey="_id"
+      />
+    </>
   );
 }

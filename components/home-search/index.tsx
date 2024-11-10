@@ -1,4 +1,4 @@
-import { Col, Row, Skeleton } from "antd";
+import { Col, notification, Row, Skeleton } from "antd";
 import MuiImageCustom from "../MuiImageCustom";
 import MainJobPostCard from "./mainjobpost";
 import styles from "./style.module.scss";
@@ -12,10 +12,15 @@ import { useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import { ICategory } from "@/interfaces/ICategory";
 import { CategoryService } from "@/services/category";
+import RandomCompany from "./random-company";
+import CompanyService from "@/services/companyService";
+import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
+import { RETRY_LATER } from "@/constants/message";
 
 export default function SearchResultPage() {
   const [job, setJob] = useState<IJobDetail[]>();
   const [category, setCategory] = useState<ICategory[]>([]);
+  const [randomCompany, setRandomCompany] = useState<ICompanyDetail>();
   const dispatch = useDispatch();
   const router = useRouter();
 
@@ -65,7 +70,7 @@ export default function SearchResultPage() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [router, dispatch, setJob, setTotal]);
+  }, [router, dispatch]);
 
   const fetchCategory = useCallback(async () => {
     try {
@@ -77,11 +82,24 @@ export default function SearchResultPage() {
     } finally {
       dispatch(setLoading(false));
     }
-  }, [dispatch, setCategory]);
+  }, [dispatch]);
+
+  const fetchRandom = useCallback(async () => {
+    try {
+      dispatch(setLoading(true));
+      const res = await CompanyService.random();
+      setRandomCompany(res);
+    } catch {
+      notification.error({ message: RETRY_LATER });
+    } finally {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch]);
 
   useEffect(() => {
     fetchCategory();
     fetchJob();
+    fetchRandom()
   }, []);
 
   return (
@@ -94,7 +112,7 @@ export default function SearchResultPage() {
           <MainJobPostCard jobList={job} totalJobs={total} />
         </Col>
         <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-          <MuiImageCustom src="https://vieclam24h.vn/_next/image?url=%2Fimg%2Fads-banners%2Fentry-banner.png&w=384&q=75" />
+          <RandomCompany company={randomCompany}/>
         </Col>
       </Row>
     </div>
