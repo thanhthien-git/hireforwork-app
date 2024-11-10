@@ -30,7 +30,9 @@ import Link from "next/link";
 export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
-
+  const handleResetPassword = () => {
+    router.push("/reset-password");
+  };
   const dispatch = useDispatch();
   const handleLogin = useCallback(async () => {
     try {
@@ -99,11 +101,13 @@ export default function LoginForm() {
               allowClear
             />
             <Row className={styles["option"]}>
-              <Col>
-                <Button type="link" className={styles["option-forgot"]}>
-                  Quên mật khẩu?
-                </Button>
-              </Col>
+              <Button
+                type="link"
+                className={styles["option-forgot"]}
+                onClick={handleResetPassword}
+              >
+                Quên mật khẩu?
+              </Button>
             </Row>
             <Row align={"middle"} justify={"center"}>
               <Form.Item>

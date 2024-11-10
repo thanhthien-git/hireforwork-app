@@ -9,7 +9,7 @@ interface IProps {
   title: string;
 }
 
-const { Content } = Layout;
+const { Content, Header, Footer } = Layout;
 
 export default function LayoutClient({ title, children }: Readonly<IProps>) {
   return (

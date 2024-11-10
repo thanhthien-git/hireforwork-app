@@ -12,6 +12,8 @@ const endpoint = {
     viewedJobs: "/careers/viewedjobs",
     uploadImage: "/career/{id}/upload-image",
     registerCareer: "careers/register",
+    ResetPassword:"/reset-password",
+    RequestResetPassword:"/request-password-reset",
   },
   company: {
     base: "/companies",
@@ -34,12 +36,16 @@ const endpoint = {
   },
   tech: {
     base: "/tech",
+    create: "/tech/create",
+    delete: "/tech/delete",
   },
   field: {
     base: "/company-field",
   },
-  category: {
+  category : {
     base: "/category",
-  },
+    create: "/category/create",
+    delete: "/category/delete",
+  }
 };
 export default endpoint;

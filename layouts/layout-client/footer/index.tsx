@@ -38,7 +38,7 @@ export default function LayoutClientFooter() {
             </ul>
             <h4>Kết nối với Hire For Work</h4>
             <ul>
-              <li><Link href="/social/facebook">Facebook</Link></li>
+              <li><Link href="https://facebook.com/nhieuviecofficial">Facebook</Link></li>
               <li><Link href="/social/twitter">Twitter</Link></li>
               <li><Link href="/social/linkedin">LinkedIn</Link></li>
             </ul>
