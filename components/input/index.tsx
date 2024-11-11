@@ -11,7 +11,6 @@ interface InputComponentProps extends InputProps {
   label?: string;
   name: string;
   placeholder: string;
-  addonAfter?: string;
   rules?: RegisterOptions;
   className?: string;
   error?: FieldError;
@@ -23,7 +22,6 @@ export default function InputComponent({
   label,
   name,
   placeholder,
-  addonAfter,
   rules,
   className,
   control,
@@ -45,7 +43,6 @@ export default function InputComponent({
             {...field}
             allowClear
             placeholder={placeholder}
-            addonAfter={addonAfter}
             className={className}
             {...inputProps}
           ></Input>

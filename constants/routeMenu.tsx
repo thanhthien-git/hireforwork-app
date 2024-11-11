@@ -1,9 +1,8 @@
-import AuthenticationService from "@/services/authentication";
 import {
   ClockCircleOutlined,
   CodeOutlined,
   FileDoneOutlined,
-  LogoutOutlined,
+  MessageOutlined,
   PaperClipOutlined,
   PieChartOutlined,
   SettingOutlined,
@@ -83,6 +82,11 @@ export const companySider = [
     name: "Danh sách ứng viên",
     path: "/company/career-list",
     icon: <UserOutlined />,
+  },
+  {
+    name: "Trò chuyện",
+    path: "/company/chat",
+    icon: <MessageOutlined />,
   },
   {
     name: "Thông tin",

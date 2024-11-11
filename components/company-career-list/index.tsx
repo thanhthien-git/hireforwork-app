@@ -21,8 +21,7 @@ import PreviewResume from "../commons/user/details/card-resume-info/preview-resu
 import { ColumnsType } from "antd/lib/table";
 import { ICompanyApplication } from "@/interfaces/ICompanyFilter";
 import { debounce } from "lodash";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 
 export default function CareerListTable() {

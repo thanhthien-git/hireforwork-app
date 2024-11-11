@@ -1,19 +1,9 @@
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
-import { Job } from "@/interfaces/IJobPostCard";
-import { IJob } from "@/interfaces/IJob";
+import { IJobDetail } from "@/interfaces/IJobDetail";
 import { IJobFilter } from "@/interfaces/IJobFilter";
 import queryString from "query-string";
 
-export const fetchJobById = async (id: string): Promise<Job> => {
-  try {
-    const response = await api.get(`${endpoint.job.base}/${id}`);
-    return response.data;
-  } catch (err) {
-    const error = err as Error;
-    throw new Error(error.message);
-  }
-};
 export default class JobService {
   static async getJob(filter: IJobFilter) {
     try {
@@ -44,7 +34,7 @@ export default class JobService {
       throw new Error((err as Error).message);
     }
   }
-  static async create(job: IJob) {
+  static async create(job: IJobDetail) {
     try {
       const response = await api.post(endpoint.job.create, job);
       return response;
@@ -52,7 +42,7 @@ export default class JobService {
       throw new Error((err as Error).message);
     }
   }
-  static async update(job: IJob) {
+  static async update(job: IJobDetail) {
     try {
       const response = await api.post(endpoint.job.update, job);
       return response;

@@ -5,7 +5,7 @@ import LayoutManager from "@/layouts/layout-manager";
 
 function CompanySetting() {
   return (
-    <LayoutManager menu={companySider}>
+    <LayoutManager menu={companySider} title="Thông tin cá nhân">
       <CompanySettingPage />
     </LayoutManager>
   );

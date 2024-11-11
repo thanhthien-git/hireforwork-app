@@ -7,6 +7,7 @@ import endpoint from "@/constants/apiEndpoint";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { RESUME_STATUS } from "@/enum/sending";
 import queryString from "query-string";
+import { IJobFilter } from "@/interfaces/IJobFilter";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -62,10 +63,10 @@ export default class CompanyService {
     }
   }
 
-  static async getCompanyJob(id: string, page: number, limit: number) {
+  static async getCompanyJob(id: string, filter: IJobFilter) {
     try {
       const response = await api.get(
-        `${endpoint.company.getJob}/${id}?page=${page}&limit=${limit}`
+        `${endpoint.company.getJob}/${id}?${queryString.stringify(filter)}`
       );
       return response.data;
     } catch (err) {

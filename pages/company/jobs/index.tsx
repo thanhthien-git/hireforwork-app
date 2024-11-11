@@ -5,10 +5,9 @@ import LayoutManager from "@/layouts/layout-manager";
 
 function CompanyJobManager() {
   return (
-    <LayoutManager menu={companySider}>
+    <LayoutManager menu={companySider} title="Việc làm đã đăng">
       <CompanyJobTable />
     </LayoutManager>
   );
 }
-export default withRoleCompany(CompanyJobManager)
-
+export default withRoleCompany(CompanyJobManager);

@@ -1,4 +1,13 @@
-import { Button, Col, Form, notification, Row, Select, Skeleton } from "antd";
+import {
+  Button,
+  Card,
+  Col,
+  Form,
+  notification,
+  Row,
+  Select,
+  Skeleton,
+} from "antd";
 import Image from "next/image";
 import logo from "@/public/assets/logo.svg";
 import styles from "./styles.module.scss";
@@ -154,197 +163,207 @@ export default function CompanySettingPage() {
   }, [notification]);
 
   return (
-    <Row gutter={[30, 120]}>
-      <Row className={styles["company-image"]} style={{ position: "relative" }}>
-        <div
-          className={styles["cover-container"]}
-          onMouseEnter={handleCoverMouseEnter}
-          onMouseLeave={handleCoverMouseLeave}
+    <Col className={styles["company-setting"]}>
+      <Card>
+        <Row
+          className={styles["company-image"]}
+          style={{ position: "relative" }}
         >
-          <Skeleton active loading={loading}>
-            <Image
-              src={image.cover || logo}
-              width={1000}
-              height={150}
-              alt="cover"
-              className={styles["cover"]}
-              style={{ filter: coverHovered ? "blur(5px)" : "none" }}
-            />
-          </Skeleton>
+          <div
+            className={styles["cover-container"]}
+            onMouseEnter={handleCoverMouseEnter}
+            onMouseLeave={handleCoverMouseLeave}
+          >
+            <Skeleton active loading={loading}>
+              <Image
+                src={image.cover || logo}
+                width={1000}
+                height={150}
+                alt="cover"
+                className={styles["cover"]}
+                style={{ filter: coverHovered ? "blur(5px)" : "none" }}
+              />
+            </Skeleton>
 
-          {coverHovered && (
-            <div
-              className={styles["button-container"]}
-              style={{
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)",
-                zIndex: 1000,
-                display: "flex",
-                gap: "10px",
-              }}
-            >
-              <Button
-                icon={<UploadOutlined />}
-                type="primary"
-                onClick={handleOpenFileChoose}
-              />
-              <input
-                ref={fileInput}
-                type="file"
-                style={{ display: "none", zIndex: 1100 }}
-                accept="image/*"
-                onChange={(e) => handleFileChange(e, "cover")}
-              />
-              <Button icon={<DeleteFilled />} type="primary" />
-            </div>
-          )}
-        </div>
-
-        <div
-          className={styles["image-container"]}
-          onMouseEnter={handleAvatarMouseEnter}
-          onMouseLeave={handleAvatarMouseLeave}
-        >
-          <Skeleton loading={loading} active>
-            <Image
-              src={image.img || logo}
-              alt="avatar"
-              className={styles["avatar"]}
-              height={150}
-              width={150}
-            />
-          </Skeleton>
-          {avatarHovered && (
-            <div className={styles["button-container"]}>
-              <Button
-                icon={<UploadOutlined />}
-                type="primary"
-                onClick={handleOpenFileChoose}
-              />
-              <input
-                ref={fileInput}
-                type="file"
-                style={{ display: "none", zIndex: 1100 }}
-                accept="image/*"
-                onChange={(e) => handleFileChange(e, "img")}
-              />
-              <Button icon={<DeleteFilled />} type="primary" />
-            </div>
-          )}
-        </div>
-      </Row>
-      <Form
-        className={styles["form-info"]}
-        layout="vertical"
-        onFinish={handleSubmit(onSubmit)}
-      >
-        <Row className={styles["company-info"]} gutter={[16, 16]}>
-          <Col span={12}>
-            <InputComponent
-              label="Tên công ty"
-              control={control}
-              placeholder="Tên công ty"
-              name="companyName"
-              className={styles["company-input-box"]}
-              rules={{ required: REQUIRED_MESSAGE("Tên công ty") }}
-            />
-            <InputComponent
-              label="Địa chỉ"
-              control={control}
-              placeholder="Địa chỉ"
-              name="companyAddress"
-              className={styles["company-input-box"]}
-              rules={{ required: REQUIRED_MESSAGE("Địa chỉ") }}
-            />
-            <InputComponent
-              label="Số lượng nhân viên"
-              control={control}
-              placeholder="Quy mô công ty"
-              name="employeeSize"
-              className={styles["company-input-number"]}
-              type="number"
-              rules={{ required: REQUIRED_MESSAGE("Số lượng nhân viên") }}
-            />
-          </Col>
-          <Col span={12}>
-            <InputComponent
-              label="Email"
-              control={control}
-              placeholder="Email"
-              name="companyEmail"
-              className={styles["company-input-box"]}
-              disabled
-            />
-            <InputComponent
-              label="Số điện thoại"
-              control={control}
-              placeholder="Số điện thoại"
-              name="companyPhone"
-              className={styles["company-input-box"]}
-              rules={{ required: REQUIRED_MESSAGE("Số điện thoại") }}
-            />
-            <InputComponent
-              label="Website"
-              required
-              control={control}
-              placeholder="Website"
-              name="companyWebsite"
-              className={styles["company-input-box"]}
-              rules={{ required: REQUIRED_MESSAGE("Website") }}
-            />
-          </Col>
-        </Row>
-        <Row>
-          <Controller
-            name="companyField"
-            control={control}
-            rules={{ required: "Please select a field" }}
-            render={({ field }) => (
-              <Form.Item
-                label="Lĩnh vực hoạt động"
-                required
-                style={{ width: "100%" }}
+            {coverHovered && (
+              <div
+                className={styles["button-container"]}
+                style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  zIndex: 1000,
+                  display: "flex",
+                  gap: "10px",
+                }}
               >
-                <Select
-                  {...field}
-                  placeholder="Lĩnh vực hoạt động"
-                  showSearch
-                  allowClear
-                  mode="multiple"
-                  style={{ minHeight: "50px", height: "50px" }}
-                  filterOption={(input, option) =>
-                    option.children.toLowerCase().includes(input.toLowerCase())
-                  }
-                >
-                  {companyFieldData.map((item) => (
-                    <Select.Option key={item._id} value={item._id}>
-                      {item.fieldName}
-                    </Select.Option>
-                  ))}
-                </Select>
-              </Form.Item>
+                <Button
+                  icon={<UploadOutlined />}
+                  type="primary"
+                  onClick={handleOpenFileChoose}
+                />
+                <input
+                  ref={fileInput}
+                  type="file"
+                  style={{ display: "none", zIndex: 1100 }}
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, "cover")}
+                />
+                <Button icon={<DeleteFilled />} type="primary" />
+              </div>
             )}
-          />
+          </div>
+
+          <div
+            className={styles["image-container"]}
+            onMouseEnter={handleAvatarMouseEnter}
+            onMouseLeave={handleAvatarMouseLeave}
+          >
+            <Skeleton loading={loading} active>
+              <Image
+                src={image.img || logo}
+                alt="avatar"
+                className={styles["avatar"]}
+                height={150}
+                width={150}
+              />
+            </Skeleton>
+            {avatarHovered && (
+              <div className={styles["button-container"]}>
+                <Button
+                  icon={<UploadOutlined />}
+                  type="primary"
+                  onClick={handleOpenFileChoose}
+                />
+                <input
+                  ref={fileInput}
+                  type="file"
+                  style={{ display: "none", zIndex: 1100 }}
+                  accept="image/*"
+                  onChange={(e) => handleFileChange(e, "img")}
+                />
+                <Button icon={<DeleteFilled />} type="primary" />
+              </div>
+            )}
+          </div>
         </Row>
-        <Row>
-          <RichTextEditor
-            validation={{
-              required: REQUIRED_MESSAGE("Giới thiệu"),
-            }}
-            control={control}
-            placeholder="Giới thiệu công ty"
-            name="companyDescription"
-            className={styles["company-input-quill"]}
-          />
-        </Row>
-        <Row align="middle">
-          <Button type="primary" htmlType="submit">
-            Lưu
-          </Button>
-        </Row>
-      </Form>
-    </Row>
+        <Col>
+          <Form
+            className={styles["form-info"]}
+            layout="vertical"
+            onFinish={handleSubmit(onSubmit)}
+          >
+            <Row className={styles["company-info"]} gutter={[16, 16]}>
+              <Col xs={24} sm={24} lg={12}>
+                <InputComponent
+                  label="Tên công ty"
+                  control={control}
+                  placeholder="Tên công ty"
+                  name="companyName"
+                  className={styles["company-input-box"]}
+                  rules={{ required: REQUIRED_MESSAGE("Tên công ty") }}
+                />
+                <InputComponent
+                  label="Địa chỉ"
+                  control={control}
+                  placeholder="Địa chỉ"
+                  name="companyAddress"
+                  className={styles["company-input-box"]}
+                  rules={{ required: REQUIRED_MESSAGE("Địa chỉ") }}
+                />
+                <InputComponent
+                  label="Số lượng nhân viên"
+                  control={control}
+                  placeholder="Quy mô công ty"
+                  name="employeeSize"
+                  className={styles["company-input-number"]}
+                  type="number"
+                  rules={{ required: REQUIRED_MESSAGE("Số lượng nhân viên") }}
+                />
+              </Col>
+              <Col xs={24} sm={24} lg={12}>
+                <InputComponent
+                  label="Email"
+                  control={control}
+                  placeholder="Email"
+                  name="companyEmail"
+                  className={styles["company-input-box"]}
+                  disabled
+                />
+                <InputComponent
+                  label="Số điện thoại"
+                  control={control}
+                  placeholder="Số điện thoại"
+                  name="companyPhone"
+                  className={styles["company-input-box"]}
+                  rules={{ required: REQUIRED_MESSAGE("Số điện thoại") }}
+                />
+                <InputComponent
+                  label="Website"
+                  required
+                  control={control}
+                  placeholder="Website"
+                  name="companyWebsite"
+                  className={styles["company-input-box"]}
+                  rules={{ required: REQUIRED_MESSAGE("Website") }}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Controller
+                name="companyField"
+                control={control}
+                rules={{ required: "Please select a field" }}
+                render={({ field }) => (
+                  <Form.Item
+                    label="Lĩnh vực hoạt động"
+                    required
+                    style={{ width: "100%", minHeight: "50px" }}
+                  >
+                    <Select
+                      {...field}
+                      placeholder="Lĩnh vực hoạt động"
+                      showSearch
+                      allowClear
+                      mode="multiple"
+                      style={{ minHeight: "50px" }}
+                      filterOption={(input, option) =>
+                        option.children
+                          .toLowerCase()
+                          .includes(input.toLowerCase())
+                      }
+                    >
+                      {companyFieldData.map((item) => (
+                        <Select.Option key={item._id} value={item._id}>
+                          {item.fieldName}
+                        </Select.Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                )}
+              />
+            </Row>
+            <Row>
+              <RichTextEditor
+                validation={{
+                  required: REQUIRED_MESSAGE("Giới thiệu"),
+                }}
+                label="Giới thiệu"
+                control={control}
+                placeholder="Giới thiệu công ty"
+                name="companyDescription"
+                className={styles["company-input-quill"]}
+              />
+            </Row>
+            <Row align="middle" justify={"center"}>
+              <Button type="primary" htmlType="submit">
+                Lưu
+              </Button>
+            </Row>
+          </Form>
+        </Col>
+      </Card>
+    </Col>
   );
 }

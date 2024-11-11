@@ -5,7 +5,7 @@ import LayoutManager from "@/layouts/layout-manager";
 
 function CareerPage() {
   return (
-    <LayoutManager menu={companySider}>
+    <LayoutManager menu={companySider} title="Danh sách ứng viên">
       <CareerListTable />
     </LayoutManager>
   );

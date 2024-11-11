@@ -1,4 +1,13 @@
-import { Form, Button, Row, Col, notification, Spin, DatePicker } from "antd";
+import {
+  Form,
+  Button,
+  Row,
+  Col,
+  notification,
+  Spin,
+  DatePicker,
+  Switch,
+} from "antd";
 import InputComponent from "../input";
 import { Controller, useForm } from "react-hook-form";
 import { useRouter } from "next/router";
@@ -8,25 +17,24 @@ import { JOB_LEVEL } from "@/enum/jobLevel";
 import styles from "./styles.module.scss";
 import { REQUIRED_MESSAGE } from "@/constants/message";
 import SelectComponent from "../custom/select";
-import JobService, { fetchJobById } from "@/services/jobService";
+import JobService from "@/services/jobService";
 import { TechService } from "@/services/techService";
 import { IJobDetail } from "@/interfaces/IJobDetail";
 import dayjs from "dayjs";
 import { WORK_TYPE } from "@/enum/workType";
 import { CITY } from "@/constants/city";
-import moment from "moment";
 
 export default function JobForm() {
   const [filteredSkills, setFilteredSkills] = useState([]);
   const { control, handleSubmit, getValues, setValue } = useForm();
-  const [isHot, setIsHot] = useState(false)
+  const [isHot, setIsHot] = useState(false);
   const router = useRouter();
   const { id } = router.query;
   const [loading, setLoading] = useState(false);
 
   const fetchSkill = useCallback(async () => {
     try {
-      const res = await TechService.get(1, 9999);
+      const res = await TechService.get({ page: 1, pageSize: 999 });
       setFilteredSkills(
         res.docs.map((item) => {
           return item.technology;
@@ -36,6 +44,7 @@ export default function JobForm() {
       notification.error({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau" });
     }
   }, [setFilteredSkills, notification]);
+
 
   const onSubmit = useCallback(async () => {
     try {
@@ -51,9 +60,16 @@ export default function JobForm() {
         workingType: getValues("workingType"),
         recruitmentCount: Number(getValues("recruitmentCount")),
         workingLocation: getValues("workingLocation"),
-        isHot: isHot,
+        isHot: Boolean(getValues("isHot")),
         companyID: localStorage.getItem("id") as string,
       };
+
+      if (Number(formData.jobSalaryMin) >= Number(formData.jobSalaryMax)) {
+        notification.error({
+          message: "Lương tối thiểu phải nhỏ hơn lương tối đa",
+        });
+        return;
+      }
 
       if (id) {
         Object.assign(formData, {
@@ -66,6 +82,8 @@ export default function JobForm() {
         notification.success({ message: "Tạo bài đăng thành công" });
       }
     } catch (err) {
+      console.log(err);
+
       notification.error({ message: (err as Error).message });
     } finally {
       setLoading(false);
@@ -76,7 +94,7 @@ export default function JobForm() {
     async (id: string) => {
       try {
         setLoading(true);
-        const res = await fetchJobById(id);
+        const res = await JobService.getById(id);
 
         if (res) {
           setValue("jobTitle", res.doc.jobTitle);
@@ -89,7 +107,7 @@ export default function JobForm() {
           setValue("workingType", res.doc.workingType);
           setValue("recruitmentCount", res.doc.recruitmentCount);
           setValue("expireDate", dayjs(res.doc.expireDate));
-          setIsHot(res.doc.isHot)
+          setValue("isHot", res.doc.isHot);
         }
       } catch (err) {
         notification.error({ message: (err as Error).message });
@@ -123,21 +141,27 @@ export default function JobForm() {
           </Col>
           <Col span={12}>
             <InputComponent
+              min={0}
+              max={100}
               label="Lương tối thiểu"
               control={control}
               name="jobSalaryMin"
               placeholder="Lương tối thiểu"
               type="number"
               rules={{ required: REQUIRED_MESSAGE("Lương tối thiểu") }}
+              suffix="Triệu"
               className={styles["input-custom"]}
             />
           </Col>
           <Col span={12}>
             <InputComponent
+              min={0}
+              max={100}
               label="Lương tối đa"
               control={control}
               name="jobSalaryMax"
               placeholder="Lương tối đa"
+              suffix="Triệu"
               type="number"
               rules={{ required: REQUIRED_MESSAGE("Lương tối đa") }}
               className={styles["input-custom"]}
@@ -160,7 +184,7 @@ export default function JobForm() {
               className={styles["input-custom"]}
             />
           </Col>
-          <Col span={12}>
+          <Col span={6}>
             <Form.Item label="Ngày hết hạn">
               <Controller
                 name="expireDate"
@@ -176,6 +200,15 @@ export default function JobForm() {
                     onChange={(date) => field.onChange(date)}
                   />
                 )}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={6}>
+            <Form.Item label="Tuyển gấp ">
+              <Controller
+                name="isHot"
+                control={control}
+                render={({ field }) => <Switch {...field} />}
               />
             </Form.Item>
           </Col>
