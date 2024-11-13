@@ -1,4 +1,4 @@
-import { Layout } from "antd";
+import { Button, Layout } from "antd";
 import { ReactNode, useCallback, useState } from "react";
 import styles from "./styles.module.scss";
 import Head from "next/head";
@@ -42,7 +42,9 @@ export default function LayoutAdmin({ children, title }: Readonly<IProps>) {
           styles[collapsed ? "layout-collapse" : "layout-collapse-active"]
         }
       >
-        <Header className={styles["header"]}></Header>
+        <Header className={styles["header"]}>
+          <Button href="/">Trang tuyển dụng</Button>
+        </Header>
         <Content className={styles["content"]}>{children}</Content>
       </Layout>
     </Layout>

@@ -10,11 +10,7 @@ import queryString from "query-string";
 import SelectComponent from "@/components/custom/select";
 import { useForm } from "react-hook-form";
 
-interface ISearchBoxProps {
-  cateList: ICategory[];
-}
-
-export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
+export default function SearchBox() {
   const router = useRouter();
   const [isMobile, setIsMobile] = useState(false);
   const [querySearch, setQuerySearch] = useState("");
@@ -44,7 +40,10 @@ export default function SearchBox({ cateList }: Readonly<ISearchBoxProps>) {
     <div className={styles.bannerContainer}>
       <Row justify="space-between" align="middle">
         <Card className={styles.searchBox} bordered={false}>
-          <Typography.Title level={2} style={{color: '#fff', marginBottom: 20}}>
+          <Typography.Title
+            level={2}
+            style={{ color: "#fff", marginBottom: 20 }}
+          >
             200+ Việc làm IT cho bạn
           </Typography.Title>
           <Form>

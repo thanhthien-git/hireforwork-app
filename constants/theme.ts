@@ -3,8 +3,8 @@ import type { ThemeConfig } from 'antd';
 const theme: ThemeConfig = {
   token: {
     fontSize: 16,
-    colorBgBlur: '#5422c9',
-    colorPrimary: '#5422c9',
+    colorBgBlur: 'rgb(237, 27, 47)',
+    colorPrimary: 'rgb(237, 27, 47)',
     fontFamily: 'Lexend, sans-serif', 
   },
   // Table

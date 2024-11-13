@@ -3,7 +3,7 @@ import SearchResultPage from "@/components/home-search";
 
 export default function HomeSearch() {
   return (
-    <LayoutClient title="Home Search">
+    <LayoutClient title="Việc làm">
       <SearchResultPage />
     </LayoutClient>
   );

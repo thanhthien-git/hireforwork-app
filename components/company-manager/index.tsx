@@ -144,6 +144,7 @@ export default function CompanyManagerTable() {
     (field: keyof ICompanyFilter, value: string) => {
       setFilter((prev) => ({
         ...prev,
+        page: 1,
         [field]: value,
       }));
     },

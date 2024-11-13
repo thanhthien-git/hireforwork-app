@@ -1,19 +1,38 @@
-.avatar{
-    width: 4rem;
-    height: 4rem;
-    padding: 0.5rem;
-    border-radius: 50%;
-    border: 1px #5422c9 solid;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.card {
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
 }
 
-.title-username{
-    font-size: 16px;
+.card:hover {
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+}
+
+.avatar-wrapper {
+  width: 75px; // Set a fixed width
+  height: 75px; // Set a fixed height
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 50%; // Make it circular
+}
+
+.avatar {
+  object-fit: cover; // Ensures the image fills the circle
+  width: 100%;
+  height: 100%;
+}
+
+.title-username {
+  font-weight: 500;
+  color: #333;
 }
 
 .col-info {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 10px;
 }

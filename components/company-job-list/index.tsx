@@ -77,6 +77,7 @@ export default function CompanyJobTable() {
     (field: keyof IJobDetail, value: string) => {
       setFilter((prev) => ({
         ...prev,
+        page: 1,
         [field]: value,
       }));
     },

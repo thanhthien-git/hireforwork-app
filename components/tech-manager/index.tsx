@@ -11,11 +11,15 @@ import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import { debounce } from "@mui/material";
 import { ITech } from "@/interfaces/ITech";
 import { TechService } from "@/services/techService";
+import { REQUIRED_MESSAGE } from "@/constants/message";
+import { useSelector, useDispatch } from "react-redux";
+import { setLoading } from "@/redux/slices/loadingSlice";
 
 export default function TechnologyManagerTable() {
-  const [loading, setLoading] = useState(false);
   const [techData, setTechData] = useState([]);
   const [totalDocs, setTotalDocs] = useState(0);
+  const { loading } = useSelector((state) => state.loading);
+  const dispatch = useDispatch();
 
   const [filter, setFilter] = useState<ITech>({
     _id: "",
@@ -27,17 +31,16 @@ export default function TechnologyManagerTable() {
 
   const fetchTech = useCallback(async () => {
     try {
-      setLoading(true);
+      dispatch(setLoading(true));
       const res = await TechService.get(filter);
       setTechData(res.docs);
       setTotalDocs(res.totalDocs);
     } catch (err) {
       notification.error({ message: err.message });
     } finally {
-      setLoading(false);
+      dispatch(setLoading(false));
     }
-  }, [filter]);
-
+  }, [filter, dispatch]);
 
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedTech, setSelectedTech] = useState<ITech | null>(null);
@@ -55,11 +58,11 @@ export default function TechnologyManagerTable() {
     try {
       const values = await form.validateFields();
       await TechService.update(selectedTech!._id, values);
-      notification.success({ message: "Technology updated successfully" });
+      notification.success({ message: "Cập nhập thành công" });
       fetchTech();
       setIsEditModalOpen(false);
     } catch (error) {
-      notification.error({ message: "Failed to update technology" });
+      notification.error({ message: "Cập nhập thất bại" });
     }
   };
 
@@ -67,25 +70,22 @@ export default function TechnologyManagerTable() {
     setIsEditModalOpen(false);
   };
 
-
-
-
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
 
   const handleOpenAddModal = () => {
     form.resetFields();
     setIsAddModalOpen(true);
   };
- 
+
   const handleAddCategory = async () => {
     try {
-        const values = await form.validateFields();
-        await TechService.create(values);
-        notification.success({ message: "Technology added successfully" });
-        fetchTech();
-        setIsAddModalOpen(false);
+      const values = await form.validateFields();
+      await TechService.create(values);
+      notification.success({ message: "Thêm thành công" });
+      fetchTech();
+      setIsAddModalOpen(false);
     } catch (error) {
-        notification.error({ message: "Failed to add technology" });
+      notification.error({ message: "Thêm thất bại" });
     }
   };
 
@@ -95,13 +95,13 @@ export default function TechnologyManagerTable() {
 
   const handleDelete = useCallback(
     async (value: string) => {
-        try {
+      try {
         await TechService.delete(value);
         fetchTech();
-        notification.success({ message: "Delete technology success!" });
-        } catch {
-        notification.error({ message: "Delete technology failed" });
-        }
+        notification.success({ message: "Xóa thành công!" });
+      } catch {
+        notification.error({ message: "Xóa thất bại" });
+      }
     },
     [fetchTech]
   );
@@ -111,9 +111,9 @@ export default function TechnologyManagerTable() {
       {
         title: (
           <>
-            <div>Technology name</div>
+            <div>Kỹ năng</div>
             <HeaderSearchComponent
-              placeholder="Technology name"
+              placeholder="Kỹ năng"
               onChange={(e) => handleInputSearch("technology", e.target.value)}
               style={{ maxWidth: "500px" }}
             />
@@ -123,25 +123,25 @@ export default function TechnologyManagerTable() {
         key: "technology",
       },
       {
-        title: "Action",
+        title: "",
         width: "7em",
         render: (_: any, record: any) => (
           <>
-          <Popconfirm
-            title="Delete"
-            description="Are you sure to delete this technology?"
-            onConfirm={() => handleDelete(record._id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button icon={<DeleteOutlined />}></Button>
-          </Popconfirm>{" "}
-          <Button
-            type="link"
-            icon={<InfoCircleOutlined />}
-            onClick={() => showEditModal(record)}
-          />
-        </>
+            <Popconfirm
+              title="Xóa"
+              description="Bạn có muốn xóa không?"
+              onConfirm={() => handleDelete(record._id)}
+              okText="Có"
+              cancelText="Không"
+            >
+              <Button icon={<DeleteOutlined />}></Button>
+            </Popconfirm>{" "}
+            <Button
+              type="link"
+              icon={<InfoCircleOutlined />}
+              onClick={() => showEditModal(record)}
+            />
+          </>
         ),
       },
     ],
@@ -151,10 +151,10 @@ export default function TechnologyManagerTable() {
   const handleInputSearch = debounce((field, value) => {
     setFilter((prev) => ({
       ...prev,
+      page: 1,
       [field]: value,
     }));
   }, 400);
-  
 
   const handlePagination = useCallback(
     (currentPage: number, currentPageSize: number) => {
@@ -167,16 +167,14 @@ export default function TechnologyManagerTable() {
     [setFilter]
   );
 
-  
-
   useEffect(() => {
     fetchTech();
   }, [filter]);
 
   return (
     <>
-    <Modal
-        title="Edit Technology"
+      <Modal
+        title="Sửa kỹ năng"
         open={isEditModalOpen}
         onOk={handleEditCategory}
         onCancel={handleCancelEdit}
@@ -184,15 +182,15 @@ export default function TechnologyManagerTable() {
         <Form form={form} layout="vertical">
           <Form.Item
             name="technology"
-            label="Technology Name"
-            rules={[{ required: true, message: "Please input technology name!" }]}
+            label="Tên kỹ năng"
+            rules={[{ required: true, message: REQUIRED_MESSAGE("Kỹ năng") }]}
           >
             <Input />
           </Form.Item>
         </Form>
       </Modal>
       <Modal
-        title="Add New Technology"
+        title="Thêm mới"
         open={isAddModalOpen}
         onOk={handleAddCategory}
         onCancel={handleCancelAdd}
@@ -200,36 +198,36 @@ export default function TechnologyManagerTable() {
         <Form form={form} layout="vertical">
           <Form.Item
             name="technology"
-            label="Technology Name"
-            rules={[{ required: true, message: "Please input technology name!" }]}
+            label="Tên kỹ năng"
+            rules={[{ required: true, message: REQUIRED_MESSAGE("Kỹ năng") }]}
           >
             <Input />
           </Form.Item>
         </Form>
       </Modal>
-    <div className={styles["table-user"]}>
-      <Button
-        className={styles["button-add-new"]}
-        icon={<PlusOutlined />}
-        onClick={handleOpenAddModal}
-      >
-        Add new
-      </Button>
-      <TableCustom
-        columns={columns}
-        dataSource={techData}
-        loading={loading}
-        pagination={{
-          current: filter.page,
-          pageSize: filter.pageSize,
-          showSizeChanger: false,
-          total: totalDocs,
-          onChange: (page, pageSize) => {
-            handlePagination(page, pageSize);
-          },
-        }}
-      />
-    </div>
+      <div className={styles["table-user"]}>
+        <Button
+          className={styles["button-add-new"]}
+          icon={<PlusOutlined />}
+          onClick={handleOpenAddModal}
+        >
+          Thêm mới
+        </Button>
+        <TableCustom
+          columns={columns}
+          dataSource={techData}
+          loading={loading}
+          pagination={{
+            current: filter.page,
+            pageSize: filter.pageSize,
+            showSizeChanger: false,
+            total: totalDocs,
+            onChange: (page, pageSize) => {
+              handlePagination(page, pageSize);
+            },
+          }}
+        />
+      </div>
     </>
   );
 }

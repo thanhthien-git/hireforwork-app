@@ -3,7 +3,7 @@ import LayoutAdmin from "@/layouts/layout-admin";
 
 export default function JobsPage() {
     return(
-        <LayoutAdmin title="Job post">
+        <LayoutAdmin title="Tất cả bài đăng">
             <JobManagerTable/>
         </LayoutAdmin>
     )

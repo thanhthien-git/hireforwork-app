@@ -30,6 +30,7 @@ export default function JobForm() {
   const [isHot, setIsHot] = useState(false);
   const router = useRouter();
   const { id } = router.query;
+  const [companyID, setCompanyID] = useState();
   const [loading, setLoading] = useState(false);
 
   const fetchSkill = useCallback(async () => {
@@ -44,7 +45,6 @@ export default function JobForm() {
       notification.error({ message: "Đã có lỗi xảy ra, vui lòng thử lại sau" });
     }
   }, [setFilteredSkills, notification]);
-
 
   const onSubmit = useCallback(async () => {
     try {
@@ -61,7 +61,7 @@ export default function JobForm() {
         recruitmentCount: Number(getValues("recruitmentCount")),
         workingLocation: getValues("workingLocation"),
         isHot: Boolean(getValues("isHot")),
-        companyID: localStorage.getItem("id") as string,
+        companyID: companyID,
       };
 
       if (Number(formData.jobSalaryMin) >= Number(formData.jobSalaryMax)) {
@@ -88,15 +88,15 @@ export default function JobForm() {
     } finally {
       setLoading(false);
     }
-  }, [setLoading, getValues, notification, isHot]);
+  }, [setLoading, getValues, notification, isHot, companyID]);
 
   const fetchJobDetail = useCallback(
     async (id: string) => {
       try {
         setLoading(true);
         const res = await JobService.getById(id);
-
         if (res) {
+          setCompanyID(res.doc.companyID);
           setValue("jobTitle", res.doc.jobTitle);
           setValue("jobSalaryMin", res.doc.jobSalaryMin);
           setValue("jobSalaryMax", res.doc.jobSalaryMax);

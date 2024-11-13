@@ -1,3 +1,5 @@
+@import "/styles/color.scss";
+
 .bannerContainer {
   margin: 50px;
   border-radius: 8px;
@@ -5,30 +7,10 @@
 
 .searchBox {
   background: rgb(2, 0, 36);
-  background: linear-gradient(
-    139deg,
-    rgba(2, 0, 36, 1) 19%,
-    rgba(60, 25, 144, 0.6582282571231617) 100%
-  );
+  background: $main-color-gradient;
   border-radius: 8px;
   padding: 10px;
   width: 100%;
-}
-
-.reportCard {
-  background-image: url("https://sanhanghoa.vn/wp-content/uploads/2020/01/ch%E1%BB%A9ng-kho%C3%A1n.jpg");
-  background-size: 100%;
-  background-repeat: no-repeat;
-  color: #ffffff;
-  background-color: #3a1990;
-  text-align: center;
-}
-
-.banner {
-  background: linear-gradient(to right, #6a11cb, #2575fc);
-  border-radius: 8px;
-  text-align: center;
-  margin: 0 50px 0 50px;
 }
 
 .bannerText {
@@ -53,7 +35,7 @@
 }
 
 .bannerButton {
-  background-color: #7700ff;
+  background-color: $main-color;
   border: none;
   color: white;
 }
@@ -62,7 +44,7 @@
   padding: 50px;
 }
 
-.homepage-pagination{
+.homepage-pagination {
   width: 100%;
   justify-content: center;
 }

@@ -49,6 +49,7 @@ export default function CareerListTable() {
     (field: keyof ICompanyApplication, value: string) => {
       setFilter((prev) => ({
         ...prev,
+        page: 1,
         [field]: value,
       }));
     },

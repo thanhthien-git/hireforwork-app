@@ -14,9 +14,8 @@ export default function CompanyDashboardPage() {
   const [statics, setStatics] = useState({
     totalCareer: 0,
     totalJob: 0,
-    totalResume: 0, 
+    totalResume: 0,
   });
-  
 
   const fetchStatic = useCallback(async () => {
     try {
