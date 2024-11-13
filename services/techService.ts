@@ -1,13 +1,13 @@
 import endpoint from "@/constants/apiEndpoint";
 import api from "./api";
 import { ITech } from "@/interfaces/ITech";
+import queryString from "query-string";
 
 export class TechService {
   static async get(filter: ITech) {
     try {
-      const { technology, page, pageSize} = filter
       const res = await api.get(
-        `${endpoint.tech.base}?page=${page}&pageSize=${pageSize}&technology=${technology}`
+        `${endpoint.tech.base}?${queryString.stringify(filter)}`
       );
       return res.data;
     } catch (error) {

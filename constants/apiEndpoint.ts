@@ -12,8 +12,8 @@ const endpoint = {
     viewedJobs: "/careers/viewedjobs",
     uploadImage: "/career/{id}/upload-image",
     registerCareer: "careers/register",
-    ResetPassword:"/reset-password",
-    RequestResetPassword:"/request-password-reset",
+    ResetPassword: "/reset-password",
+    RequestResetPassword: "/request-password-reset",
   },
   company: {
     base: "/companies",
@@ -42,10 +42,13 @@ const endpoint = {
   field: {
     base: "/company-field",
   },
-  category : {
+  category: {
     base: "/category",
     create: "/category/create",
     delete: "/category/delete",
-  }
+  },
+  admin: {
+    static: "/admin/static",
+  },
 };
 export default endpoint;

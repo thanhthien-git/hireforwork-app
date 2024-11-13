@@ -9,17 +9,26 @@
   display: flex;
   justify-content: flex-end;
   padding: 0;
-  
+
   @media (max-width: 576px) {
     justify-content: flex-start;
     margin-bottom: 20px;
   }
-  
 }
+
+@media (max-width: 576px) {
+  .table-manager {
+    padding-bottom: 80px !important;
+  }
+}
+
 .btn-add {
   min-height: 40px;
 }
-.text-column{
+.text-column {
   padding: 10px;
   text-wrap: wrap;
+}
+.table-manager {
+  padding-bottom: 20px;
 }

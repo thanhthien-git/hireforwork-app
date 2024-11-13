@@ -1,20 +1,37 @@
-import React, { useState } from "react";
-import { Col, Row, Pagination, Skeleton } from "antd";
+import React, { useCallback, useEffect, useState } from "react";
+import { Col, Row, Pagination, Skeleton, notification } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
-import { useRouter } from "next/router";
 import styles from "../style.module.scss";
 import { useSelector } from "react-redux";
 import JobCard from "../job-card";
 import { IJobDetail } from "@/interfaces/IJobDetail";
+import JobService from "@/services/jobService";
 
-interface IHottestJobProp {
-  jobList: IJobDetail[];
-}
-export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
-  const { loading } = useSelector((state) => state.loading);
+export default function HottestJob() {
   const [current, setCurrent] = useState<number>(1);
+  const [loading, setLoading] = useState(false);
   const pageSize = 6;
-  const router = useRouter();
+
+  const [jobList, setJobList] = useState<IJobDetail[]>([]);
+
+  const fetchHotJob = useCallback(async () => {
+    try {
+      setLoading(true);
+      const response = await JobService.getJob({
+        page: 1,
+        pageSize: 10,
+        isHot: true,
+      });
+
+      setJobList(response?.docs);
+    } catch (err) {
+      notification.error({
+        message: "Đã có lỗi xảy ra",
+      });
+    } finally {
+      setLoading(false);
+    }
+  }, [notification]);
 
   const handlePaginationChange = (page: number) => {
     setCurrent(page);
@@ -25,6 +42,9 @@ export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
     current * pageSize
   );
 
+  useEffect(() => {
+    fetchHotJob();
+  }, []);
   return (
     <div className={styles["item-home-page"]}>
       <h2
@@ -48,14 +68,18 @@ export default function HottestJob({ jobList }: Readonly<IHottestJobProp>) {
         Việc làm tuyển gấp
       </h2>
       <Row gutter={[16, 16]}>
-        <Skeleton loading={loading} active>
-          {paginatedJobs.length > 0 &&
-            paginatedJobs.map((job) => (
-              <Col xs={24} sm={12} md={8} lg={6} key={job._id}>
-                <JobCard job={job} />
-              </Col>
-            ))}
-        </Skeleton>
+        {loading ? (
+          <Skeleton loading={loading} active paragraph={{ rows: 10 }} />
+        ) : (
+          <>
+            {paginatedJobs.length > 0 &&
+              paginatedJobs.map((job) => (
+                <Col xs={24} sm={12} md={8} lg={6} key={job._id}>
+                  <JobCard job={job} />
+                </Col>
+              ))}
+          </>
+        )}
       </Row>
 
       <Pagination

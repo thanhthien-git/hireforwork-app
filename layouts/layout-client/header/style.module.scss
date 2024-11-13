@@ -1,13 +1,10 @@
+@import "/styles/color.scss";
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    139deg,
-    rgba(2, 0, 36, 1) 19%,
-    rgba(60, 25, 144, 0.6582282571231617) 100%
-  );
+  background: $main-color-gradient;
   color: white;
   min-height: 100px;
   .nav {

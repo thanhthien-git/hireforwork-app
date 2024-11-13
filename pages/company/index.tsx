@@ -5,7 +5,7 @@ import LayoutManager from "@/layouts/layout-manager";
 
 function CompanyDashboard() {
     return (
-        <LayoutManager menu={companySider}>
+        <LayoutManager menu={companySider} title="Tổng quan">
             <CompanyDashboardPage/>
         </LayoutManager>
     )

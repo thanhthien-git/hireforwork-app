@@ -27,11 +27,11 @@ api.interceptors.response.use(
       error?.response?.status < 500
     ) {
       if (error?.response?.status === 401) {
-        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = "/login";
       }
-
       //return message in catch
-      const errorMessage = error?.response?.data || "Oops, something xc!";
+      const errorMessage = error?.response?.data || "Oops, something wrong!";
       const customError = new Error(errorMessage);
 
       customError.name = "API Error";

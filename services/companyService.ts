@@ -1,8 +1,13 @@
-import { ICompanyFilter } from "@/interfaces/ICompanyFilter";
+import {
+  ICompanyApplication,
+  ICompanyFilter,
+} from "@/interfaces/ICompanyFilter";
 import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { RESUME_STATUS } from "@/enum/sending";
+import queryString from "query-string";
+import { IJobFilter } from "@/interfaces/IJobFilter";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -58,10 +63,10 @@ export default class CompanyService {
     }
   }
 
-  static async getCompanyJob(id: string, page: number, limit: number) {
+  static async getCompanyJob(id: string, filter: IJobFilter) {
     try {
       const response = await api.get(
-        `${endpoint.company.getJob}/${id}?page=${page}&limit=${limit}`
+        `${endpoint.company.getJob}/${id}?${queryString.stringify(filter)}`
       );
       return response.data;
     } catch (err) {
@@ -69,9 +74,13 @@ export default class CompanyService {
     }
   }
 
-  static async getCareerList(id: string) {
+  static async getCareerList(id: string, filter: ICompanyApplication) {
     try {
-      const response = await api.get(`${endpoint.company.getCareerList}/${id}`);
+      const response = await api.get(
+        `${endpoint.company.base}/${id}/get-applier?${queryString.stringify(
+          filter
+        )}`
+      );
       return response.data;
     } catch (err) {
       throw new Error((err as Error).message);

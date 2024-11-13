@@ -75,7 +75,7 @@ export default function SearchResultPage() {
   const fetchCategory = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      const res = await CategoryService.get(1, 999);
+      const res = await CategoryService.get({page: 1, pageSize: 999});
       setCategory(res?.docs);
     } catch {
       console.log(`some thing wrong`);
@@ -99,7 +99,7 @@ export default function SearchResultPage() {
   useEffect(() => {
     fetchCategory();
     fetchJob();
-    fetchRandom()
+    fetchRandom();
   }, []);
 
   return (
@@ -112,7 +112,7 @@ export default function SearchResultPage() {
           <MainJobPostCard jobList={job} totalJobs={total} />
         </Col>
         <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-          <RandomCompany company={randomCompany}/>
+          <RandomCompany company={randomCompany} />
         </Col>
       </Row>
     </div>

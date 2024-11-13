@@ -11,6 +11,7 @@ import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import { debounce } from "@mui/material";
 import { CategoryService } from "@/services/category";
 import { ICategory } from "@/interfaces/ICategory";
+import { REQUIRED_MESSAGE } from "@/constants/message";
 
 export default function CategoryManagerTable() {
   const [loading, setLoading] = useState(false);
@@ -38,9 +39,10 @@ export default function CategoryManagerTable() {
     }
   }, [filter]);
 
-
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(null);
+  const [selectedCategory, setSelectedCategory] = useState<ICategory | null>(
+    null
+  );
   const [form] = Form.useForm();
 
   const showEditModal = (category: ICategory) => {
@@ -67,50 +69,52 @@ export default function CategoryManagerTable() {
     setIsEditModalOpen(false);
   };
 
-const [isAddModalOpen, setIsAddModalOpen] = useState(false);
-const handleOpenAddModal = () => {
-  form.resetFields();
-  setIsAddModalOpen(true);
-};
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const handleOpenAddModal = () => {
+    form.resetFields();
+    setIsAddModalOpen(true);
+  };
 
-const handleAddCategory = async () => {
-  try {
-    const values = await form.validateFields();
-    await CategoryService.create(values);
-    notification.success({ message: "Category added successfully" });
-    fetchCategory();
-    setIsAddModalOpen(false);
-  } catch (error) {
-    notification.error({ message: "Failed to add category" });
-  }
-};
-
-const handleCancelAdd = () => {
-  setIsAddModalOpen(false);
-};
-
-const handleDelete = useCallback(
-  async (value: string) => {
+  const handleAddCategory = async () => {
     try {
-      await CategoryService.delete(value);
+      const values = await form.validateFields();
+      await CategoryService.create(values);
+      notification.success({ message: "Category added successfully" });
       fetchCategory();
-      notification.success({ message: "Delete category success!" });
-    } catch {
-      notification.error({ message: "Delete category failed" });
+      setIsAddModalOpen(false);
+    } catch (error) {
+      notification.error({ message: "Failed to add category" });
     }
-  },
-  [fetchCategory]
-);
+  };
+
+  const handleCancelAdd = () => {
+    setIsAddModalOpen(false);
+  };
+
+  const handleDelete = useCallback(
+    async (value: string) => {
+      try {
+        await CategoryService.delete(value);
+        fetchCategory();
+        notification.success({ message: "Delete category success!" });
+      } catch {
+        notification.error({ message: "Delete category failed" });
+      }
+    },
+    [fetchCategory]
+  );
 
   const columns = useMemo(
     () => [
       {
         title: (
           <>
-            <div>Category name</div>
+            <div>Lĩnh vực</div>
             <HeaderSearchComponent
-              placeholder="Category name"
-              onChange={(e) => handleInputSearch("categoryName", e.target.value)}
+              placeholder="Lĩnh vực"
+              onChange={(e) =>
+                handleInputSearch("categoryName", e.target.value)
+              }
               style={{ maxWidth: "500px" }}
             />
           </>
@@ -119,25 +123,25 @@ const handleDelete = useCallback(
         key: "categoryName",
       },
       {
-        title: "Action",
+        title: "",
         width: "7em",
         render: (_: any, record: any) => (
           <>
-          <Popconfirm
-            title="Delete"
-            description="Are you sure to delete this category?"
-            onConfirm={() => handleDelete(record._id)}
-            okText="Yes"
-            cancelText="No"
-          >
-            <Button icon={<DeleteOutlined />}></Button>
-          </Popconfirm>{" "}
-          <Button
-            type="link"
-            icon={<InfoCircleOutlined />}
-            onClick={() => showEditModal(record)}
-          />
-        </>
+            <Popconfirm
+              title="Delete"
+              description="Are you sure to delete this category?"
+              onConfirm={() => handleDelete(record._id)}
+              okText="Yes"
+              cancelText="No"
+            >
+              <Button icon={<DeleteOutlined />}></Button>
+            </Popconfirm>{" "}
+            <Button
+              type="link"
+              icon={<InfoCircleOutlined />}
+              onClick={() => showEditModal(record)}
+            />
+          </>
         ),
       },
     ],
@@ -150,7 +154,6 @@ const handleDelete = useCallback(
       [field]: value,
     }));
   }, 400);
-  
 
   const handlePagination = useCallback(
     (currentPage: number, currentPageSize: number) => {
@@ -163,16 +166,14 @@ const handleDelete = useCallback(
     [setFilter]
   );
 
-  
-
   useEffect(() => {
     fetchCategory();
   }, [filter]);
 
   return (
     <>
-    <Modal
-        title="Edit Category"
+      <Modal
+        title="Sửa lĩnh vực"
         open={isEditModalOpen}
         onOk={handleEditCategory}
         onCancel={handleCancelEdit}
@@ -180,15 +181,15 @@ const handleDelete = useCallback(
         <Form form={form} layout="vertical">
           <Form.Item
             name="categoryName"
-            label="Category Name"
-            rules={[{ required: true, message: "Please input category name!" }]}
+            label="Tên lĩnh vực"
+            rules={[{ required: true, message: "Vui lòng nhập tên!" }]}
           >
             <Input />
           </Form.Item>
         </Form>
       </Modal>
       <Modal
-        title="Add New Category"
+        title="Thêm"
         open={isAddModalOpen}
         onOk={handleAddCategory}
         onCancel={handleCancelAdd}
@@ -197,35 +198,35 @@ const handleDelete = useCallback(
           <Form.Item
             name="categoryName"
             label="Category Name"
-            rules={[{ required: true, message: "Please input category name!" }]}
+            rules={[{ required: true, message: REQUIRED_MESSAGE("Lĩnh vực") }]}
           >
             <Input />
           </Form.Item>
         </Form>
       </Modal>
-    <div className={styles["table-user"]}>
-      <Button
-        className={styles["button-add-new"]}
-        icon={<PlusOutlined />}
-        onClick={handleOpenAddModal}
-      >
-        Add new
-      </Button>
-      <TableCustom
-        columns={columns}
-        dataSource={categoryData}
-        loading={loading}
-        pagination={{
-          current: filter.page,
-          pageSize: filter.pageSize,
-          showSizeChanger: false,
-          total: totalDocs,
-          onChange: (page, pageSize) => {
-            handlePagination(page, pageSize);
-          },
-        }}
-      />
-    </div>
+      <div className={styles["table-user"]}>
+        <Button
+          className={styles["button-add-new"]}
+          icon={<PlusOutlined />}
+          onClick={handleOpenAddModal}
+        >
+          Thêm mới
+        </Button>
+        <TableCustom
+          columns={columns}
+          dataSource={categoryData}
+          loading={loading}
+          pagination={{
+            current: filter.page,
+            pageSize: filter.pageSize,
+            showSizeChanger: false,
+            total: totalDocs,
+            onChange: (page, pageSize) => {
+              handlePagination(page, pageSize);
+            },
+          }}
+        />
+      </div>
     </>
   );
 }

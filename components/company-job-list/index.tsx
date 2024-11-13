@@ -2,20 +2,31 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import TableCustom from "../tableCustom";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
 import HeaderDateRange from "../date-range";
-import { Button, Col, notification, Row } from "antd";
+import { Button, Col, DatePicker, notification, Row, Tag } from "antd";
 import { DeleteFilled, PlusSquareOutlined } from "@ant-design/icons";
 import styles from "./styles.module.scss";
 import CompanyService from "@/services/companyService";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import JobService from "@/services/jobService";
+import { IJobDetail } from "@/interfaces/IJobDetail";
+import { ColumnsType } from "antd/lib/table";
+import { JOB_LEVEL } from "@/enum/jobLevel";
+import { CITY } from "@/constants/city";
+import { IJobFilter } from "@/interfaces/IJobFilter";
+import { debounce } from "lodash";
 
 export default function CompanyJobTable() {
   const [loading, setLoading] = useState(false);
-  const [job, setJob] = useState([]);
-  const [pagination, setPagination] = useState({
+  const [job, setJob] = useState<IJobDetail[]>([]);
+  const [filter, setFilter] = useState<IJobFilter>({
     page: 1,
-    limit: 10,
+    pageSize: 10,
+    jobTitle: "",
+    dateCreateFrom: undefined,
+    dateCreateTo: undefined,
+    endDateFrom: undefined,
+    endDateTo: undefined,
   });
   const [total, setTotal] = useState<number>();
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
@@ -25,8 +36,7 @@ export default function CompanyJobTable() {
       setLoading(true);
       const res = await CompanyService.getCompanyJob(
         localStorage.getItem("id") as string,
-        pagination.page,
-        pagination.limit
+        filter
       );
       setJob(res.docs);
       setTotal(res.totalDocs);
@@ -35,8 +45,8 @@ export default function CompanyJobTable() {
     } finally {
       setLoading(false);
     }
-  }, [setLoading, setJob, setTotal, pagination]);
-  
+  }, [setLoading, setJob, setTotal, filter]);
+
   const handleDelete = useCallback(async () => {
     try {
       setLoading(true);
@@ -51,20 +61,50 @@ export default function CompanyJobTable() {
 
   useEffect(() => {
     fetchCompanyJob();
-  }, [fetchCompanyJob, pagination]);
+  }, [fetchCompanyJob, filter]);
 
   const handlePagination = useCallback(
     (currentPage: number) => {
-      setPagination((prev) => ({
+      setFilter((prev) => ({
         ...prev,
         page: currentPage,
       }));
     },
-    [setPagination]
+    [setFilter]
+  );
+
+  const debounceFunction = useCallback(
+    (field: keyof IJobDetail, value: string) => {
+      setFilter((prev) => ({
+        ...prev,
+        page: 1,
+        [field]: value,
+      }));
+    },
+    []
+  );
+
+  const handleInputSearch = useCallback(
+    debounce((field, value) => {
+      debounceFunction(field, value);
+    }, 400),
+    []
+  );
+
+  const handleInputDate = useCallback(
+    (field: [string, string], dateString: [string, string]) => {
+      const [start, end] = field;
+      setFilter((prev) => ({
+        ...prev,
+        [start]: dateString[0],
+        [end]: dateString[1],
+      }));
+    },
+    []
   );
 
   const router = useRouter();
-  const columns = useMemo(
+  const columns: ColumnsType = useMemo(
     () => [
       {
         title: (
@@ -72,25 +112,33 @@ export default function CompanyJobTable() {
             <div>Tiêu đề</div>
             <HeaderSearchComponent
               placeholder="Tiêu đề"
-              onChange={(e) => console.log(e.target.value)}
+              onChange={(e) => handleInputSearch("jobTitle", e.target.value)}
             />
           </>
         ),
         dataIndex: "jobTitle",
         key: "jobID",
         width: "16em",
-        render: (_: string, record: string) => (
+        render: (_: string, record: IJobDetail) => (
           <Link href={`/company/jobs/${record._id}/edit`}>
             {record.jobTitle}{" "}
           </Link>
         ),
-        fixed: "left",
       },
       {
         title: (
           <>
             <div>Ngày tạo</div>
-            <HeaderDateRange />
+            <DatePicker.RangePicker
+              placeholder={["S", "E"]}
+              allowClear
+              onChange={(dates, dateStrings: [string, string]) => {
+                handleInputDate(
+                  ["dateCreateFrom", "dateCreateTo"],
+                  [dateStrings[0], dateStrings[1]]
+                );
+              }}
+            />
           </>
         ),
         dataIndex: "createAt",
@@ -103,7 +151,16 @@ export default function CompanyJobTable() {
         title: (
           <>
             <div>Ngày hết hạn</div>
-            <HeaderDateRange />
+            <DatePicker.RangePicker
+              placeholder={["S", "E"]}
+              allowClear
+              onChange={(dates, dateStrings: [string, string]) => {
+                handleInputDate(
+                  ["endDateFrom", "endDateTo"],
+                  [dateStrings[0], dateStrings[1]]
+                );
+              }}
+            />
           </>
         ),
         dataIndex: "expireDate",
@@ -112,14 +169,36 @@ export default function CompanyJobTable() {
         render: (item: Date) => <span>{new Date(item).toLocaleString()}</span>,
       },
       {
+        title: "Tuyển gấp",
+        dataIndex: "isHot",
+        key: "isHot",
+        render: (item: boolean) => {
+          return item ? <Tag style={{ color: "red" }}>Tuyển gấp</Tag> : "N/A";
+        },
+      },
+      {
         title: "Kinh nghiệm",
         dataIndex: "jobLevel",
         key: "jobLevel",
+        render: (item: keyof typeof JOB_LEVEL) => {
+          return <Tag style={{ color: "green" }}>{JOB_LEVEL[item]}</Tag>;
+        },
       },
       {
         title: "Địa điểm làm việc",
         dataIndex: "workingLocation",
         key: "workingLocation",
+        render: (item: Array<keyof typeof CITY>) => (
+          <>
+            {item?.map((i) => (
+              <div>
+                <Tag key={i} style={{ color: "green" }}>
+                  {CITY[i]}
+                </Tag>
+              </div>
+            ))}
+          </>
+        ),
       },
       {
         title: "Yêu cầu",
@@ -135,37 +214,29 @@ export default function CompanyJobTable() {
         ),
       },
       {
-        title: "Mô tả",
-        dataIndex: "jobDescription",
-        key: "jobDescription",
-        render: (item: string) => (
-          <div
-            dangerouslySetInnerHTML={{ __html: item }}
-            className={styles["text-column"]}
-          />
-        ),
-      },
-      {
-        title: "Tuyển gấp",
-        dataIndex: "isHot",
-        key: "isHot",
-      },
-      {
         title: "Lương thấp nhất",
         dataIndex: "jobSalaryMin",
         key: "jobSalaryMin",
+        align: "center",
+        render: (item: number) => {
+          return <Tag style={{ color: "green" }}>{item} triệu</Tag>;
+        },
       },
       {
         title: "Lương cao nhất",
         dataIndex: "jobSalaryMax",
+        align: "center",
         key: "jobSalaryMax",
+        render: (item: number) => {
+          return <Tag style={{ color: "green" }}>{item} triệu</Tag>;
+        },
       },
     ],
     []
   );
 
   return (
-    <>
+    <Col className={styles["table-manager"]}>
       <Row className={styles["add-row"]} gutter={[16, 16]}>
         {selectedRowKeys.length > 0 && (
           <Col xs={24} sm={12} md={12} lg={12} xl={12}>
@@ -198,14 +269,14 @@ export default function CompanyJobTable() {
         </Col>
       </Row>
       <TableCustom
-        scroll={{ x: "max-content" }}
+        scroll={{ x: "max-content", y: 400 }}
         bordered
         columns={columns}
         dataSource={job}
         loading={loading}
         pagination={{
-          current: pagination.page,
-          pageSize: pagination.limit,
+          current: filter.page,
+          pageSize: filter.pageSize,
           total: total,
           onChange: (page) => {
             handlePagination(page);
@@ -214,12 +285,11 @@ export default function CompanyJobTable() {
         rowKey="_id"
         rowSelection={{
           selectedRowKeys,
-          onChange: (newSelectedRowKeys: React.Key[]) => {
+          onChange: (newSelectedRowKeys: any) => {
             setSelectedRowKeys(newSelectedRowKeys);
           },
         }}
       />
-      ;
-    </>
+    </Col>
   );
 }

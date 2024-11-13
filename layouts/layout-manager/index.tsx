@@ -1,4 +1,4 @@
-import { Button, Card, Dropdown, Grid, Layout, Menu } from "antd";
+import { Button, Card, Dropdown, Grid, Layout, Menu, Typography } from "antd";
 import { ReactNode, useCallback, useEffect, useMemo, useState } from "react";
 import styles from "./style.module.scss";
 import {
@@ -12,6 +12,7 @@ import { logout } from "@/redux/slices/authSlice";
 import { Header } from "antd/lib/layout/layout";
 import { MenuProps } from "antd/lib";
 import { jwtDecode } from "jwt-decode";
+import Head from "next/head";
 
 const { Content, Sider } = Layout;
 const { useBreakpoint } = Grid;
@@ -23,11 +24,16 @@ interface MenuItem {
 }
 
 interface IProps {
+  title: string;
   menu?: MenuItem[];
   children: ReactNode;
 }
 
-export default function LayoutManager({ menu, children }: Readonly<IProps>) {
+export default function LayoutManager({
+  menu,
+  children,
+  title,
+}: Readonly<IProps>) {
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
@@ -73,7 +79,11 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
   ];
 
   return (
-    <Layout style={{ minHeight: "100vh" }} hasSider>
+    <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider>
+      <Head>
+        <title>{`${title} | Job Sonar `}</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      </Head>
       {screens.md ? (
         <Sider
           width={250}
@@ -139,12 +149,15 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
         {isCompany && (
           <Header
             style={{
-              height: "10%",
+              height: "64px",
               background: "#fff",
               padding: 0,
               marginBottom: "10px",
               borderRadius: "5px",
               boxShadow: "0 2px 8px rgba(0, 21, 41, 0.1)",
+              position: "sticky",
+              top: 0,
+              zIndex: 1000,
             }}
           >
             <div
@@ -152,19 +165,23 @@ export default function LayoutManager({ menu, children }: Readonly<IProps>) {
                 padding: "20px",
                 display: "flex",
                 alignItems: "center",
-                height: "64px",
+                height: "100%",
               }}
             >
-              <h2 style={{ margin: 0 }}>Quản lý tuyển dụng</h2>
+              {screens.md ? (
+                <Typography.Title level={4} style={{ margin: 0 }}>
+                  {title}
+                </Typography.Title>
+              ) : (
+                ""
+              )}
               <Dropdown placement="bottomRight" menu={{ items }}>
                 <Button style={{ marginLeft: "auto" }}>{email}</Button>
               </Dropdown>
             </div>
           </Header>
         )}
-        <Card className={styles["content-wrapper"]}>
-          <Content className={styles["content"]}>{children}</Content>
-        </Card>
+        <Content className={styles["content"]}>{children}</Content>
       </Layout>
     </Layout>
   );

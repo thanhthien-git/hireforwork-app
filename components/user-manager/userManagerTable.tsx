@@ -32,6 +32,7 @@ export default function ManagerUserTable() {
     (field: keyof IUserFilter, value: string) => {
       setFilter((prev) => ({
         ...prev,
+        page:1,
         [field]: value,
       }));
     },

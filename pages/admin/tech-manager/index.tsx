@@ -3,7 +3,7 @@ import LayoutAdmin from "@/layouts/layout-admin";
 
 export default function TechnologyManager() {
     return (
-        <LayoutAdmin title="Technology Manager">
+        <LayoutAdmin title="Kỹ năng">
             <TechnologyManagerTable/>
         </LayoutAdmin>
     )

@@ -1,28 +1,38 @@
-import { Card, Col, Row } from "antd";
-import logo from "@/public/assets/logo.svg";
-import Image from "next/image";
+import { Button, Card, Col, Row } from "antd";
+import logo from "@/public/assets/logo-gradient.png";
 import styles from "./style.module.scss";
+import Image from "next/image";
 
-export default function CardNewestUser() {
+interface ICard {
+  _id: string;
+  careerPicture: string;
+  careerEmail: string;
+}
+
+export default function CardNewestUser(career?: Readonly<ICard>) {
   return (
-    <Card style={{marginBottom: 5}}>
-      <Row>
-        <Col span={4}>
-          <div className={styles["avatar"]}>
+    <Card className={styles.card} hoverable>
+      <Row align="middle">
+        <Col span={4} className={styles["avatar-container"]}>
+          <div className={styles["avatar-wrapper"]}>
             <Image
-              src={logo}
+              src={career?.careerPicture || logo}
+              height={75}
+              width={75}
               alt="avatar"
-              layout="responsive"
-              width={64}
-              height={64}
-              className="image"
+              className={styles.avatar}
             />
           </div>
         </Col>
-        <Col span={12} >
-          <Row className={styles["title-username"]}>name</Row>
+        <Col span={12}>
           <Row>
-            <i style={{fontSize: 12}}>date create</i>
+            <Button
+              href={`/admin/user-manager/${career?._id}`}
+              type="link"
+              className={styles["title-username"]}
+            >
+              {career?.careerEmail}
+            </Button>
           </Row>
         </Col>
       </Row>
