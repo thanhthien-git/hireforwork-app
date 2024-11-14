@@ -24,6 +24,8 @@ const endpoint = {
     registerCompany: "/companies/register",
     random: "/companies/random",
     changeApplication: "companies/change-application-status",
+    ResetPassword: "/reset-password-company",
+    RequestResetPassword: "/request-password-reset-company",
   },
   job: {
     base: "/jobs",
