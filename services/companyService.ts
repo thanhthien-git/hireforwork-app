@@ -8,6 +8,7 @@ import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { RESUME_STATUS } from "@/enum/sending";
 import queryString from "query-string";
 import { IJobFilter } from "@/interfaces/IJobFilter";
+import { IRequestResetPassword, IResetPassword } from "@/interfaces/IResetPassword";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -157,6 +158,22 @@ export default class CompanyService {
       });
       return res.data;
     } catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+  static async requestPasswordResetCompany(data:IRequestResetPassword){
+    try{
+      const res = await api.post(endpoint.company.RequestResetPassword,data)
+      return res.data;
+    }  catch (err) {
+      throw new Error((err as Error).message);
+    }
+  }
+  static async resetPasswordCompany(data:IResetPassword){
+    try{
+      const res = await api.post(endpoint.company.ResetPassword,data)
+      return res.data;
+    }  catch (err) {
       throw new Error((err as Error).message);
     }
   }
