@@ -5,14 +5,14 @@ import CompanyCard from "@/components/commons/user/item-companydetail/CompanyCar
 import CompanyDetails from "@/components/commons/user/item-companydetail/CompanyDetails";
 import JobList from "@/components/commons/user/item-companydetail/JobList";
 import { Card, notification, Skeleton } from "antd";
-import CompanyService, { fetchCompaniesByID } from "@/services/companyService";
+import CompanyService from "@/services/companyService";
 import { useRouter } from "next/router";
-import { ICompanyDetails } from "@/interfaces/ICompanyDetail";
+import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 
 export default function CompanyProfile() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
-  const [companyDetail, setCompanyDetail] = useState<ICompanyDetails>({
+  const [companyDetail, setCompanyDetail] = useState<ICompanyDetail>({
     companyName: "",
     companyImage: {
       imageURL: "",
@@ -65,18 +65,11 @@ export default function CompanyProfile() {
   }, [router.query.id]);
 
   return (
-    <LayoutClient title="Company Details">
+    <LayoutClient title="Chi tiết công ty">
+      <Skeleton loading={loading} avatar active>
+        <CompanyCard company={companyDetail} />
+      </Skeleton>
       <div className={styles.container}>
-        <Skeleton loading={loading} avatar active>
-          <CompanyCard
-            companyName={companyDetail.companyName}
-            avatar={companyDetail.companyImage.imageURL}
-            coverImage={companyDetail.companyImage.coverURL}
-            website={companyDetail.contact.companyWebsite}
-            employeeCount={companyDetail.employeeSize}
-          />
-        </Skeleton>
-
         <Skeleton loading={loading} active paragraph={{ rows: 4 }}>
           <CompanyDetails
             description={companyDetail.description}
@@ -87,10 +80,7 @@ export default function CompanyProfile() {
 
         <Skeleton loading={loading} active>
           <Card className={styles.recruitmentCard}>
-            <JobList
-              companyName={companyDetail.companyName}
-              companyImage={companyDetail.companyImage.imageURL}
-            />
+            <JobList />
           </Card>
         </Skeleton>
       </div>

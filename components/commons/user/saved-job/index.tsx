@@ -2,11 +2,9 @@ import React, { useEffect, useState, useCallback } from "react";
 import { Col, Pagination, Row, Spin, Typography, notification } from "antd";
 import SupJobPostCard from "../item-jobsaved";
 import UserService from "@/services/userService";
-import { Job } from "@/interfaces/IJobPostCard";
 import { useRouter } from "next/router";
 import styles from "./style.module.scss";
 import { RETRY_LATER } from "@/constants/message";
-import logo from "@/public/assets/logo.svg";
 
 const SavedJobList: React.FC = () => {
   const [savedJobs, setSavedJobs] = useState<Job[]>([]);
@@ -81,7 +79,6 @@ const SavedJobList: React.FC = () => {
                 salary={`${job.jobSalaryMin} - ${job.jobSalaryMax}`}
                 location={job.workingLocation}
                 deadline={new Date(job.expireDate).toLocaleDateString()}
-                companyImageUrl={logo}
                 onRemove={handleRemoveSavedJob}
                 onClick={handleJobClick}
               />

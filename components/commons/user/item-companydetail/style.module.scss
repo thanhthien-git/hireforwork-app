@@ -1,3 +1,4 @@
+@import "/styles/color.scss";
 .container {
   padding: 20px 10px;
   max-width: 1200px;
@@ -5,20 +6,20 @@
 }
 
 .companyCard {
-  border-radius: 8px;
-  padding: 0;
-  position: relative;
-  overflow: hidden;
+  background: $main-color-gradient;
+  width: 100%;
+  max-height: 400px;
 }
 
 .coverImageContainer {
-  width: 100%;
-  height: 220px;
+  height: 150px;
+  width: 150px;
+  border-radius: 8px;
+  background-color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  overflow: hidden;
-  border-radius: 8px;
+  margin-right: 20px;
 }
 
 .coverImage {
@@ -38,50 +39,12 @@
 }
 
 .companyTitle {
-  margin-bottom: 0;
-}
-
-.checkIcon {
-  color: #1890ff;
-  margin-left: 8px;
-}
-
-.followButtonContainer {
-  text-align: right;
+  margin-bottom: 0 !important;
+  color: white !important;
 }
 
 .companyDetailsCard {
   margin-top: 20px;
-}
-
-.recruitmentCard {
-  margin-top: 20px;
-  border-radius: 8px;
-}
-
-.recruitmentTitleContainer {
-  margin-bottom: 20px;
-}
-
-.searchRow {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.fullWidthSelect {
-  width: 100%;
-  min-height: 50px;
-}
-
-.listItemMeta {
-  display: flex;
-  align-items: center !important;
-}
-
-.jobAvatar {
-  align-self: center;
-  border-radius: 8px;
 }
 
 .pagination {
@@ -92,7 +55,7 @@
 }
 .button {
   color: #fff;
-  background: #5422c9;
+  background: $main-color-gradient;
 }
 
 .card {
@@ -105,6 +68,40 @@
 .card:hover {
   transform: translateY(-5px);
 }
-.search-box {
-  min-height: 50px;
+
+.option-button {
+  height: 50px;
+  width: 150px;
+}
+
+.company-detail-header {
+  width: 100%;
+
+  @media (min-width: 992px) {
+    padding: 0 100px;
+  }
+
+  @media (max-width: 991px) {
+    padding: 0;
+  }
+}
+
+.company-rate {
+  background-color: #ffffff0d;
+  height: 75px;
+  padding: 10px;
+  display: flex;
+  border-radius: 8px;
+}
+
+.company-rate-col {
+  .companyTitle {
+    font-size: 16px;
+  }
+
+  @media (max-width: 767px) {
+    .companyTitle {
+      font-size: 12px;
+    }
+  }
 }

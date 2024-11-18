@@ -1,5 +1,4 @@
-import { Col, notification, Row, Skeleton } from "antd";
-import MuiImageCustom from "../MuiImageCustom";
+import { Col, notification, Row } from "antd";
 import MainJobPostCard from "./mainjobpost";
 import styles from "./style.module.scss";
 import { useCallback, useEffect, useState } from "react";
@@ -75,7 +74,7 @@ export default function SearchResultPage() {
   const fetchCategory = useCallback(async () => {
     try {
       dispatch(setLoading(true));
-      const res = await CategoryService.get({page: 1, pageSize: 999});
+      const res = await CategoryService.get({ page: 1, pageSize: 999 });
       setCategory(res?.docs);
     } catch {
       console.log(`some thing wrong`);

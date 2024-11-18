@@ -6,7 +6,9 @@
   align-items: center;
   background: $main-color-gradient;
   color: white;
+  border-bottom: 1px solid #ffffff1a;
   min-height: 100px;
+
   .nav {
     ul {
       display: flex;
@@ -29,15 +31,27 @@
     font-size: 14px;
     margin-left: 5px;
     font-weight: bold;
+    height: 50px;
     background-color: transparent;
     color: white;
   }
 }
+
 .hamburgerMenu {
   display: none;
 }
 
 @media (max-width: 768px) {
+  .header {
+    position: fixed;         // Fixed positioning
+    top: 0;                  // Align to the top of the page
+    left: 0;
+    right: 0;
+    z-index: 1000;           // Ensure it's on top of other content
+    background: $main-color-gradient;
+    padding: 10px 20px;      // Adjust padding if needed
+  }
+
   .nav,
   .styled-button {
     display: none;
@@ -46,6 +60,7 @@
   .drawer {
     width: 50%;
   }
+
   .ant-drawer-content {
     width: 100%;
   }
@@ -62,7 +77,6 @@
       margin-bottom: 20px;
       a {
         text-decoration: none;
-        color: #3c1990;
       }
     }
   }
@@ -75,10 +89,10 @@
       font-weight: bold;
     }
   }
+
 }
 
 .custom-button {
-  color: #3c1990;
   font-size: 13px;
   font-weight: bold;
 }

@@ -4,11 +4,13 @@ import TableCustom from "../tableCustom";
 import { IJobFilter } from "@/interfaces/IJobFilter";
 import JobService from "@/services/jobService";
 import { ColumnsType } from "antd/lib/table";
-import { Button, Tag } from "antd";
+import { DatePicker, Tag } from "antd";
 import { debounce } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
 import Link from "next/link";
+import { JOB_LEVEL } from "@/enum/jobLevel";
+import { CITY } from "@/constants/city";
 
 export default function JobManagerTable() {
   const [jobDocs, setJobDocs] = useState();
@@ -44,6 +46,18 @@ export default function JobManagerTable() {
     []
   );
 
+  const handleInputDate = useCallback(
+    (field: [string, string], dateString: [string, string]) => {
+      const [start, end] = field;
+      setFilter((prev) => ({
+        ...prev,
+        [start]: dateString[0],
+        [end]: dateString[1],
+      }));
+    },
+    []
+  );
+
   const handlePagination = useCallback((page: number, pageSize: number) => {
     setFilter((prev) => ({
       ...prev,
@@ -68,11 +82,9 @@ export default function JobManagerTable() {
         key: "jobTitle",
         render: (_, record) => {
           return (
-            <>
-              <Link href={`/admin/jobs-manager/${record._id}`}>
-                {record.jobTitle}
-              </Link>
-            </>
+            <Link href={`/admin/jobs-manager/${record._id}`}>
+              {record.jobTitle}
+            </Link>
           );
         },
       },
@@ -89,43 +101,111 @@ export default function JobManagerTable() {
         dataIndex: "companyName",
         key: "companyName",
       },
-
       {
-        title: "Ngày tạo",
+        title: (
+          <>
+            <div>Ngày tạo</div>
+            <DatePicker.RangePicker
+              placeholder={["S", "E"]}
+              allowClear
+              onChange={(dates, dateStrings: [string, string]) => {
+                handleInputDate(
+                  ["dateCreateFrom", "dateCreateTo"],
+                  [dateStrings[0], dateStrings[1]]
+                );
+              }}
+            />
+          </>
+        ),
         dataIndex: "createAt",
         key: "createAt",
-        render: (item) => <span>{new Date(item).toLocaleString()}</span>,
+        width: "12em",
+        render: (item: Date) => <span>{new Date(item).toLocaleString()}</span>,
       },
 
       {
-        title: "Ngày hết hạn",
+        title: (
+          <>
+            <div>Ngày hết hạn</div>
+            <DatePicker.RangePicker
+              placeholder={["S", "E"]}
+              allowClear
+              onChange={(dates, dateStrings: [string, string]) => {
+                handleInputDate(
+                  ["endDateFrom", "endDateTo"],
+                  [dateStrings[0], dateStrings[1]]
+                );
+              }}
+            />
+          </>
+        ),
         dataIndex: "expireDate",
         key: "expireDate",
-        render: (item) => <span>{new Date(item).toLocaleString()}</span>,
+        width: "12em",
+        render: (item: Date) => <span>{new Date(item).toLocaleString()}</span>,
       },
       {
-        title: "Kỹ năng",
-        dataIndex: "jobRequirement",
-        key: "jobRequirement",
-        render: (item: string[]) => {
-          return item.map((i: string) => {
-            return (
-              <div>
-                <Tag style={{ color: "green" }}>{i}</Tag>
-              </div>
-            );
-          });
+        title: "Tuyển gấp",
+        dataIndex: "isHot",
+        key: "isHot",
+        render: (item: boolean) => {
+          return item ? <Tag style={{ color: "red" }}>Tuyển gấp</Tag> : "N/A";
         },
       },
       {
-        title: "Lương tối thiểu",
-        dataIndex: "jobSalaryMin",
-        key: "jobSalaryMin",
+        title: "Kinh nghiệm",
+        dataIndex: "jobLevel",
+        key: "jobLevel",
+        render: (item: keyof typeof JOB_LEVEL) => {
+          return <Tag style={{ color: "green" }}>{JOB_LEVEL[item]}</Tag>;
+        },
       },
       {
-        title: "Lương tối đa",
+        title: "Địa điểm làm việc",
+        dataIndex: "workingLocation",
+        key: "workingLocation",
+        render: (item: Array<keyof typeof CITY>) => (
+          <>
+            {item?.map((i) => (
+              <div>
+                <Tag key={i} style={{ color: "green" }}>
+                  {CITY[i]}
+                </Tag>
+              </div>
+            ))}
+          </>
+        ),
+      },
+      {
+        title: "Yêu cầu",
+        dataIndex: "jobRequirement",
+        key: "jobRequirement",
+        width: "10rem",
+        render: (item: string[]) => (
+          <div>
+            {item.map((i, _) => (
+              <div>{i}</div>
+            ))}
+          </div>
+        ),
+      },
+      {
+        title: "Lương thấp nhất",
+        dataIndex: "jobSalaryMin",
+        key: "jobSalaryMin",
+        align: "center",
+        render: (item: number) => {
+          return <Tag style={{ color: "green" }}>{item} triệu</Tag>;
+        },
+      },
+      {
+        title: "Lương cao nhất",
         dataIndex: "jobSalaryMax",
+        align: "center",
         key: "jobSalaryMax",
+        render: (item: number) => {
+          return <Tag style={{ color: "green" }}>{item} triệu</Tag>;
+        },
       },
     ],
     []
@@ -150,6 +230,7 @@ export default function JobManagerTable() {
 
   return (
     <TableCustom
+      scroll={{ x: "max-content", y: 400 }}
       columns={columns}
       dataSource={jobDocs}
       loading={loading}

@@ -70,7 +70,7 @@ export default function UserDetailResume({
 
   const fetchTechnologies = useCallback(async () => {
     try {
-      const res = await TechService.get(1, 999);
+      const res = await TechService.get({ page: 1, pageSize: 999 });
       setTech(
         res?.docs?.map((item: ITech) => ({
           id: item._id,

@@ -23,6 +23,7 @@ import { IJobDetail } from "@/interfaces/IJobDetail";
 import dayjs from "dayjs";
 import { WORK_TYPE } from "@/enum/workType";
 import { CITY } from "@/constants/city";
+import { verifyToken } from "@/utils/jwt";
 
 export default function JobForm() {
   const [filteredSkills, setFilteredSkills] = useState([]);
@@ -61,7 +62,9 @@ export default function JobForm() {
         recruitmentCount: Number(getValues("recruitmentCount")),
         workingLocation: getValues("workingLocation"),
         isHot: Boolean(getValues("isHot")),
-        companyID: companyID,
+        companyID:
+          companyID ||
+          verifyToken(localStorage?.getItem("token") as string)?.sub,
       };
 
       if (Number(formData.jobSalaryMin) >= Number(formData.jobSalaryMax)) {
@@ -88,7 +91,7 @@ export default function JobForm() {
     } finally {
       setLoading(false);
     }
-  }, [setLoading, getValues, notification, isHot, companyID]);
+  }, [setLoading, getValues, notification, isHot, companyID, verifyToken]);
 
   const fetchJobDetail = useCallback(
     async (id: string) => {

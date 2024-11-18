@@ -6,7 +6,7 @@ import {
   CalendarOutlined,
 } from "@ant-design/icons";
 import styles from "./style.module.scss";
-import logo from '@/public/assets/logo.svg'
+import logo from "@/public/assets/logo-gradient.png";
 
 export interface IJobPostCard {
   id: string;
@@ -23,11 +23,10 @@ export interface IJobPostCard {
 export default function JobPostCard({
   id,
   title,
-  company,
   salary,
   location,
+  companyImageUrl,
   deadline,
-  companyImageUrl = "/default-image.png",
   onRemove,
   onClick,
 }: Readonly<IJobPostCard>) {
@@ -38,48 +37,33 @@ export default function JobPostCard({
       className={styles["job-card"]}
       onClick={() => onClick(id)}
     >
-      <Row gutter={16} align="middle">
-        <Col className={styles["company-logo"]}>
-          <Image
-            src={logo}
-            alt="Company Logo"
-            width={40}
-            height={40}
-            preview={false}
-          />
-        </Col>
-        <Col flex="auto">
-          <Typography.Title level={5} className={styles["job-title"]}>
-            {title}
-          </Typography.Title>
-          <Typography.Text className={styles["company-name"]}>
-            {company}
-          </Typography.Text>
-        </Col>
-      </Row>
-      <Button
-        className={styles["btn-unsave"]}
-        onClick={(e) => {
-          e.stopPropagation();
-          onRemove(id);
-        }}
-      >
-        Bỏ lưu
-      </Button>
-      <Row gutter={[16, 16]} className={styles["job-info"]}>
-        <Col className={styles["icon-text"]}>
+      <Col className={styles["job-info"]}>
+        <Row gutter={16} align="middle">
+          <Col flex="auto">
+            <Typography.Title level={5} className={styles["job-title"]}>
+              {title}
+            </Typography.Title>
+          </Col>
+        </Row>
+        <Row className={styles["icon-text"]}>
           <DollarOutlined />
           <Typography.Text>{salary} triệu</Typography.Text>
-        </Col>
-        <Col className={styles["icon-text"]}>
-          <EnvironmentOutlined />
-          <Typography.Text>{location}</Typography.Text>
-        </Col>
-        <Col className={styles["icon-text"]}>
+        </Row>
+        <Row className={styles["icon-text"]}>
           <CalendarOutlined />
           <Typography.Text>{deadline}</Typography.Text>
-        </Col>
-      </Row>
+        </Row>
+        <Row className={styles["icon-text"]}>
+          <Button
+            onClick={(e) => {
+              e.stopPropagation();
+              onRemove(id);
+            }}
+          >
+            Bỏ lưu
+          </Button>
+        </Row>
+      </Col>
     </Card>
   );
 }

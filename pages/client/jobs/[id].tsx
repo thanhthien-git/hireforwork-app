@@ -5,7 +5,7 @@ import JobPage from '../../../components/commons/user/item-jobdetails/job-detail
 
 const JobDetail: React.FC = () => {
   return (
-    <LayoutClient title="Job Detail">
+    <LayoutClient title="Chi tiết công việc">
       <div className={styles.container}>
         <JobPage/>
       </div>

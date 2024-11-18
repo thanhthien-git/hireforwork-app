@@ -23,7 +23,6 @@ export default function JobList({
   };
   const router = useRouter();
 
-
   return (
     <div>
       <Skeleton
@@ -40,10 +39,7 @@ export default function JobList({
         <Row gutter={[16, 16]}>
           {Array(jobList).length > 0
             ? jobList?.map((job) => (
-                <Col
-                  span={24}
-                  key={job._id}
-                >
+                <Col span={24} key={job._id}>
                   <JobPostCard job={job} />
                 </Col>
               ))

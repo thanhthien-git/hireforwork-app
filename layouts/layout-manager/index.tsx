@@ -13,6 +13,7 @@ import { Header } from "antd/lib/layout/layout";
 import { MenuProps } from "antd/lib";
 import { jwtDecode } from "jwt-decode";
 import Head from "next/head";
+import { verifyToken } from "@/utils/jwt";
 
 const { Content, Sider } = Layout;
 const { useBreakpoint } = Grid;
@@ -37,9 +38,17 @@ export default function LayoutManager({
   const [collapsed, setCollapsed] = useState<boolean>(false);
   const dispatch = useDispatch();
   const [openKeys, setOpenKeys] = useState<string[]>([]);
+  const [email, setEmail] = useState<string>();
   const defaultSelectedKeys = useMemo(() => {
     return ["/company"];
   }, []);
+
+  useEffect(() => {
+    if (localStorage?.getItem("token")) {
+      const data = verifyToken(String(localStorage?.getItem("token")));
+      setEmail(data?.username);
+    }
+  });
 
   const router = useRouter();
   const screens = useBreakpoint();
@@ -67,8 +76,6 @@ export default function LayoutManager({
 
   const isCompany = router.pathname.startsWith("/company");
 
-  const email = jwtDecode(localStorage?.getItem("token") as string)?.username;
-
   const items: MenuProps["items"] = [
     {
       key: "logout",
@@ -81,7 +88,7 @@ export default function LayoutManager({
   return (
     <Layout style={{ height: "100vh", overflow: "hidden" }} hasSider>
       <Head>
-        <title>{`${title} | Job Sonar `}</title>
+        <title>{`${title} | NHIEUViec `}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
       {screens.md ? (

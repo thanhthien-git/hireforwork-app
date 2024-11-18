@@ -1,7 +1,6 @@
-import { Badge, Card, Col, Row, Typography } from "antd";
+import { Badge, Card, Col, Image, Row, Typography } from "antd";
 import styles from "./style.module.scss";
-import logo from "@/public/assets/logo-gradient.svg";
-import Image from "next/image";
+import logo from "@/public/assets/logo-gradient.png";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { EnvironmentOutlined, ShareAltOutlined } from "@ant-design/icons";
 
@@ -18,7 +17,7 @@ export default function RandomCompany({ company }: Readonly<IProp>) {
             <Col>
               <Image
                 alt="logo"
-                src={company?.companyImage?.imageURL || logo}
+                src={company?.companyImage?.imageURL || logo.src}
                 className={styles["random-card-cover"]}
               />
             </Col>
@@ -37,7 +36,10 @@ export default function RandomCompany({ company }: Readonly<IProp>) {
             <Typography.Text>{company?.description && ""}</Typography.Text>
           </Row>
           <Row>
-            <Typography.Text><EnvironmentOutlined style={{color: "gray"}}/> {company?.typeOfCompany}</Typography.Text>
+            <Typography.Text>
+              <EnvironmentOutlined style={{ color: "gray" }} />{" "}
+              {company?.contact.companyAddress}
+            </Typography.Text>
           </Row>
         </Col>
       </Card>

@@ -1,12 +1,10 @@
 import {
   Button,
   Card,
-  Checkbox,
   Col,
   Form,
   Typography,
   Row,
-  Spin,
   Avatar,
   Space,
 } from "antd";

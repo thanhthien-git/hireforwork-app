@@ -1,53 +1,98 @@
-import { Card, Row, Col, Typography, Avatar } from 'antd';
-import { CheckCircleOutlined } from '@ant-design/icons';
-import styles from './style.module.scss';
+import { Row, Col, Typography, Avatar, Button, Rate } from "antd";
+import { EnvironmentOutlined, StarOutlined } from "@ant-design/icons";
+import styles from "./style.module.scss";
+import logo from "@/public/assets/logo-gradient.png";
+import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 
 const { Title, Text } = Typography;
 
 interface CompanyCardProps {
-  companyName: string;
-  avatar: string;
-  coverImage: string;
-  website: string;
-  employeeCount: number;
+  company: ICompanyDetail;
 }
 
-const CompanyCard: React.FC<CompanyCardProps> = ({
-  companyName,
-  avatar,
-  coverImage,
-  website,
-  employeeCount,
-}) => {
+export default function CompanyCard({ company }: Readonly<CompanyCardProps>) {
   return (
-    <Card hoverable className={styles.companyCard}>
-      <div className={styles.coverImageContainer}>
-        <img
-          src={coverImage}
-          alt="Company Cover"
-          className={styles.coverImage}
-        />
-      </div>
-      <div className={styles.companyInfo}>
-        <Row gutter={16} align="middle">
-          <Col xs={6} sm={4} md={2} lg={2}>
-            <Avatar
-              size={80}
-              src={avatar}
-              className={styles.companyAvatar}
-            />
-          </Col>
-          <Col xs={18} sm={20} md={22} lg={22}>
-            <Title level={5} className={styles.companyTitle}>
-              {companyName}{' '}
-              <CheckCircleOutlined className={styles.checkIcon} />
+    <Row className={styles.companyCard} align={"middle"}>
+      <Row
+        className={styles["company-detail-header"]}
+        justify={"space-between"}
+      >
+        <Col className={styles["coverImageContainer"]} xl={24}>
+          <Avatar
+            size={125}
+            src={company.companyImage?.imageURL || logo.src}
+            className={styles.companyAvatar}
+          />
+        </Col>
+        <Col
+          style={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+          }}
+        >
+          <Row>
+            <Title level={2} className={styles.companyTitle}>
+              {company.companyName}
             </Title>
-            <Text type="secondary">{website} • {employeeCount} nhân viên</Text>
-          </Col>
-        </Row>
-      </div>
-    </Card>
+          </Row>
+          <Row>
+            <Text style={{ color: "gray" }}>
+              <EnvironmentOutlined /> {company.contact.companyAddress}
+            </Text>
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col>
+              <Button type="primary" className={styles["option-button"]}>
+                Viết đánh giá
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                type="primary"
+                className={styles["option-button"]}
+                style={{ backgroundColor: "#fff", color: "#ed1b2f" }}
+              >
+                Theo dõi
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+        <Col className={styles["company-rate"]}>
+          <Row gutter={[16, 16]} align={"middle"} justify={"center"}>
+            <Col className={styles["company-rate-col"]}>
+              <Title className={styles.companyTitle} level={2}>
+                0.0
+              </Title>
+            </Col>
+            <Col className={styles["company-rate-col"]}>
+              <Row>
+                <Rate
+                  style={{ color: "white" }}
+                  character={<StarOutlined style={{ color: "white" }} />}
+                />
+              </Row>
+              <Row>
+                <Text className={styles.companyTitle}>0 đánh giá</Text>
+              </Row>
+            </Col>
+            <Col className={styles["company-rate-col"]}>
+              <Row>
+                <Col>
+                  <Title className={styles.companyTitle} level={2}>
+                    0%
+                  </Title>{" "}
+                </Col>
+                <Col>
+                  <Text className={styles.companyTitle} style={{wordBreak: "break-word"}}>
+                    Khuyến khích làm việc tại đây
+                  </Text>{" "}
+                </Col>
+              </Row>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </Row>
   );
-};
-
-export default CompanyCard;
+}
