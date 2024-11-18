@@ -53,9 +53,9 @@ export default function CompanyManagerTable() {
       {
         title: (
           <>
-            <div>Company's name</div>
+            <div>Tên công ty</div>
             <HeaderSearchComponent
-              placeholder="Company's name"
+              placeholder="Tên công ty"
               onChange={(e) => handleInputSearch("companyName", e.target.value)}
             />
           </>
@@ -66,9 +66,9 @@ export default function CompanyManagerTable() {
       {
         title: (
           <>
-            <div>Company's email</div>
+            <div>Email</div>
             <HeaderSearchComponent
-              placeholder="Company's email"
+              placeholder="Email"
               onChange={(e) =>
                 handleInputSearch("companyEmail", e.target.value)
               }
@@ -81,7 +81,7 @@ export default function CompanyManagerTable() {
       {
         title: (
           <>
-            <div>Company's Phone</div>
+            <div>Số điện thoại</div>
             <HeaderSearchComponent
               placeholder="Company's Phone"
               onChange={(e) =>
@@ -94,13 +94,13 @@ export default function CompanyManagerTable() {
         key: "companyPhone",
       },
       {
-        title: "Date created",
+        title: "Ngày tạo",
         dataIndex: "createAt",
         key: "createAt",
         render: (item: Date) => <span>{new Date(item).toLocaleString()}</span>,
       },
       {
-        title: "Type of company",
+        title: "Lĩnh vực",
         dataIndex: "typeOfCompany",
         key: "typeOfCompany",
         render: (item: string[]) => (
@@ -115,13 +115,13 @@ export default function CompanyManagerTable() {
         ),
       },
       {
-        title: "Action",
+        title: "",
         width: "7em",
         render: (_: any, record: any) => (
           <>
             <Popconfirm
-              title="Delete"
-              description="Are you sure to delete this company?"
+              title="Xóa"
+              description="Bạn có muốn xóa?"
               onConfirm={() => handleDelete(record._id)}
               okText="Yes"
               cancelText="No"
@@ -196,7 +196,7 @@ export default function CompanyManagerTable() {
         icon={<PlusOutlined />}
         onClick={()=> router.push('/admin/companies-manager/create')}
       >
-        Add new
+        Thêm mới
       </Button>
       <TableCustom
         columns={columns}

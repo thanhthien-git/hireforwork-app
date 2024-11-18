@@ -40,17 +40,20 @@ export default class AuthenticationService {
       const response = await api.post(endpoint.users.registerCareer, user);
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to register');
+      throw new Error(error.response?.data?.message || "Failed to register");
     }
   }
 
   static async registerCompany(company: IRegisterCompany) {
     try {
       console.log("Company Data:", company);
-      const response = await api.post(endpoint.company.registerCompany, company);
+      const response = await api.post(
+        endpoint.company.registerCompany,
+        company
+      );
       return response.data;
     } catch (error: any) {
-      throw new Error(error.response?.data?.message || 'Failed to register');
+      throw new Error(error.response?.data?.message || "Failed to register");
     }
   }
 }

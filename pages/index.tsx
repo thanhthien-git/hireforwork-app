@@ -5,9 +5,7 @@ const HomePage = () => {
   return (
     <div>
       <LayoutClient title="Trang chủ">
-        <div style={{ margin: "50px 0" }}>
-          <HomePageComponent />
-        </div>
+        <HomePageComponent />
       </LayoutClient>
     </div>
   );

@@ -11,27 +11,16 @@ import CompanyCard from "./company-card";
 
 export default function TopCompany() {
   const [current, setCurrent] = useState(1);
-  const pageSize = 5;
+  const pageSize = 6;
   const [companyList, setCompanyList] = useState<ICompanyDetail[]>([]);
   const [loading, setLoading] = useState(false);
 
   const router = useRouter();
 
-  const handlePaginationChange = (page: number) => {
-    setCurrent(page);
-  };
-
   const paginatedCompanies = companyList.slice(
     (current - 1) * pageSize,
     current * pageSize
   );
-
-  const truncateDescription = (description: string, maxLength: number) => {
-    if (description.length > maxLength) {
-      return description.substring(0, maxLength) + "...";
-    }
-    return description;
-  };
 
   const fetchTopCompany = useCallback(async () => {
     try {
@@ -50,30 +39,27 @@ export default function TopCompany() {
   }, []);
 
   return (
-    <div className={styles["item-home-page"]}>
-      <Typography.Title level={2} style={{ textAlign: "center" }}>
+    <div className={styles["item-company"]}>
+      <Typography.Title
+        level={3}
+        style={{ textAlign: "center", marginBottom: 20 }}
+      >
         Nhà tuyển dụng nổi bật
       </Typography.Title>
-      <Row gutter={[16, 16]} justify="center">
+
+      <Row gutter={[16, 16]}>
         {loading ? (
           <Skeleton loading={loading} paragraph={{ rows: 10 }} />
         ) : (
           <>
             {paginatedCompanies.map((company) => (
-              <CompanyCard company={company} />
+              <Col key={company._id} xs={24} md={12} lg={8}>
+                <CompanyCard company={company} />
+              </Col>
             ))}
           </>
         )}
       </Row>
-      <Pagination
-        className={styles["homepage-pagination"]}
-        current={current}
-        total={companyList.length}
-        pageSize={pageSize}
-        onChange={handlePaginationChange}
-        showSizeChanger={false}
-        hideOnSinglePage
-      />
     </div>
   );
 }

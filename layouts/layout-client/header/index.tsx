@@ -115,16 +115,19 @@ export default function LayoutClientHeader() {
   return (
     <Header className={styles["header"]}>
       <Link href="/">
-        <Image src={logo} alt="Logo" style={{display:'flex', alignItems:'center'}} width={100} height={100} />
+        <Image
+          src={logo}
+          alt="Logo"
+          style={{ display: "flex", alignItems: "center" }}
+          width={100}
+          height={100}
+        />
       </Link>
 
       <nav className={styles.nav}>
         <ul>
           <li>
-            <Link href="/jobs">Việc Làm</Link>
-          </li>
-          <li>
-            <Link href="/companies">Công Ty</Link>
+            <Link href="/search">Việc Làm</Link>
           </li>
           <li>
             <Link href="/about">Về Chúng Tôi</Link>
@@ -169,9 +172,6 @@ export default function LayoutClientHeader() {
         <ul className={styles["mobileNav"]}>
           <li>
             <Link href="/jobs">Việc Làm</Link>
-          </li>
-          <li>
-            <Link href="/companies">Công Ty</Link>
           </li>
           <li>
             <Link href="/about">Về Chúng Tôi</Link>

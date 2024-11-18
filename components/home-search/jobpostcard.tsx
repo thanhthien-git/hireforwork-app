@@ -91,7 +91,11 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
 
           <Row>
             {job?.jobRequirement?.map((item) => (
-              <Tag key={item} color="#3c1990" style={{ marginTop: 10 }} onClick={() => handleClickTag(item)}>
+              <Tag
+                key={item}
+                className={styles["job-card-tag"]}
+                onClick={() => handleClickTag(item)}
+              >
                 {item}
               </Tag>
             ))}

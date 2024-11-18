@@ -9,17 +9,19 @@ interface IProps {
   title: string;
 }
 
-const { Content, Header, Footer } = Layout;
+const { Content } = Layout;
 
 export default function LayoutClient({ title, children }: Readonly<IProps>) {
   return (
     <Layout className={styles["layout"]}>
       <Head>
-        <title>{`${title} | Job Sonar `}</title>
+        <title>{`${title} | NHIEUViec `}</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </Head>
 
-      <LayoutClientHeader />
+      <div className={styles["layout-header"]}>
+        <LayoutClientHeader />
+      </div>
 
       <Content className={styles["content"]}>{children}</Content>
 

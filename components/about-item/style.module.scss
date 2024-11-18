@@ -1,139 +1,138 @@
 // AboutUs.module.scss
 .container {
-    padding: 60px;
-    background-color: #f9f9f9;
-  
-    .intro-section {
+  padding: 60px;
+  background-color: #f9f9f9;
+
+  .intro-section {
+    text-align: center;
+    margin-bottom: 50px;
+
+    .logo {
+      max-width: 350px;
+      margin-bottom: 20px;
+    }
+
+    .title {
+      font-size: 36px;
+      color: rgb(237, 27, 47);
+    }
+
+    .description {
+      font-size: 18px;
+      color: #666;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+  }
+
+  .values-section,
+  .team-section {
+    margin-top: 40px;
+
+    .section-title {
+      font-size: 28px;
+      color: rgb(237, 27, 47);
+      margin-bottom: 20px;
       text-align: center;
-      margin-bottom: 50px;
-  
-      .logo {
-        max-width: 350px;
-        margin-bottom: 20px;
+    }
+
+    .value-item {
+      text-align: center;
+      padding: 20px;
+      transition: all 0.3s ease;
+      border-radius: 8px;
+
+      &:hover {
+        background-color: #fafafa;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
       }
-  
-      .title {
+
+      .icon {
         font-size: 36px;
-        color: #3f51b5;
+        color: rgb(237, 27, 47);
+        margin-bottom: 10px;
       }
-  
+
       .description {
-        font-size: 18px;
-        color: #666;
-        max-width: 600px;
-        margin: 0 auto;
+        font-size: 16px;
+        color: #555;
       }
     }
-  
-    .values-section,
-    .team-section {
-      margin-top: 40px;
-  
-      .section-title {
-        font-size: 28px;
-        color: #3f51b5;
-        margin-bottom: 20px;
-        text-align: center;
+
+    .team-card {
+      text-align: center;
+      margin-top: 20px;
+      transition: all 0.3s ease;
+      padding: 20px;
+
+      &:hover {
+        background-color: #fafafa;
+        box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
       }
-  
-      .value-item {
-        text-align: center;
-        padding: 20px;
-        transition: all 0.3s ease;
-        border-radius: 8px;
-  
-        &:hover {
-          background-color: #fafafa;
-          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-  
-        .icon {
-          font-size: 36px;
-          color: #3f51b5;
-          margin-bottom: 10px;
-        }
-  
-        .description {
-          font-size: 16px;
-          color: #555;
-        }
+
+      .avatar {
+        margin-bottom: 10px;
       }
-  
-      .team-card {
-        text-align: center;
-        margin-top: 20px;
-        transition: all 0.3s ease;
-        padding: 20px;
-  
-        &:hover {
-          background-color: #fafafa;
-          box-shadow: 0px 4px 12px rgba(0, 0, 0, 0.1);
-        }
-  
-        .avatar {
-          margin-bottom: 10px;
-        }
-  
-        .name {
-          font-size: 18px;
-          font-weight: bold;
-          color: #3f51b5;
-        }
-  
-        .position {
-          font-size: 14px;
-          color: #999;
-        }
+
+      .name {
+        font-size: 18px;
+        font-weight: bold;
+        color: rgb(237, 27, 47);
+      }
+
+      .position {
+        font-size: 14px;
+        color: #999;
       }
     }
   }
+}
+.social-icons {
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+
+  .anticon {
+    transition: color 0.3s ease;
+
+    &:hover {
+      color: #1890ff;
+    }
+  }
+}
+.social-section {
+  text-align: center;
+  margin-top: 30px;
+
   .social-icons {
-    margin-top: 10px;
     display: flex;
     justify-content: center;
-    gap: 8px;
-  
-    .anticon {
+    gap: 16px;
+
+    a {
       transition: color 0.3s ease;
-  
+
       &:hover {
         color: #1890ff;
       }
     }
   }
-  .social-section {
-    text-align: center;
-    margin-top: 30px;
-  
-    .social-icons {
-      display: flex;
-      justify-content: center;
-      gap: 16px;
-  
-      a {
-        transition: color 0.3s ease;
-  
-        &:hover {
-          color: #1890ff;
-        }
-      }
-    }
+}
+.arrow-button {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: translateY(5px);
   }
-  .arrow-button {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    margin-top: 20px;
-    transition: transform 0.3s ease;
-  
-    &:hover {
-      transform: translateY(5px);
-    }
-  
-    .anticon {
-      font-size: 30px;
-      color: #3f51b5;
-    }
+
+  .anticon {
+    font-size: 30px;
+    color: rgb(237, 27, 47);
   }
-  
+}

@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { Col, Row, Pagination, Skeleton, notification } from "antd";
+import { Col, Row, Pagination, Skeleton, notification, Typography } from "antd";
 import { ClockCircleOutlined } from "@ant-design/icons";
 import styles from "../style.module.scss";
-import { useSelector } from "react-redux";
 import JobCard from "../job-card";
 import { IJobDetail } from "@/interfaces/IJobDetail";
 import JobService from "@/services/jobService";
@@ -47,26 +46,29 @@ export default function HottestJob() {
   }, []);
   return (
     <div className={styles["item-home-page"]}>
-      <h2
+      <div
         style={{
-          color: "#fff",
           marginBottom: "10px",
-          backgroundColor: "#2F1471",
           padding: "15px",
           display: "flex",
           alignItems: "center",
           borderRadius: "5px",
         }}
+        className={styles["item-banner"]}
       >
-        <ClockCircleOutlined
-          style={{
-            marginRight: "10px",
-            fontSize: "20px",
-            color: "#fff",
-          }}
-        />
-        Việc làm tuyển gấp
-      </h2>
+        <Typography.Title
+          level={5}
+          style={{ color: "white", textAlign: "center", margin: 0 }}
+        >
+          <ClockCircleOutlined
+            style={{
+              marginRight: "10px",
+              color: "#fff",
+            }}
+          />
+          Việc làm tuyển gấp
+        </Typography.Title>
+      </div>
       <Row gutter={[16, 16]}>
         {loading ? (
           <Skeleton loading={loading} active paragraph={{ rows: 10 }} />
@@ -81,14 +83,14 @@ export default function HottestJob() {
           </>
         )}
       </Row>
-
-      <Pagination
-        className={styles["homepage-pagination"]}
-        current={current}
-        total={jobList.length}
-        pageSize={pageSize}
-        onChange={handlePaginationChange}
-      />
+      <Row className={styles["homepage-pagination"]} justify={"center"}>
+        <Pagination
+          current={current}
+          total={jobList.length}
+          pageSize={pageSize}
+          onChange={handlePaginationChange}
+        />
+      </Row>
     </div>
   );
 }

@@ -53,7 +53,7 @@ export default function ManagerUserTable() {
           <>
             <div>Email</div>
             <HeaderSearchComponent
-              placeholder="Enter email"
+              placeholder="Email"
               onChange={(e) => handleInputSearch("careerEmail", e.target.value)}
             />
           </>
@@ -65,9 +65,9 @@ export default function ManagerUserTable() {
       {
         title: (
           <>
-            <div>First Name</div>
+            <div>Họ</div>
             <HeaderSearchComponent
-              placeholder="Enter name"
+              placeholder="Họ"
               onChange={(e) =>
                 handleInputSearch("careerFirstName", e.target.value)
               }
@@ -81,9 +81,9 @@ export default function ManagerUserTable() {
       {
         title: (
           <>
-            <div>Last Name</div>
+            <div>Tên</div>
             <HeaderSearchComponent
-              placeholder="Enter name"
+              placeholder="Tên"
               onChange={(e) => handleInputSearch("lastName", e.target.value)}
             />
           </>
@@ -95,9 +95,9 @@ export default function ManagerUserTable() {
       {
         title: (
           <>
-            <div>Phone</div>
+            <div>Số điện thoại</div>
             <HeaderSearchComponent
-              placeholder="Phone"
+              placeholder="Số điện thoại"
               onChange={(e) => handleInputSearch("careerPhone", e.target.value)}
             />
           </>
@@ -107,7 +107,7 @@ export default function ManagerUserTable() {
         key: "careerPhone",
       },
       {
-        title: "Language",
+        title: "Ngôn ngữ",
         dataIndex: "languages",
         key: "languages",
         render: (item: string[]) => (
@@ -122,13 +122,13 @@ export default function ManagerUserTable() {
         ),
       },
       {
-        title: "Sign up date",
+        title: "Ngày đăng ký",
         dataIndex: "createAt",
         key: "createAt",
         render: (item: any) => <span>{new Date(item).toLocaleString()} </span>,
       },
       {
-        title: "Action",
+        title: "",
         render: (_: any, record: any) => (
           <>
             <Popconfirm

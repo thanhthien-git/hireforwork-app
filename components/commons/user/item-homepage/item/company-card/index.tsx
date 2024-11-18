@@ -1,9 +1,11 @@
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { EnvironmentOutlined, RightOutlined } from "@ant-design/icons";
-import { Avatar, Badge, Card, Typography } from "antd";
+import { Avatar, Badge, Card, Col, Row, Typography } from "antd";
+import logo from "@/public/assets/logo-gradient.png";
+import styles from "./styles.module.scss";
 
 const { Meta } = Card;
-const { Text } = Typography;
+const { Text, Title } = Typography;
 
 interface IProps {
   company: ICompanyDetail;
@@ -11,48 +13,48 @@ interface IProps {
 export default function CompanyCard({ company }: Readonly<IProps>) {
   return (
     <Card
-      style={{
-        width: 300,
-        borderRadius: 8,
-        overflow: "hidden",
-        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-        textAlign: "center",
-      }}
+      hoverable
+      bordered
+      onClick={() => (window.location.pathname = `/company/${company._id}`)}
+      bodyStyle={{ padding: 0 }}
+      className={styles["card-top-company"]}
       cover={
-        <div style={{ padding: "16px", backgroundColor: "#f0f2f5" }}>
-          <Avatar
-            size={80}
-            src={company?.companyImage?.imageURL}
-            style={{
-              borderRadius: 8,
-              backgroundColor: "#fff",
-              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-            }}
-          />
-        </div>
+        <>
+          <div className={styles["card-cover"]}>
+            <Avatar
+              size={150}
+              src={company?.companyImage?.imageURL || logo.src}
+              className={styles["card-company-image"]}
+            />
+          </div>
+          <div className={styles["card-company-description"]}>
+            <Title level={5}>{company.companyName}</Title>
+          </div>
+        </>
       }
-    >
-      <Meta
-        title={<Text strong>{company.companyName}</Text>}
-        description={
-          <>
-            <Text type="secondary">
-              <EnvironmentOutlined /> {company.contact.companyAddress}
-            </Text>
-            <div style={{ marginTop: 8 }}>
-              <Badge
-                color="green"
-                text={
-                  <Text strong style={{ color: "#52c41a" }}>
-                    2 Việc làm
-                  </Text>
-                }
-              />
-              <RightOutlined style={{ color: "#1890ff", marginLeft: 4 }} />
-            </div>
-          </>
-        }
-      />
-    </Card>
+      actions={[
+        <Meta
+          className={"card-meta"}
+          description={
+            <Row
+              className={styles["card-company-meta"]}
+              align="middle"
+              justify={"space-between"}
+            >
+              <Col xs={24} md={12}>
+                <div className={styles["company-address"]}>
+                  {company.contact.companyAddress}
+                </div>
+              </Col>
+              <Col xs={24} md={12}>
+                <div className={styles["company-job"]}>
+                  <Badge color="green" text={<Text>2 Việc làm</Text>} />
+                </div>
+              </Col>
+            </Row>
+          }
+        />,
+      ]}
+    ></Card>
   );
 }

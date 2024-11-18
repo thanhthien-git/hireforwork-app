@@ -1,23 +1,13 @@
-import {
-  Button,
-  Card,
-  Checkbox,
-  Col,
-  Form,
-  notification,
-  Row,
-  Spin,
-} from "antd";
+import { Button, Card, Form, notification, Row, Spin } from "antd";
 import InputComponent from "../input";
 import { useForm } from "react-hook-form";
 import { REQUIRED_MESSAGE } from "@/constants/message";
 import styles from "./style.module.scss";
 import InputPasswordComponent from "../input/input-password";
 import StyledButton from "../button";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { ILogin } from "@/interfaces/ILogin";
 import AuthenticationService from "@/services/authentication";
-import { LoadingOutlined } from "@ant-design/icons";
 import { ROLE } from "@/constants/role";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
@@ -117,7 +107,7 @@ export default function LoginForm() {
             <Row align={"middle"} justify={"center"}>
               <Typography.Title level={5}>
                 Chưa có tài khoản?{" "}
-                <Link href={"/register"} style={{ color: "rgb(84, 34, 201)" }}>
+                <Link href={"/register"} style={{ color: "rgb(237, 27, 47)" }}>
                   Đăng ký ngay
                 </Link>
               </Typography.Title>

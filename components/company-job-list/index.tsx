@@ -1,7 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
 import TableCustom from "../tableCustom";
 import HeaderSearchComponent from "../header-search/headerSearchComponent";
-import HeaderDateRange from "../date-range";
 import { Button, Col, DatePicker, notification, Row, Tag } from "antd";
 import { DeleteFilled, PlusSquareOutlined } from "@ant-design/icons";
 import styles from "./styles.module.scss";
@@ -55,6 +54,7 @@ export default function CompanyJobTable() {
     } catch (err) {
       notification.error({ message: (err as Error).message });
     } finally {
+      fetchCompanyJob();
       setLoading(false);
     }
   }, [setLoading, notification, selectedRowKeys, fetchCompanyJob]);

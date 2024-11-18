@@ -1,17 +1,27 @@
+@import "/styles/color.scss";
 .footer {
   display: flex;
-  flex-wrap: wrap; /* Cho phép các cột gập lại trên các màn hình nhỏ */
-  justify-content: space-between; /* Căn giữa trên màn hình lớn */
-  align-items: flex-start; /* Căn đầu cột theo chiều dọc */
-  background: rgb(2, 0, 36);
-  background: linear-gradient(
-    139deg,
-    rgba(2, 0, 36, 1) 19%,
-    rgba(60, 25, 144, 0.6582282571231617) 100%
-  );
-  color: white;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: flex-start;
+  background: $main-color-gradient;
   padding: 20px 0;
+  color: #fff;
 
+  .footer-collapse {
+    width: 100%;
+    border: none;
+    color: #fff;
+  }
+
+  .footer-collapse ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .footer-collapse span {
+    color: white;
+  }
   .column {
     flex: 1; /* Chia đều không gian giữa các cột */
     padding: 0 20px; /* Khoảng cách giữa các cột */
@@ -50,5 +60,6 @@
       margin-bottom: 20px; /* Thêm khoảng cách giữa các cột khi xếp chồng */
       text-align: center; /* Căn giữa cho các mục trong cột */
     }
+
   }
 }

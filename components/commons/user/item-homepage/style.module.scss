@@ -1,37 +1,13 @@
 @import "/styles/color.scss";
 
-.bannerContainer {
-  margin: 50px;
-  border-radius: 8px;
-}
-
 .searchBox {
-  background: rgb(2, 0, 36);
   background: $main-color-gradient;
-  border-radius: 8px;
-  padding: 10px;
+  padding: 50px 150px;
   width: 100%;
-}
-
-.bannerText {
-  color: white;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.imageContainer {
-  display: flex;
   justify-content: center;
-}
-
-.bannerImage {
-  width: 80%;
-  object-fit: contain;
-}
-
-.buttonContainer {
+  min-height: 300px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
 }
 
 .bannerButton {
@@ -40,11 +16,41 @@
   color: white;
 }
 
-.item-home-page {
+.home-content {
   padding: 50px;
 }
 
-.homepage-pagination {
-  width: 100%;
-  justify-content: center;
+.item-banner {
+  background: $main-color-gradient;
+}
+
+.item-home-page,
+.item-company,
+.item-banner {
+  margin-top: 20px;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .searchBox {
+    padding: 20px 10px;
+  }
+
+  .home-content {
+    padding: 10px;
+  }
+}
+
+.recommend-tag {
+  background-color: transparent !important;
+  color: #dedede;
+  border-color: #414042;
+  border-radius: 20px;
+  cursor: pointer;
+  padding: 10px;
+}
+
+.recommend-tag:hover {
+  border-color: #fff;
+  color: #fff;
 }

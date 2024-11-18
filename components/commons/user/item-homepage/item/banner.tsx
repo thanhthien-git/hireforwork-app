@@ -1,8 +1,7 @@
-import { Card, Input, Button, Row, Col, Form, Typography } from "antd";
+import { Input, Button, Row, Col, Form, Typography, Tag } from "antd";
 import styles from "../style.module.scss";
 import { useState, useEffect, useCallback } from "react";
 import { SearchOutlined } from "@ant-design/icons";
-import { ICategory } from "@/interfaces/ICategory";
 import { CITY } from "@/constants/city";
 import { useRouter } from "next/router";
 import _ from "lodash"; // Import Lodash
@@ -39,7 +38,7 @@ export default function SearchBox() {
   return (
     <div className={styles.bannerContainer}>
       <Row justify="space-between" align="middle">
-        <Card className={styles.searchBox} bordered={false}>
+        <div className={styles.searchBox}>
           <Typography.Title
             level={2}
             style={{ color: "#fff", marginBottom: 20 }}
@@ -47,8 +46,8 @@ export default function SearchBox() {
             200+ Việc làm IT cho bạn
           </Typography.Title>
           <Form>
-            <Row gutter={16}>
-              <Col span={8}>
+            <Row gutter={[20, 20]}>
+              <Col xs={24} sm={6}>
                 <SelectComponent
                   item={CITY}
                   defaultValue={CITY[0]}
@@ -64,26 +63,11 @@ export default function SearchBox() {
                   }}
                 />
               </Col>
-              <Col span={16}>
+              <Col xs={24} sm={14}>
                 <Input
                   name="jobTitle"
                   placeholder="Tìm kiếm cơ hội việc làm"
                   prefix={<SearchOutlined style={{ marginLeft: 15 }} />}
-                  suffix={
-                    !isMobile && (
-                      <Button
-                        type="primary"
-                        style={{
-                          width: "120px",
-                          borderRadius: "0 5px 5px 0",
-                          height: "50px",
-                        }}
-                        onClick={handleSearch}
-                      >
-                        Tìm Kiếm
-                      </Button>
-                    )
-                  }
                   allowClear
                   style={{
                     minHeight: 50,
@@ -94,23 +78,63 @@ export default function SearchBox() {
                   onChange={(e) => setQuerySearch(e.target.value)}
                 />
               </Col>
+              <Col xs={24} sm={4}>
+                {!isMobile && (
+                  <Button
+                    type="primary"
+                    style={{
+                      width: "100%",
+                      height: "50px",
+                    }}
+                    onClick={handleSearch}
+                  >
+                    Tìm Kiếm
+                  </Button>
+                )}
+              </Col>
+            </Row>
+            <Row style={{ marginTop: 20 }} align={"bottom"} gutter={[20, 20]}>
+              <Col>
+                <Typography.Title level={5} style={{ color: "#dedede" }}>
+                  Từ khóa phổ biến :
+                </Typography.Title>
+              </Col>{" "}
+              <Col>
+                <Tag
+                  className={styles["recommend-tag"]}
+                  onClick={() => router.push("/search?q=NodeJS")}
+                >
+                  NodeJS
+                </Tag>
+                <Tag
+                  className={styles["recommend-tag"]}
+                  onClick={() => router.push("/search?q=ReactJS")}
+                >
+                  ReactJS
+                </Tag>
+                <Tag
+                  className={styles["recommend-tag"]}
+                  onClick={() => router.push("/search?q=Fresher")}
+                >
+                  Fresher
+                </Tag>
+                <Tag
+                  className={styles["recommend-tag"]}
+                  onClick={() => router.push("/search?q=Intern")}
+                >
+                  Intern
+                </Tag>
+              </Col>
             </Row>
           </Form>
-          <Row
-            justify="space-between"
-            gutter={[16, 16]}
-            style={{ marginTop: "10px", display: "flex" }}
-          >
-            {isMobile && (
-              <Col
-                xs={24}
-                md={4}
-                style={{ textAlign: isMobile ? "center" : "right" }}
-              >
+          {isMobile && (
+            <Row justify="center" style={{ marginTop: "10px" }}>
+              <Col xs={24}>
                 <Button
                   type="primary"
                   style={{
-                    marginTop: isMobile ? "10px" : "0",
+                    marginTop: "10px",
+                    width: "100%",
                     height: "50px",
                   }}
                   onClick={handleSearch}
@@ -118,9 +142,9 @@ export default function SearchBox() {
                   Tìm Kiếm
                 </Button>
               </Col>
-            )}
-          </Row>
-        </Card>
+            </Row>
+          )}
+        </div>
       </Row>
     </div>
   );

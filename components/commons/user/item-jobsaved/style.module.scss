@@ -1,43 +1,13 @@
-.job-card {
-  border-radius: 8px;
-  background-color: #FFF;
-  position: relative;
-  padding-right: 70px; /* Add padding to prevent button overlap */
-}
-
-.company-logo {
-  width: 50px;
-  height: 50px;
-  padding: 5px;
-
-}
-
-.job-title {
-  margin-top: 10px;
-  font-size: 16px;
-}
-
 .company-name {
   font-size: 16px;
   color: #3c3c3c;
 }
 
-.tag-container {
-  position: absolute;
-  top: 16px;
-  right: 16px;
-  display: flex;
-  gap: 4px;
-}
-
-.job-info {
-  margin-top: 10px;
-}
-
 .icon-text {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .btn-unsave {
@@ -46,21 +16,9 @@
   right: 16px;
 }
 
-/* Responsive adjustments for mobile view */
 @media (max-width: 576px) {
   .job-card {
     padding-right: 16px; /* Remove the padding on smaller screens */
-  }
-
-  .tag-container {
-    position: static; /* Change positioning for mobile */
-    text-align: right;
-    margin-top: 8px;
-  }
-
-  .company-logo {
-    width: 50px;
-    height: 50px;
   }
 
   .job-title {
