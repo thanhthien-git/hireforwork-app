@@ -24,6 +24,7 @@ import dayjs from "dayjs";
 import { WORK_TYPE } from "@/enum/workType";
 import { CITY } from "@/constants/city";
 import { verifyToken } from "@/utils/jwt";
+import { IT_CATEGORY } from "@/constants/category";
 
 export default function JobForm() {
   const [filteredSkills, setFilteredSkills] = useState([]);
@@ -56,12 +57,14 @@ export default function JobForm() {
         jobSalaryMax: Number(getValues("jobSalaryMax")),
         jobRequirement: getValues("jobRequirement"),
         jobDescription: getValues("jobDescription"),
+        jobCategory: getValues("jobCategory"),
         jobLevel: getValues("jobLevel"),
         expireDate: getValues("expireDate"),
         workingType: getValues("workingType"),
         recruitmentCount: Number(getValues("recruitmentCount")),
         workingLocation: getValues("workingLocation"),
         isHot: Boolean(getValues("isHot")),
+        isClosed: Boolean(getValues("isClosed")),
         companyID:
           companyID ||
           verifyToken(localStorage?.getItem("token") as string)?.sub,
@@ -103,6 +106,7 @@ export default function JobForm() {
           setValue("jobTitle", res.doc.jobTitle);
           setValue("jobSalaryMin", res.doc.jobSalaryMin);
           setValue("jobSalaryMax", res.doc.jobSalaryMax);
+          setValue("jobCategory", res.doc.jobCategory);
           setValue("jobLevel", res.doc.jobLevel);
           setValue("workingLocation", res.doc.workingLocation);
           setValue("jobRequirement", res.doc.jobRequirement);
@@ -111,6 +115,7 @@ export default function JobForm() {
           setValue("recruitmentCount", res.doc.recruitmentCount);
           setValue("expireDate", dayjs(res.doc.expireDate));
           setValue("isHot", res.doc.isHot);
+          setValue("isClosed", res.doc.isClosed);
         }
       } catch (err) {
         notification.error({ message: (err as Error).message });
@@ -206,10 +211,19 @@ export default function JobForm() {
               />
             </Form.Item>
           </Col>
-          <Col span={6}>
+          <Col span={3}>
             <Form.Item label="Tuyển gấp ">
               <Controller
                 name="isHot"
+                control={control}
+                render={({ field }) => <Switch {...field} />}
+              />
+            </Form.Item>
+          </Col>
+          <Col span={3}>
+            <Form.Item label="Ngưng tuyển">
+              <Controller
+                name="isClosed"
                 control={control}
                 render={({ field }) => <Switch {...field} />}
               />
@@ -258,6 +272,19 @@ export default function JobForm() {
               label="Kĩ năng"
               item={filteredSkills}
               name="jobRequirement"
+              control={control}
+              placeholder="Kĩ năng"
+              className={styles["input-custom"]}
+              rules={{ required: REQUIRED_MESSAGE("Yêu cầu") }}
+              mode="multiple"
+            />
+          </Col>
+
+          <Col xs={24}>
+            <SelectComponent
+              label="Kĩ năng"
+              item={IT_CATEGORY}
+              name="jobCategory"
               control={control}
               placeholder="Kĩ năng"
               className={styles["input-custom"]}

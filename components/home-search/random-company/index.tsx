@@ -1,48 +1,60 @@
-import { Badge, Card, Col, Image, Row, Typography } from "antd";
+import { Avatar, Badge, Card, Col, Row, Typography } from "antd";
 import styles from "./style.module.scss";
 import logo from "@/public/assets/logo-gradient.png";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
-import { EnvironmentOutlined, ShareAltOutlined } from "@ant-design/icons";
 
 interface IProp {
   company?: ICompanyDetail;
 }
+const { Title, Text } = Typography;
+const { Meta } = Card;
 export default function RandomCompany({ company }: Readonly<IProp>) {
   return (
     <Badge.Ribbon text="Nhà tuyển dụng nổi bật" color="green">
-      <Card className={styles["random-card"]}>
-        <Col>
-          <Row>
-            {/* image */}
-            <Col>
-              <Image
-                alt="logo"
+      <Card
+        hoverable
+        bordered
+        onClick={() => (window.location.pathname = `/company/${company?._id}`)}
+        bodyStyle={{ padding: 0 }}
+        className={styles["card-top-company"]}
+        cover={
+          <>
+            <div className={styles["card-cover"]}>
+              <Avatar
+                size={150}
                 src={company?.companyImage?.imageURL || logo.src}
-                className={styles["random-card-cover"]}
+                className={styles["card-company-image"]}
               />
-            </Col>
-            {/* Name */}
-            <Col>
-              <Typography.Title level={5}>
-                {company?.companyName || "N/A"}
-              </Typography.Title>
-              <Typography.Link href={`/company/${company?._id}`}>
-                Xem chi tiết <ShareAltOutlined />
-              </Typography.Link>
-            </Col>
-          </Row>
-          {/* short description */}
-          <Row>
-            <Typography.Text>{company?.description && ""}</Typography.Text>
-          </Row>
-          <Row>
-            <Typography.Text>
-              <EnvironmentOutlined style={{ color: "gray" }} />{" "}
-              {company?.contact.companyAddress}
-            </Typography.Text>
-          </Row>
-        </Col>
-      </Card>
+            </div>
+            <div className={styles["card-company-description"]}>
+              <Title level={5}>{company?.companyName}</Title>
+            </div>
+          </>
+        }
+        actions={[
+          <Meta
+            className={"card-meta"}
+            description={
+              <Row
+                className={styles["card-company-meta"]}
+                align="middle"
+                justify={"space-between"}
+              >
+                <Col xs={24} md={12}>
+                  <div className={styles["company-address"]}>
+                    {company?.contact.companyAddress}
+                  </div>
+                </Col>
+                <Col xs={24} md={12}>
+                  <div className={styles["company-job"]}>
+                    <Badge color="green" text={<Text>2 Việc làm</Text>} />
+                  </div>
+                </Col>
+              </Row>
+            }
+          />,
+        ]}
+      ></Card>
     </Badge.Ribbon>
   );
 }

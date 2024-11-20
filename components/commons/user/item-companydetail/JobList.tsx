@@ -10,6 +10,7 @@ import {
   Card,
   Row,
   Col,
+  Tag,
 } from "antd";
 import { CreditCardOutlined, EnvironmentOutlined } from "@ant-design/icons";
 import styles from "./style.module.scss";
@@ -18,6 +19,7 @@ import CompanyService from "@/services/companyService";
 import Link from "next/link";
 import { IJobDetail } from "@/interfaces/IJobDetail";
 import { IJobFilter } from "@/interfaces/IJobFilter";
+import { CITY } from "@/constants/city";
 
 const { Text } = Typography;
 
@@ -77,19 +79,28 @@ export default function JobList() {
                           <Text style={{ marginRight: 10 }}>
                             <EnvironmentOutlined />
                           </Text>
-                          {job.workingLocation?.map((location) => (
-                            <Text key={location} style={{ marginRight: 10 }}>
-                              {location}
-                            </Text>
+                          <Text>
+                            {job.workingLocation
+                              ?.map(
+                                (location) =>
+                                  CITY[location as keyof typeof CITY]
+                              )
+                              .join(" - ")}
+                          </Text>
+                        </Col>
+                        <Col xs={24} sm={18} md={20}>
+                          {job?.jobRequirement?.map((item) => (
+                            <Tag color="green">{item}</Tag>
                           ))}
                         </Col>
                       </Row>
+
                       <Row align="middle" gutter={[8, 8]}>
                         <Col xs={24} sm={18} md={20}>
                           <Text style={{ marginRight: 10 }}>
                             <CreditCardOutlined />
                           </Text>
-                          <Text>
+                          <Text style={{ color: "green" }}>
                             {job.jobSalaryMin} - {job.jobSalaryMax} triệu
                           </Text>
                         </Col>

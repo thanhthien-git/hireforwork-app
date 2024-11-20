@@ -38,10 +38,6 @@
   background-color: transparent !important;
   box-shadow: none !important;
 }
-.container {
-  padding-top: 16px;
-  padding-bottom: 24px;
-}
 
 .job-list {
   margin-top: 16px;
@@ -52,11 +48,6 @@
   justify-content: center;
   margin-top: 16px;
 }
-.container {
-  padding-top: 16px;
-  padding-bottom: 24px;
-}
-
 .pagination {
   text-align: center;
   margin-top: 30px;
@@ -67,10 +58,10 @@
   border-radius: 8px;
   background-color: #fafafa;
   margin-bottom: 16px;
-}
 
-.image {
-  border-radius: 8px;
+  -webkit-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.12);
+  -moz-box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, 0.12);
 }
 
 .title {
@@ -80,22 +71,6 @@
 .company {
   font-size: 14px;
   color: #595959;
-}
-
-.icon-text {
-  display: flex;
-  align-items: center;
-  margin-right: 16px;
-
-  .icon {
-    margin-right: 4px;
-  }
-}
-
-.locationTag {
-  border: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
 }
 
 .container {
@@ -121,4 +96,7 @@
   margin-top: 10px;
   background: $main-color;
   color: #fff;
+}
+.job-card-default {
+  margin-top: 10px;
 }

@@ -264,7 +264,11 @@ const JobPage = () => {
                     {" "}
                     <div className={styles.infoItem}>
                       <h4>Danh mục</h4>
-                      <p>{jobDetail?.jobCategory ?? "N/A"}</p>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html: jobDetail?.jobCategory || "",
+                        }}
+                      ></p>
                     </div>
                     <div className={styles.infoItem}>
                       <h4>Kinh nghiệm</h4>
@@ -289,7 +293,8 @@ const JobPage = () => {
                         {jobDetail?.workingType
                           ?.map((type) => {
                             return WORK_TYPE[type as keyof typeof WORK_TYPE];
-                          }).join(", ")}
+                          })
+                          .join(", ")}
                       </p>
                     </div>
                   </Col>

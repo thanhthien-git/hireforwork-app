@@ -6,10 +6,10 @@ export interface IJobDetail {
   jobSalaryMax?: number;
   jobRequirement?: string[];
   jobLevel?: string;
-  jobCategory?: string;
+  jobCategory?: string[];
   quantity?: number;
   workingLocation?: string[];
-  workingType? : string[]
+  workingType?: string[];
   recruitmentCount?: number;
   expireDate?: Date;
   createAt?: Date;
@@ -26,5 +26,6 @@ export interface IJobDetail {
     companyAddress: string;
   };
   isHot?: boolean;
+  isClosed?: boolean;
   workType?: string[];
 }

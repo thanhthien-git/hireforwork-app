@@ -1,5 +1,5 @@
 export interface ICompanyDetail {
-  _id?: string,
+  _id?: string;
   companyName: string;
   companyImage?: {
     imageURL: string;
@@ -16,4 +16,5 @@ export interface ICompanyDetail {
   typeOfCompany?: string[];
   employeeSize?: number;
   companyField?: number;
+  workingLocation?: string[];
 }

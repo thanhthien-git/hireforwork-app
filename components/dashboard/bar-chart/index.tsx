@@ -42,10 +42,10 @@ export default function LineChartComponent(data: Readonly<LineChartProps>) {
           data.totalPost || 0,
           data.totalResume || 0,
         ],
-        borderColor: "#ed1b2f", // Line color
-        backgroundColor: "rgba(75, 192, 192, 0.2)", // Area color (optional)
-        fill: true, // Fill area under the line
-        tension: 0.4, // Smooth the line curve
+        borderColor: "#ed1b2f",
+        backgroundColor: "rgba(75, 192, 192, 0.2)",
+        fill: true,
+        tension: 0.4,
       },
     ],
   };
@@ -54,23 +54,23 @@ export default function LineChartComponent(data: Readonly<LineChartProps>) {
     responsive: true,
     plugins: {
       legend: {
-        display: false, 
+        display: false,
       },
       tooltip: {
         callbacks: {
-          label: (context: any) => `${context.raw}`, // Tooltip callback to display data
+          label: (context: any) => `${context.raw}`,
         },
       },
     },
     scales: {
       x: {
-        beginAtZero: true, // Start x-axis from zero
+        beginAtZero: true,
       },
       y: {
-        beginAtZero: true, // Start y-axis from zero
+        beginAtZero: true,
       },
     },
   };
 
-  return <Line data={chartData} options={options} />;
+  return <Line data={chartData} options={options} height={400} width={500} />;
 }

@@ -10,6 +10,8 @@ import styles from "./style.module.scss";
 import { IJobDetail } from "@/interfaces/IJobDetail";
 import { IS_HOT } from "@/constants/message";
 import { useRouter } from "next/router";
+import { CITY } from "@/constants/city";
+import logo from "@/public/assets/logo-gradient.png";
 
 interface IJobCardProp {
   job: IJobDetail;
@@ -22,16 +24,20 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
     router.push(`/search?query=${value}`);
   }, []);
 
+  const handleClickCategory = useCallback((value: string) => {
+    router.push(`/search?jobCategory=${value}`);
+  }, []);
+
   const handleOpenJob = useCallback((id: string) => {
     router.push(`/jobs/${id}`);
   }, []);
 
   return (
-    <Card hoverable className={styles.card} key={job._id}>
+    <Card hoverable bordered className={styles.card} key={job._id}>
       <Row gutter={[16, 16]} align="middle" justify="space-between">
         <Col xs={24} sm={6} md={4} lg={4}>
           <Image
-            src={job?.companyImage?.imageURL}
+            src={job?.companyImage?.imageURL || logo.src}
             alt="Company Logo"
             width={120}
             height={120}
@@ -71,9 +77,9 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
               <Typography.Text>
                 {Array.isArray(job?.workingLocation) &&
                 job?.workingLocation.length > 0 ? (
-                  job.workingLocation.map((location: string, index: number) => (
-                    <Tag key={index} className={styles.locationTag}>
-                      {location}
+                  job.workingLocation.map((location: any, index: number) => (
+                    <Tag className={styles.locationTag}>
+                      {CITY[location as keyof typeof CITY]}
                     </Tag>
                   ))
                 ) : (
@@ -95,6 +101,16 @@ export default function JobPostCard({ job }: Readonly<IJobCardProp>) {
                 key={item}
                 className={styles["job-card-tag"]}
                 onClick={() => handleClickTag(item)}
+              >
+                {item}
+              </Tag>
+            ))}
+          </Row>
+          <Row>
+            {job?.jobCategory?.map((item) => (
+              <Tag
+                className={styles["job-card-default"]}
+                onClick={() => handleClickCategory(item)}
               >
                 {item}
               </Tag>

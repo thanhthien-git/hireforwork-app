@@ -47,6 +47,7 @@ export default function DashboardPage() {
     fetchStatic();
   }, []);
 
+
   return (
     <Spin spinning={loading}>
       <Row className={styles["dashboard-container"]} gutter={[16, 16]}>

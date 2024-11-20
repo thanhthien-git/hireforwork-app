@@ -2,9 +2,9 @@ import { useCallback, useEffect, useState } from "react";
 import CompanyService from "@/services/companyService";
 import { Card, Col, notification, Row } from "antd";
 import styles from "./styles.module.scss";
-import LineChart from "../dashboard/bar-chart";
 import { useSelector, useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
+import LineChart from "./chart";
 
 export default function CompanyDashboardPage() {
   const { loading } = useSelector((state) => state.loading);
@@ -58,25 +58,6 @@ export default function CompanyDashboardPage() {
     return () => clearInterval(interval);
   }, [statics.totalResume]);
 
-  const data = [
-    { label: "Ứng viên", value: statics.totalCareer },
-    { label: "Số bài đăng", value: statics.totalJob },
-    { label: "Số lượt ứng tuyển", value: statics.totalResume },
-  ];
-
-  const options = {
-    responsive: true,
-    plugins: {
-      legend: {
-        display: false,
-      },
-      title: {
-        display: true,
-        text: "Thống kê hoạt động",
-      },
-    },
-  };
-
   return (
     <Row className={styles["chart-content"]}>
       <Col span={16}>
@@ -85,12 +66,7 @@ export default function CompanyDashboardPage() {
           className={styles["static-chart"]}
           loading={loading}
         >
-          <LineChart
-            data={data}
-            xField="label"
-            yField="value"
-            options={options}
-          />
+          <LineChart statics={statics} />
         </Card>
       </Col>
       <Col span={6}>

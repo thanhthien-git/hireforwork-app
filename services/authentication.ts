@@ -3,9 +3,8 @@ import api from "./api";
 import endpoint from "@/constants/apiEndpoint";
 import { ROLE } from "@/constants/role";
 import { useDispatch } from "react-redux";
-import { IRegister } from "@/interfaces/IRegister";
-import { IRegisterCareer } from "@/interfaces/IRegisterCareer";
 import { IRegisterCompany } from "@/interfaces/IRegisterCompany";
+import { IRegister } from "@/interfaces/IRegister";
 
 export default class AuthenticationService {
   dispatch = useDispatch();
@@ -35,7 +34,7 @@ export default class AuthenticationService {
     localStorage.removeItem("userID");
   }
 
-  static async registerCareer(user: IRegisterCareer) {
+  static async registerCareer(user: IRegister) {
     try {
       const response = await api.post(endpoint.users.registerCareer, user);
       return response.data;
@@ -46,7 +45,6 @@ export default class AuthenticationService {
 
   static async registerCompany(company: IRegisterCompany) {
     try {
-      console.log("Company Data:", company);
       const response = await api.post(
         endpoint.company.registerCompany,
         company

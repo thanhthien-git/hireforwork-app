@@ -1,13 +1,21 @@
 import endpoint from "@/constants/apiEndpoint";
+import { setAuthState } from "@/redux/slices/authSlice";
+import { verifyToken } from "@/utils/jwt";
 import axios, { InternalAxiosRequestConfig } from "axios";
 
 const api = axios.create({
   baseURL: `${endpoint.base}`,
 });
 
+
 api.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
+    const currentDate = Math.floor(Date.now() / 1000);
     const token = localStorage.getItem("token");
+    if (Number(verifyToken(token as string)?.exp) < currentDate) {
+      localStorage.clear();
+      window.location.href = "/login";
+    }
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }

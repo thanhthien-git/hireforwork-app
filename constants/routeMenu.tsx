@@ -61,8 +61,8 @@ export const careerSider = [
     icon: <FileDoneOutlined />,
   },
   {
-    name: "Việc làm đã xem",
-    path: "/user/viewed-job",
+    name: "Việc làm đã ứng tuyển",
+    path: "/user/applied-job",
     icon: <ClockCircleOutlined />,
   },
 ];

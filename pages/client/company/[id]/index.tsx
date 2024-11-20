@@ -71,14 +71,10 @@ export default function CompanyProfile() {
       </Skeleton>
       <div className={styles.container}>
         <Skeleton loading={loading} active paragraph={{ rows: 4 }}>
-          <CompanyDetails
-            description={companyDetail.description}
-            address={companyDetail.contact.companyAddress}
-            phone={companyDetail.contact.companyPhone}
-          />
+          <CompanyDetails company={companyDetail} />
         </Skeleton>
 
-        <Skeleton loading={loading} active>
+        <Skeleton loading={loading} active paragraph={{ rows: 4 }}>
           <Card className={styles.recruitmentCard}>
             <JobList />
           </Card>

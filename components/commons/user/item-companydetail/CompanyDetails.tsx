@@ -1,46 +1,70 @@
 import React from "react";
-import { Card, Col, Row, Typography } from "antd";
-import { EnvironmentOutlined, PhoneOutlined } from "@ant-design/icons";
+import { Card, Col, Divider, Row, Typography } from "antd";
 import styles from "./style.module.scss";
+import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
+import DetailLabel from "./detail";
 
 const { Title, Text } = Typography;
 
-interface CompanyDetailsProps {
-  description: string;
-  address: string;
-  phone: string;
+interface IProps {
+  company: ICompanyDetail;
 }
 
-const CompanyDetails: React.FC<CompanyDetailsProps> = ({
-  description,
-  address,
-  phone,
-}) => {
+export default function ({ company }: Readonly<IProps>) {
   return (
-    <Card className={styles.companyDetailsCard}>
-      <Row>
-        <Title level={4}>Giới thiệu công ty</Title>
-      </Row>
-      <Row>
-        <div dangerouslySetInnerHTML={{ __html: description }} />
-      </Row>
-      <Row style={{ marginTop: 20 }}>
-        <Title level={4}>Thông tin liên hệ</Title>
-      </Row>
-      <Col>
-        <Row gutter={[0, 16]}>
-          <Text>
-            <EnvironmentOutlined /> Địa chỉ công ty: {address}
-          </Text>
+    <>
+      <Card className={styles.companyDetailsCard}>
+        <Row>
+          <Title level={4}>Thông tin liên hệ</Title>
         </Row>
-        <Row gutter={[0, 16]}>
-          <Text>
-            <PhoneOutlined rotate={90} /> Số điện thoại: {phone}
-          </Text>
+        <Divider style={{ marginTop: 0 }} />
+        <Row>
+          <Col xs={24} sm={12}>
+            {" "}
+            <Row style={{ marginTop: 10 }}>
+              <DetailLabel
+                label="Địa chỉ công ty"
+                value={company.contact?.companyAddress || "Chưa cập nhập"}
+              />
+            </Row>
+            <Row style={{ marginTop: 10 }}>
+              <DetailLabel
+                label="Số điện thoại"
+                value={company.contact?.companyPhone || "Chưa cập nhập"}
+              />
+            </Row>
+            <Row style={{ marginTop: 10 }}>
+              <DetailLabel
+                label="Quy mô công ty"
+                value={company.employeeSize || "Chưa cập nhập"}
+              />
+            </Row>
+          </Col>
+          <Col xs={24} sm={12}>
+            {" "}
+            <Row style={{ marginTop: 10 }}>
+              <DetailLabel
+                label="Website"
+                value={company.contact?.companyWebsite || "Chưa cập nhập"}
+              />
+            </Row>
+            <Row style={{ marginTop: 10 }}>
+              <DetailLabel
+                label="Email"
+                value={company?.contact?.companyEmail || "Chưa cập nhập"}
+              />
+            </Row>
+          </Col>
         </Row>
-      </Col>
-    </Card>
+      </Card>
+      <Card className={styles.companyDetailsCard}>
+        <Row>
+          <Title level={4}>Giới thiệu công ty</Title>
+        </Row>
+        <Row>
+          <div dangerouslySetInnerHTML={{ __html: company.description }} />
+        </Row>
+      </Card>
+    </>
   );
-};
-
-export default CompanyDetails;
+}

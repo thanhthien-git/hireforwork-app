@@ -1,0 +1,18 @@
+.mobile-divider {
+  display: none;
+}
+.detail-label-container {
+  flex-direction: column;
+}
+@media (max-width: 767px) {
+  .mobile-divider {
+    display: block;
+  }
+
+  .detail-label-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+  }
+}

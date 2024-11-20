@@ -6,7 +6,7 @@ import LayoutManager from "@/layouts/layout-manager";
 function JobPostEdit() {
 
   return (
-    <LayoutManager menu={companySider}>
+    <LayoutManager menu={companySider} title="Chi tiết công việc">
         <JobForm/>
     </LayoutManager>
   );

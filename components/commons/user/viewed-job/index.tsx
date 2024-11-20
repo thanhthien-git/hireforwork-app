@@ -1,113 +1,79 @@
-import React, { useEffect, useState, useCallback } from 'react';
-import { Col, Pagination, Row, Typography, notification } from 'antd';
-import SubJobPostCard from '../item-jobviewed'; 
-import UserService from '@/services/userService';
-import { fetchJobById } from '@/services/jobService';
-import { fetchCompaniesByID } from '@/services/companyService'; 
-import { Job } from '@/interfaces/IJobPostCard'; 
-import { useRouter } from 'next/router';
-import styles from './style.module.scss';
+import React, { useEffect, useState, useCallback } from "react";
+import { Col, Pagination, Row, Spin, Typography } from "antd";
+import { useRouter } from "next/router";
+import styles from "./style.module.scss";
+import { IApplyJobCard } from "@/interfaces/IApplyJob";
+import UserService from "@/services/userService";
+import AppliedJobCard from "./card";
 
-const ViewedJobsList: React.FC = () => {
-    const [viewedJobs, setViewedJobs] = useState<Job[]>([]);
-    const [currentPage, setCurrentPage] = useState(1);
-    const pageSize = 4;
-    const router = useRouter();
+export default function AppliedJob() {
+  const [appliedJob, setAppliedJob] = useState<IApplyJobCard[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [pagination, setPagination] = useState({
+    page: 1,
+    pageSize: 4,
+  });
+  const [total, setTotal] = useState(0);
+  const router = useRouter();
 
-    const fetchViewedJobs = useCallback(async () => {
-        try {
-            const userId = localStorage.getItem("id");
-            if (!userId) {
-                notification.error({ message: "User ID not found" });
-                return;
-            }
+  const fetchAppliedJob = useCallback(async () => {
+    try {
+      setLoading(true);
+      const id = localStorage?.getItem("id") as string;
+      const res = await UserService.getAppliedJob(
+        id,
+        pagination.page,
+        pagination.pageSize
+      );
+      setAppliedJob(res[0].docs);
+      setTotal(res[0].totalDocs);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  }, [pagination]);
 
-            const viewedJobsResponse = await UserService.getViewedJobs(userId);
-            if (viewedJobsResponse && Array.isArray(viewedJobsResponse)) {
-                const jobDetails = await Promise.all(viewedJobsResponse.map(fetchJobDetails));
-                setViewedJobs(jobDetails);
-            }
-        } catch (err) {
-            notification.error({
-                message: "Error fetching viewed jobs",
-                description: err.response?.data?.message || err.message,
-            });
-        }
-    }, []);
+  useEffect(() => {
+    fetchAppliedJob();
+  }, [pagination]);
 
-    const fetchJobDetails = useCallback(async (job) => {
-        const jobDetail = await fetchJobById(job.jobID);
-        const fetchedJob = jobDetail.doc;
+  const handleJobClick = useCallback(
+    (jobId: string) => {
+      router.push(`/jobs/${jobId}`);
+    },
+    [router]
+  );
 
-        const companyResponse = await fetchCompaniesByID(fetchedJob.companyID);
-        const companyDetail = companyResponse.doc;
+  const handlePagination = useCallback((page: number) => {
+    setPagination((prev) => ({ ...prev, page: page }));
+  }, []);
 
-        return {
-            _id: fetchedJob._id,
-            jobTitle: fetchedJob.jobTitle,
-            jobSalaryMin: fetchedJob.jobSalaryMin,
-            jobSalaryMax: fetchedJob.jobSalaryMax,
-            workingLocation: fetchedJob.workingLocation ? fetchedJob.workingLocation.join(', ') : 'Unknown Location',
-            expireDate: fetchedJob.expireDate,
-            companyID: companyDetail.companyName || "Unknown Company",
-            companyImageUrl: companyDetail.companyImage?.imageURL || '/logo.png',
-            isHot: fetchedJob.isHot || false,
-            isUrgent: fetchedJob.isUrgent || false,
-        };
-    }, []);
-
-    useEffect(() => {
-        fetchViewedJobs();
-    }, [fetchViewedJobs]);
-
-    const handleJobClick = useCallback((jobId: string) => {
-        router.push(`/jobs/${jobId}`);
-    }, [router]);
-
-    const indexOfLastJob = currentPage * pageSize;
-    const indexOfFirstJob = indexOfLastJob - pageSize;
-    const currentJobs = viewedJobs.slice(indexOfFirstJob, indexOfLastJob);
-
-    const handleChangePage = useCallback((page: number) => {
-        setCurrentPage(page);
-    }, []);
-
-    return (
-        <div className={styles.viewedjob}>
-            <div className={styles.container}>
-                <Typography.Title level={5}>Việc làm đã xem</Typography.Title>
-            </div>
-
-            <Row gutter={[16, 16]} className={styles['job-col']}>
-                {currentJobs.map((job) => (
-                    <Col span={24} key={job._id}>
-                        <SubJobPostCard
-                            id={job._id}
-                            title={job.jobTitle}
-                            company={job.companyID}
-                            salary={`${job.jobSalaryMin} - ${job.jobSalaryMax}`}
-                            location={job.workingLocation}
-                            deadline={new Date(job.expireDate).toLocaleDateString()}
-                            companyImageUrl={job.companyImageUrl}
-                            isHot={job.isHot}
-                            isUrgent={job.isUrgent}
-                            onClick={() => handleJobClick(job._id)}
-                        />
-                    </Col>
-                ))}
-            </Row>
-
-            <div className={styles["center-pagination"]}>
-                <Pagination
-                    current={currentPage}
-                    total={viewedJobs.length}
-                    pageSize={pageSize}
-                    onChange={handleChangePage}
-                    showSizeChanger={false}
-                />
-            </div>
-        </div>
-    );
-};
-
-export default ViewedJobsList;
+  return (
+    <div className={styles.viewedjob}>
+      <div className={styles.container}>
+        <Typography.Title level={5}>Việc làm đã ứng tuyển</Typography.Title>
+      </div>
+      <Spin spinning={loading}>
+        <Row gutter={[16, 16]} className={styles["job-col"]}>
+          {appliedJob?.map((job) => (
+            <Col
+              span={24}
+              key={job.jobID}
+              onClick={() => handleJobClick(job.jobID)}
+            >
+              <AppliedJobCard job={job} />
+            </Col>
+          ))}
+        </Row>
+      </Spin>
+      <Row align={"middle"} justify={"center"} style={{ marginTop: 20 }}>
+        <Pagination
+          onChange={(page, _) => handlePagination(page)}
+          pageSize={pagination.pageSize}
+          total={total}
+        />
+      </Row>
+    </div>
+  );
+}

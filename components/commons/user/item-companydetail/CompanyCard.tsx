@@ -12,56 +12,59 @@ interface CompanyCardProps {
 
 export default function CompanyCard({ company }: Readonly<CompanyCardProps>) {
   return (
-    <Row className={styles.companyCard} align={"middle"}>
-      <Row
-        className={styles["company-detail-header"]}
-        justify={"space-between"}
-      >
-        <Col className={styles["coverImageContainer"]} xl={24}>
-          <Avatar
-            size={125}
-            src={company.companyImage?.imageURL || logo.src}
-            className={styles.companyAvatar}
-          />
-        </Col>
-        <Col
-          style={{
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-          }}
-        >
-          <Row>
-            <Title level={2} className={styles.companyTitle}>
-              {company.companyName}
-            </Title>
-          </Row>
-          <Row>
-            <Text style={{ color: "gray" }}>
-              <EnvironmentOutlined /> {company.contact.companyAddress}
-            </Text>
-          </Row>
-          <Row gutter={[16, 16]}>
+    <div className={styles["company-info-header"]}>
+      <Row gutter={[16, 16]} style={{ width: "1200px" }}>
+        <Col xs={24} md={16}>
+          <Row className={styles["company-info-detail"]}>
             <Col>
-              <Button type="primary" className={styles["option-button"]}>
-                Viết đánh giá
-              </Button>
+              <div className={styles["coverImageContainer"]}>
+                <Avatar
+                  size={125}
+                  src={company.companyImage?.imageURL || logo.src}
+                  className={styles.companyAvatar}
+                />
+              </div>
             </Col>
-            <Col>
-              <Button
-                type="primary"
-                className={styles["option-button"]}
-                style={{ backgroundColor: "#fff", color: "#ed1b2f" }}
-              >
-                Theo dõi
-              </Button>
+            <Col
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+              }}
+            >
+              <Row className={styles["companyTitle"]}>
+                <Title level={2} style={{ color: "#fff", margin: 0 }}>
+                  {company.companyName}
+                </Title>
+              </Row>
+              <Row>
+                <Text style={{ color: "gray" }}>
+                  <EnvironmentOutlined /> {company.contact.companyAddress}
+                </Text>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col>
+                  <Button type="primary" className={styles["option-button"]}>
+                    Viết đánh giá
+                  </Button>
+                </Col>
+                <Col>
+                  <Button
+                    type="primary"
+                    className={styles["option-button"]}
+                    style={{ backgroundColor: "#fff", color: "#ed1b2f" }}
+                  >
+                    Theo dõi
+                  </Button>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </Col>
-        <Col className={styles["company-rate"]}>
-          <Row gutter={[16, 16]} align={"middle"} justify={"center"}>
+        <Col xs={24} md={8} className={styles["company-rate"]}>
+          <Row gutter={[40, 40]} align={"middle"} justify={"center"}>
             <Col className={styles["company-rate-col"]}>
-              <Title className={styles.companyTitle} level={2}>
+              <Title className={styles.companyTitle} level={3}>
                 0.0
               </Title>
             </Col>
@@ -76,23 +79,9 @@ export default function CompanyCard({ company }: Readonly<CompanyCardProps>) {
                 <Text className={styles.companyTitle}>0 đánh giá</Text>
               </Row>
             </Col>
-            <Col className={styles["company-rate-col"]}>
-              <Row>
-                <Col>
-                  <Title className={styles.companyTitle} level={2}>
-                    0%
-                  </Title>{" "}
-                </Col>
-                <Col>
-                  <Text className={styles.companyTitle} style={{wordBreak: "break-word"}}>
-                    Khuyến khích làm việc tại đây
-                  </Text>{" "}
-                </Col>
-              </Row>
-            </Col>
           </Row>
         </Col>
       </Row>
-    </Row>
+    </div>
   );
 }

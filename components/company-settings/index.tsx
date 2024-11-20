@@ -20,9 +20,10 @@ import CompanyService from "@/services/companyService";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { REQUIRED_MESSAGE } from "@/constants/message";
 import { FieldService } from "@/services/fieldService";
-import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
+import { useRouter } from "next/router";
+import { verifyToken } from "@/utils/jwt";
 
 export default function CompanySettingPage() {
   const { control, setValue, handleSubmit, getValues } = useForm();
@@ -36,7 +37,13 @@ export default function CompanySettingPage() {
     img: "",
   });
   const fileInput = useRef<HTMLInputElement | null>(null);
-  const id = localStorage?.getItem("id") as string;
+  const router = useRouter();
+
+  const getID = () => {
+    const token = String(localStorage?.getItem("token"));
+    const role = verifyToken(token)?.role;
+    return role === "ADMIN" ? String(router.query.id) : String(token);
+  };
 
   const handleOpenFileChoose = useCallback(() => {
     if (fileInput.current) {
@@ -69,7 +76,7 @@ export default function CompanySettingPage() {
     async (file: File, field: string) => {
       try {
         dispatch(setLoading(true));
-        const id = localStorage?.getItem("id") as string;
+        const id = getID();
         const formData = new FormData();
         formData.append("avatar", file);
         if (field === "cover") {
@@ -98,6 +105,7 @@ export default function CompanySettingPage() {
   const fetchCompanyDetails = useCallback(async () => {
     try {
       dispatch(setLoading(true));
+      const id = getID();
       const res = await CompanyService.getById(id);
       setValue("companyName", res?.doc?.companyName);
       setValue("companyEmail", res?.doc?.contact?.companyEmail);

@@ -8,7 +8,10 @@ import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
 import { RESUME_STATUS } from "@/enum/sending";
 import queryString from "query-string";
 import { IJobFilter } from "@/interfaces/IJobFilter";
-import { IRequestResetPassword, IResetPassword } from "@/interfaces/IResetPassword";
+import {
+  IRequestResetPassword,
+  IResetPassword,
+} from "@/interfaces/IResetPassword";
 
 export default class CompanyService {
   static async get(filter: ICompanyFilter) {
@@ -90,7 +93,9 @@ export default class CompanyService {
 
   static async getStatic(id: string) {
     try {
-      const response = await api.get(`${endpoint.company.getStatic}/${id}`);
+      const response = await api.get(
+        `${endpoint.company.base}/${id}/get-static`
+      );
       return response;
     } catch (err) {
       throw new Error((err as Error).message);
@@ -161,19 +166,19 @@ export default class CompanyService {
       throw new Error((err as Error).message);
     }
   }
-  static async requestPasswordResetCompany(data:IRequestResetPassword){
-    try{
-      const res = await api.post(endpoint.company.RequestResetPassword,data)
+  static async requestPasswordResetCompany(data: IRequestResetPassword) {
+    try {
+      const res = await api.post(endpoint.company.RequestResetPassword, data);
       return res.data;
-    }  catch (err) {
+    } catch (err) {
       throw new Error((err as Error).message);
     }
   }
-  static async resetPasswordCompany(data:IResetPassword){
-    try{
-      const res = await api.post(endpoint.company.ResetPassword,data)
+  static async resetPasswordCompany(data: IResetPassword) {
+    try {
+      const res = await api.post(endpoint.company.ResetPassword, data);
       return res.data;
-    }  catch (err) {
+    } catch (err) {
       throw new Error((err as Error).message);
     }
   }

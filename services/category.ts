@@ -1,13 +1,13 @@
 import endpoint from "@/constants/apiEndpoint";
 import api from "./api";
 import { ICategory } from "@/interfaces/ICategory";
+import queryString from "query-string";
 
 export class CategoryService {
   static async get(filter: ICategory) {
     try {
-      const { categoryName, page, pageSize} = filter
       const res = await api.get(
-        `${endpoint.category.base}?page=${page}&pageSize=${pageSize}&categoryName=${categoryName}`
+        `${endpoint.category.base}?${queryString.stringify(filter)}`
       );
 
       return res.data;

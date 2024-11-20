@@ -4,7 +4,7 @@ import LayoutAdmin from "@/layouts/layout-admin";
 function UserManager() {
 
   return (
-    <LayoutAdmin title="User Manager">
+    <LayoutAdmin title="Quản lý người dùng">
       <ManagerUserTable/>
     </LayoutAdmin>
   );

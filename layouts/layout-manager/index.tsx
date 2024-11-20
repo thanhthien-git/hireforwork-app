@@ -152,7 +152,7 @@ export default function LayoutManager({
           ))}
         </Menu>
       )}
-      <Layout className={styles["layout-right"]}>
+      <Layout className={styles["layout-right"]} style={{ marginBottom: 20 }}>
         {isCompany && (
           <Header
             style={{

@@ -13,16 +13,16 @@ const initialState: AuthState = {
 };
 
 export const forceLogout = () => {
-  localStorage.removeItem("token")
-  localStorage.removeItem("id")
-}
+  localStorage.removeItem("token");
+  localStorage.removeItem("id");
+};
 
 const authSlice = createSlice({
   name: "auth",
   initialState,
   reducers: {
-    setAuthState(state) {
-      state.isAuth = true;
+    setAuthState(state, action) {
+      state.isAuth = action.payload;
       state.token = localStorage.getItem("token");
     },
     logout(state) {

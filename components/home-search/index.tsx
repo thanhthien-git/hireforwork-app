@@ -9,8 +9,6 @@ import { IJobFilter } from "@/interfaces/IJobFilter";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@/redux/slices/loadingSlice";
-import { ICategory } from "@/interfaces/ICategory";
-import { CategoryService } from "@/services/category";
 import RandomCompany from "./random-company";
 import CompanyService from "@/services/companyService";
 import { ICompanyDetail } from "@/interfaces/ICompanyDetail";
@@ -18,7 +16,6 @@ import { RETRY_LATER } from "@/constants/message";
 
 export default function SearchResultPage() {
   const [job, setJob] = useState<IJobDetail[]>();
-  const [category, setCategory] = useState<ICategory[]>([]);
   const [randomCompany, setRandomCompany] = useState<ICompanyDetail>();
   const dispatch = useDispatch();
   const router = useRouter();
@@ -71,18 +68,6 @@ export default function SearchResultPage() {
     }
   }, [router, dispatch]);
 
-  const fetchCategory = useCallback(async () => {
-    try {
-      dispatch(setLoading(true));
-      const res = await CategoryService.get({ page: 1, pageSize: 999 });
-      setCategory(res?.docs);
-    } catch {
-      console.log(`some thing wrong`);
-    } finally {
-      dispatch(setLoading(false));
-    }
-  }, [dispatch]);
-
   const fetchRandom = useCallback(async () => {
     try {
       dispatch(setLoading(true));
@@ -96,7 +81,6 @@ export default function SearchResultPage() {
   }, [dispatch]);
 
   useEffect(() => {
-    fetchCategory();
     fetchJob();
     fetchRandom();
   }, []);
@@ -105,13 +89,16 @@ export default function SearchResultPage() {
     <div className={styles.container}>
       <Row gutter={24}>
         <Col xs={24} sm={24} md={24} lg={16} xl={16}>
-          <div>
-            <JobPostSearch categoryData={category} />
-          </div>
-          <MainJobPostCard jobList={job} totalJobs={total} />
+          <JobPostSearch />
+          <Row>
+            <MainJobPostCard jobList={job} totalJobs={total} />
+          </Row>
         </Col>
+
         <Col xs={24} sm={24} md={24} lg={8} xl={8}>
-          <RandomCompany company={randomCompany} />
+          <div style={{ position: "sticky", top: 120, zIndex: 1 }}>
+            <RandomCompany company={randomCompany} />
+          </div>
         </Col>
       </Row>
     </div>
